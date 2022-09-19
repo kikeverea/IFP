@@ -4,65 +4,168 @@ import java.util.Scanner;
 
 public class Start {
 
-    private static final String MENSAJE_SOLICITAR_NUMERO = "Introduzca el %s número flotante a %s";
+    private static final String MENSAJE_SOLICITAR_NUMERO = "Introduzca el %s número flotante %s: ";
+    private static final String[] ORDINALES = new String[]{"primer", "segundo", "tercer"};
+    private static final String CABECERA =
+            "\n***************************************\n" +
+            "**** Calculadora de Calculator S.A ****\n" +
+            "**************************************\n";
+    private static final String MENU =
+            "Introduzca una opción del menú:\n" +
+            "\t1. Sumar\n" +
+            "\t2. Restar\n" +
+            "\t3. Multiplicar\n" +
+            "\t4. Dividir\n" +
+            "\t5. Número mayor de 3 números\n" +
+            "\t6. Capicúa\n" +
+            "\t0. Salir\n" +
+            "Introduzca una opción: ";
+
     private static Scanner scanner;
 
     public static void main(String[] args) {
+        //inicia el Scanner con el que se solicitara input a el usuario
         scanner = new Scanner(System.in);
-
         int opcion;
+
+        //imprime la cabecera
+        System.out.println(CABECERA);
+
         while (true) {
-            mostrarMenu();
+            //imprime el menu
+            System.out.print(MENU);
+
+            //solicita opción al usuario
             opcion = scanner.nextInt();
 
-            if (opcion == 0) {
+            if (opcion == 0)
+                //termina el programa
                 break;
-            }
+
+            //línea en blanco
+            System.out.println();
 
             ejecutarOpcion(opcion);
+
+            //línea en blanco
+            System.out.println();
        }
+
+        System.out.println("El programa ha finalizado");
     }
 
-    private static void mostrarMenu() {
-        //TODO
-    }
-
-    private static void ejecutarOpcion(int opcion) {
+    static void ejecutarOpcion(int opcion) {
         switch (opcion) {
             case 1 :
                 ejecutarSuma();
                 break;
-//            case 2 :
-//                ejecutarResta();
-//                break;
-//            case 3 :
-//                ejecutarMultiplicacion();
-//                break;
-//            case 4 :
-//                ejecutarDivision();
-//                break;
-//            case 5 :
-//                ejecutarMaximoDeTres();
-//                break;
-//            case 6 :
-//                ejecutarCapicua();
-//                break;
+            case 2 :
+                ejecutarResta();
+                break;
+            case 3 :
+                ejecutarMultiplicacion();
+                break;
+            case 4 :
+                ejecutarDivision();
+                break;
+            case 5 :
+                ejecutarMaximoDeTres();
+                break;
+            case 6 :
+                ejecutarCapicua();
+                break;
+            default:
+                System.out.println("Opción errónea");
+                break;
         }
     }
 
-    private static void ejecutarSuma() {
-        float n1, n2, resultado;
+    static void ejecutarSuma() {
+        float[] numeros = solicitarNumeros(2, "Suma", "a sumar");
+        float resultado = numeros[0] + numeros[1];
 
-        //primer numero
-        System.out.printf(MENSAJE_SOLICITAR_NUMERO+"\n", "primer", "sumar");
-        n1 = scanner.nextFloat();
+        imprimeResultado("La suma de %.2f y %.2f es %.2f", numeros[0], numeros[1], resultado);
+    }
 
-        //segundo numero
-        System.out.printf(MENSAJE_SOLICITAR_NUMERO+"\n", "segundo", "sumar");
-        n2 = scanner.nextFloat();
+    static void ejecutarResta() {
+        float[] numeros = solicitarNumeros(2, "Resta", "a restar");
+        float resultado = numeros[0] - numeros[1];
 
-        resultado = n1 + n2;
-        System.out.printf("La suma de %f y %f es %f", n1, n2, resultado);
+        imprimeResultado("La resta de %.2f y %.2f es %.2f", numeros[0], numeros[1], resultado);
+    }
+
+    static void ejecutarMultiplicacion() {
+        float[] numeros = solicitarNumeros(2, "Multiplicación", "a multiplicar");
+        float resultado = numeros[0] * numeros[1];
+
+        imprimeResultado("La multiplicación de %.2f y %.2f es %.2f", numeros[0], numeros[1], resultado);
+    }
+
+    static void ejecutarDivision() {
+        float[] numeros = solicitarNumeros(2, "División", "a dividir");
+        float resultado;
+
+        //asegurarse que no se intenta dividir entre cero
+        if (numeros[1] == 0) {
+            System.out.println("Error division por 0");
+            return;
+        }
+
+        resultado = numeros[0] / numeros[1];
+        imprimeResultado("La división de %.2f y %.2f es %.2f", numeros[0], numeros[1], resultado);
+    }
+
+    static void ejecutarMaximoDeTres() {
+        float[] numeros = solicitarNumeros(3, "Máximo de Tres", "de los tres");
+        float resultado = Math.max(Math.max(numeros[0], numeros[1]), numeros[2]);
+
+        imprimeResultado("EL número %.2f es el mayor de los 3 números", resultado);
+    }
+
+    private static void ejecutarCapicua() {
+        System.out.println("***** Capicúa *****");
+        System.out.println("Introduzca un número para saber si es capicúa: ");
+
+        //solicita un int al usuario, para evitar problemas con nextLine() en el caso de haber
+        //corrido alguna de las otras opciones que utilizan nextFloat() antes que esta
+        int numero = scanner.nextInt();
+
+        String cadenaDeNumero = String.valueOf(numero);
+        boolean esCapicua = esCapicua(cadenaDeNumero);
+
+        imprimeResultado(String.format("%s es capicúa", esCapicua ? "SI" : "NO"));
+    }
+
+    static boolean esCapicua(String numero) {
+        for (int i = 0, j = numero.length() - 1; i < numero.length(); i++, j--)
+            if (numero.charAt(i) != numero.charAt(j))
+                return false;
+
+        return true;
+    }
+
+    private static float[] solicitarNumeros(int cantidad, String operacion, String accion) {
+        float[] numeros = new float[cantidad];
+        String posicion;
+
+        System.out.println("***** " + operacion + " *****");
+
+        for (int i = 0; i < cantidad; i++) {
+            posicion = ORDINALES[i];
+            numeros[i] = solicitarNumero(String.format(MENSAJE_SOLICITAR_NUMERO, posicion, accion));
+        }
+
+        return numeros;
+    }
+
+    static float solicitarNumero(String mensaje) {
+        System.out.print(mensaje);
+        return scanner.nextFloat();
+    }
+
+    static void imprimeResultado(String mensaje, Number... args) {
+        System.out.printf(mensaje + "\n", (Object[]) args);
+        System.out.println("****************");
     }
 }
 
