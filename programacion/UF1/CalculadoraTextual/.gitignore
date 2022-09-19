@@ -7,6 +7,11 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/misc.xml
+.idea/vcs.xml
+
+# Classes
+target/
 
 # AWS User-specific
 .idea/**/aws.xml
