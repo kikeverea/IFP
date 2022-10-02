@@ -1,5 +1,6 @@
 package ifp.kikeverea;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Start {
@@ -18,36 +19,38 @@ public class Start {
             "\t4. Dividir\n" +
             "\t5. Número mayor de 3 números\n" +
             "\t6. Capicúa\n" +
-            "\t0. Salir\n" +
-            "Introduzca una opción: ";
+            "\t0. Salir\n";
 
     private static Scanner scanner;
 
     public static void main(String[] args) {
-        //inicia el Scanner con el que se solicitara input a el usuario
+        // inicia el Scanner con el que se solicitara input a el usuario
         scanner = new Scanner(System.in);
         int opcion;
 
-        //imprime la cabecera
+        // imprime la cabecera
         System.out.println(CABECERA);
 
+        // itera hasta que el usuario introduzca la opción salir (0)
         while (true) {
-            //imprime el menu
+
+            // imprime el menu
             System.out.print(MENU);
 
-            //solicita opción al usuario
-            opcion = scanner.nextInt();
+            // solicita opción al usuario
+            opcion = (int) solicitarNumero("Introduzca una opción: ");
 
-            if (opcion == 0)
-                //termina el programa
+            if (opcion == 0) {
+                // termina el programa
                 break;
+            }
 
-            //línea en blanco
+            // línea en blanco
             System.out.println();
 
             ejecutarOpcion(opcion);
 
-            //línea en blanco
+            // línea en blanco
             System.out.println();
        }
 
@@ -105,7 +108,7 @@ public class Start {
         float[] numeros = solicitarNumeros(2, "División", "a dividir");
         float resultado;
 
-        //asegurarse que no se intenta dividir entre cero
+        // asegura que no se intenta dividir entre cero
         if (numeros[1] == 0) {
             System.out.println("Error division por 0");
             return;
@@ -126,12 +129,10 @@ public class Start {
         System.out.println("***** Capicúa *****");
         System.out.println("Introduzca un número para saber si es capicúa: ");
 
-        //solicita un int al usuario, para evitar problemas con nextLine() en el caso de haber
-        //corrido alguna de las otras opciones que utilizan nextFloat() antes que esta
+        // solicita un int al usuario para evitar problemas con nextLine(), de haberse
+        // escogido cualquiera de las otras opciones que utilizan nextFloat(), antes que esta.
         int numero = scanner.nextInt();
-
-        String cadenaDeNumero = String.valueOf(numero);
-        boolean esCapicua = esCapicua(cadenaDeNumero);
+        boolean esCapicua = esCapicua(String.valueOf(numero));
 
         imprimeResultado(String.format("%s es capicúa", esCapicua ? "SI" : "NO"));
     }
@@ -158,9 +159,19 @@ public class Start {
         return numeros;
     }
 
-    static float solicitarNumero(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextFloat();
+    private static float solicitarNumero(String mensaje) {
+        // itera hasta que el usuario introduce un número válido
+        while (true) {
+            try {
+                System.out.print(mensaje);
+                return scanner.nextFloat();
+            }
+            catch (InputMismatchException e) {
+                // consume el resto de la línea, para evitar un bucle infinito
+                scanner.nextLine();
+                System.out.println("Entrada no válida, por favor introduzca un número");
+            }
+        }
     }
 
     static void imprimeResultado(String mensaje, Number... args) {
