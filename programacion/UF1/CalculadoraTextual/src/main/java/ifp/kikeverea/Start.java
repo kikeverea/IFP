@@ -38,7 +38,7 @@ public class Start {
             System.out.print(MENU);
 
             // solicita opción al usuario
-            opcion = (int) solicitarNumero("Introduzca una opción: ");
+            opcion = solicitarEntero("Introduzca una opción: ");
 
             if (opcion == 0) {
                 // termina el programa
@@ -127,12 +127,13 @@ public class Start {
 
     private static void ejecutarCapicua() {
         System.out.println("***** Capicúa *****");
-        System.out.println("Introduzca un número para saber si es capicúa: ");
 
         // solicita un int al usuario para evitar problemas con nextLine(), de haberse
         // escogido cualquiera de las otras opciones que utilizan nextFloat(), antes que esta.
-        int numero = scanner.nextInt();
-        boolean esCapicua = esCapicua(String.valueOf(numero));
+        int numero = solicitarEntero("Introduzca un número para saber si es capicúa: ");
+
+        String numeroString = String.valueOf(numero);
+        boolean esCapicua = esCapicua(numeroString);
 
         imprimeResultado(String.format("%s es capicúa", esCapicua ? "SI" : "NO"));
     }
@@ -159,6 +160,10 @@ public class Start {
         return numeros;
     }
 
+    private static int solicitarEntero(String mensaje) {
+        return (int) solicitarNumero(mensaje);
+    }
+
     private static float solicitarNumero(String mensaje) {
         // itera hasta que el usuario introduce un número válido
         while (true) {
@@ -175,8 +180,9 @@ public class Start {
     }
 
     static void imprimeResultado(String mensaje, Number... args) {
+        System.out.println("****************************************************************");
         System.out.printf(mensaje + "\n", (Object[]) args);
-        System.out.println("****************");
+        System.out.println("****************************************************************");
     }
 }
 
