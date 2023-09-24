@@ -1,11 +1,6 @@
 package ifp.kikeverea;
+import java.lang.String;
 
-/**
- * <h3>Constructores</h3>
- * Persona (): constructor por defecto <br>
- * Persona (String): constructor con el parámetro "nombre" <br>
- * Persona (String, String, String, String, int): constructor con los siguinetes parámetros en orden: nombre, apellido, ciudad, nacionalidad, edad
- */
 public class Persona {
     
     private String nombre;
