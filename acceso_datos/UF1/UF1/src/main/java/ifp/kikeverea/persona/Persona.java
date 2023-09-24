@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.persona;
 import java.lang.String;
 
 public class Persona {
@@ -16,7 +16,7 @@ public class Persona {
 
     /**
      * Constructor con el parámetro "nombre"
-     * @param nombre
+     * @param nombre el nombre de la persona
      */
     public Persona(String nombre) {
         this.nombre = nombre;
@@ -24,11 +24,11 @@ public class Persona {
 
     /**
      * Constructor con los parámetros: nombre, apellido, ciudad, nacionalidad, edad
-     * @param nombre
-     * @param apellido
-     * @param ciudad
-     * @param nacionalidad
-     * @param edad
+     * @param nombre el nombre de la persona
+     * @param apellido el apellido de la persona
+     * @param ciudad la ciudad de nacimiento de la persona
+     * @param nacionalidad la nacionalidad de la persona
+     * @param edad la edad en años de la persona
      */
     public Persona(String nombre, String apellido, String ciudad, String nacionalidad, int edad) {
         this.nombre = nombre;
@@ -78,6 +78,10 @@ public class Persona {
         this.edad = edad;
     }
 
+    /**
+     *
+     * @return Una cadena con los atributos de esta Persona. Con formato para impresión
+     */
     @Override
     public String toString() {
         return "Nombre: '" + nombre + '\'' +

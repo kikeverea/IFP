@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.persona;
 
 public class Main {
     public static void main(String[] args) {
