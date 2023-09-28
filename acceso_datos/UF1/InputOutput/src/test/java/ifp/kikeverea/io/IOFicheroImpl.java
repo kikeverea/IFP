@@ -29,15 +29,30 @@ public class IOFicheroImpl implements IOFichero {
     }
 
     /**
-     * Escribe contenido a un fichero
-     * @param fichero El ficher en el que escribirá el contenido
+     * Escribe contenido a un fichero. Si el fichero ya tenía contenido, este será eliminado en el proceso de escritura
+     * @param fichero El fichero en el que escribirá el contenido
      * @param contenido El contenido a escribir en el fichero
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
     @Override
     public void escribirEnFichero(File fichero, String contenido) throws IOException {
-        // Crea un nuevo FileWriter para el fichero
-        try (FileWriter writer = new FileWriter(fichero)) {
+        escibirContenido(fichero, contenido, false);
+    }
+
+    /**
+     * Añade contenido al final de un fichero. El contenido del fichero no será modificado en el proceso de escritura
+     * @param fichero El fichero al que se le añadirá el contenido
+     * @param contenido El contenido a añadir al fichero
+     * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
+     */
+    @Override
+    public void anadirEnFichero(File fichero, String contenido) throws IOException {
+        escibirContenido(fichero, contenido, true);
+    }
+
+    private void escibirContenido(File fichero, String contenido, boolean append) throws IOException {
+        // Crea un nuevo escritor (FileWriter) para el fichero
+        try (FileWriter writer = new FileWriter(fichero, append)) {
             for (char c : contenido.toCharArray())
                 // Añade cada caracter al final del fichero
                 writer.append(c);

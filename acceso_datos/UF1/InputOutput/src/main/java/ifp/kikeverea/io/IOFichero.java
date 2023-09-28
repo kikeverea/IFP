@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 public interface IOFichero {
-    String leerContenido(File ruta) throws IOException;
-    void escribirEnFichero(File ruta, String contenido) throws IOException;
+    String leerContenido(File fichero) throws IOException;
+    void escribirEnFichero(File fichero, String contenido) throws IOException;
+    void anadirEnFichero(File fichero, String contenido) throws IOException;
 }
