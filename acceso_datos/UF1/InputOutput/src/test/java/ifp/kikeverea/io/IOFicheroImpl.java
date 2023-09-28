@@ -39,6 +39,7 @@ public class IOFicheroImpl implements IOFichero {
         // Crea un nuevo FileWriter para el fichero
         try (FileWriter writer = new FileWriter(fichero)) {
             for (char c : contenido.toCharArray())
+                // Añade cada caracter al final del fichero
                 writer.append(c);
         }
     }
