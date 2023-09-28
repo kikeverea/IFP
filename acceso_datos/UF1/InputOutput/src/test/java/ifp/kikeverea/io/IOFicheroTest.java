@@ -48,4 +48,22 @@ public class IOFicheroTest {
 
         Assertions.assertEquals(CONTENIDO_FICHERO, io.leerContenido(fichero));
     }
+
+    @Test
+    void anadirContenidoEnUnFicheroNoAlteraElContenidoExistente() throws Exception {
+        File fichero = new File(RUTA_FICHERO_DINAMICO);
+        fichero.deleteOnExit();
+
+        io.escribirEnFichero(fichero, CONTENIDO_FICHERO);
+        io.anadirEnFichero(fichero, "\nContenido adicional");
+
+        Assertions.assertEquals(CONTENIDO_FICHERO + "\n" + "Contenido adicional", io.leerContenido(fichero));
+    }
 }
+
+
+
+
+
+
+
