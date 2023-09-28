@@ -36,4 +36,15 @@ public class IOFicheroTest {
         io.escribirEnFichero(fichero, CONTENIDO_FICHERO);
         Assertions.assertEquals(CONTENIDO_FICHERO, io.leerContenido(fichero));
     }
+
+    @Test
+    void escribirContenidoEnUnFicheroEliminaElContenidoAnterior() throws Exception {
+        File fichero = new File(RUTA_BASE + "prueba_fichero_dinamica.txt");
+        fichero.deleteOnExit();
+
+        io.escribirEnFichero(fichero, "Este contenido será eliminado");
+        io.escribirEnFichero(fichero, CONTENIDO_FICHERO);
+
+        Assertions.assertEquals(CONTENIDO_FICHERO, io.leerContenido(fichero));
+    }
 }
