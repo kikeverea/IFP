@@ -28,16 +28,18 @@ public class IOFicheroImpl implements IOFichero {
         return sb.toString();
     }
 
+    /**
+     * Escribe contenido a un fichero
+     * @param fichero El ficher en el que escribirá el contenido
+     * @param contenido El contenido a escribir en el fichero
+     * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
+     */
     @Override
-    public void escribirEnFichero(String ruta, String contenido) throws IOException {
-        File fichero = new File(ruta);
-
+    public void escribirEnFichero(File fichero, String contenido) throws IOException {
         // Crea un nuevo FileWriter para el fichero
         try (FileWriter writer = new FileWriter(fichero)) {
-            int c;
-            while ((c = reader.read()) != -1)
-                // anexa caracteres al StringBuilder hasta que el reader llega al final del stream
-                sb.append((char) c);
+            for (char c : contenido.toCharArray())
+                writer.append(c);
         }
     }
 }
