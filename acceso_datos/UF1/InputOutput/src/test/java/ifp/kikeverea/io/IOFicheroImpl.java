@@ -5,14 +5,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class BufferedIOFichero implements IOFichero {
+public class IOFicheroImpl implements IOFichero {
 
-    public String leerContenido(String ruta) throws IOException {
+    /**
+     * Lee el contenido de un fichero de texto. Asume que el fichero existe
+     * @param fichero Fichero del cual se lee el contenido
+     * @return String con el contenido del fichero
+     * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
+     */
+    public String leerContenido(File fichero) throws IOException {
 
-        File fichero = new File(ruta);
         StringBuilder sb = new StringBuilder();
 
-        // Crea un nuevo FileReader para el fichero
+        // Crea un nuevo lector (FileReader) para el fichero
         try (FileReader reader = new FileReader(fichero)) {
             int c;
             while ((c = reader.read()) != -1)

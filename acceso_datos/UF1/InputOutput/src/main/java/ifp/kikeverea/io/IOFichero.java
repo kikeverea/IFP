@@ -1,8 +1,8 @@
 package ifp.kikeverea.io;
 
+import java.io.File;
 import java.io.IOException;
 
 public interface IOFichero {
-
-    String leerContenido(String ruta) throws IOException;
+    String leerContenido(File ruta) throws IOException;
 }
