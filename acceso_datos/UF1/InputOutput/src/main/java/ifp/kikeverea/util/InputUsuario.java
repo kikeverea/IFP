@@ -3,7 +3,7 @@ package ifp.kikeverea.util;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-class InputUsuario {
+public class InputUsuario {
 
     private final Scanner scanner;
     private final ValidadorNumeros validador;
