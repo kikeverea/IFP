@@ -79,15 +79,51 @@ public class Persona {
     }
 
     /**
-     *
-     * @return Una cadena con los atributos de esta Persona. Con formato para impresión
+     * Compara un Objeto con esta instancia de Persona
+     * @param o El objeto a comparar
+     * @return 'true' si el Objeto es igual o es una referencia a esta misma instancia de Persona, de lo contrario 'false'
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Persona persona = (Persona) o;
+        return edad == persona.edad && nombre.equals(persona.nombre) && apellido.equals(persona.apellido) && ciudad.equals(persona.ciudad) && nacionalidad.equals(persona.nacionalidad);
+    }
+
+    /**
+     * Convierte esta Persona en String
+     * @return Una String con los atributos de esta Persona
      */
     @Override
     public String toString() {
-        return "Nombre: '" + nombre + '\'' +
-                ", Apellido: '" + apellido + '\'' +
-                ", Ciudad: '" + ciudad + '\'' +
-                ", Nacionalidad: '" + nacionalidad + '\'' +
-                ", Edad: " + edad;
+        return "Nombre: '" + nombre + "', " +
+                "Apellido: '" + apellido + "', " +
+                "Ciudad: '" + ciudad + "', " +
+                "Nacionalidad: '" + nacionalidad + "', " +
+                "Edad: '" + edad + "'";
+    }
+
+    /**
+     * Convierte una String en una Persona. La operación es el opuesto simétrico a {@link #toString() toString}
+     * @param raw La String con la info para crear una nueva persona. Se asume que su formato viene dado por {@link #toString() toString}
+     * @return Una nueva persona con los atributos encontrados en la String 'raw'
+     */
+    public static Persona fromString(String raw) {
+        String[] attributos = raw.split(", ");
+        return new Persona(
+                extraerAtributo("Nombre", attributos[0]),
+                extraerAtributo("Apellido", attributos[1]),
+                extraerAtributo("Ciudad", attributos[2]),
+                extraerAtributo("Nacionalidad", attributos[3]),
+                Integer.parseInt(extraerAtributo("Edad", attributos[4]))
+        );
+    }
+
+    private static String extraerAtributo(String atributo, String raw) {
+        // longitud del atributo + los 3 caracteres siguientes (: ')
+        int longitudAtributo = atributo.length() + 3;
+
+        return raw.substring(longitudAtributo, raw.length() -1);
     }
 }
