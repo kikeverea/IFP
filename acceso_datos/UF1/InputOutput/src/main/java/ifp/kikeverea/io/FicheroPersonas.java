@@ -5,17 +5,11 @@ import ifp.kikeverea.persona.Persona;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FicheroPersonas {
 
-    public enum Estado {
-        NO_EXISTE,
-        CREADO,
-        CON_CONTENIDO
-    }
-
     private File fichero;
-    private Estado estado = Estado.NO_EXISTE;
     private final List<Persona> personas = new ArrayList<>();
     private final IOFichero<Persona> io;
 
@@ -35,11 +29,6 @@ public class FicheroPersonas {
             return false;
         }
 
-        if (fichero.exists()) {
-            estado = Estado.CON_CONTENIDO;
-            return true;
-        }
-
         return true;
     }
 
@@ -48,8 +37,8 @@ public class FicheroPersonas {
         return rutaDirectorioDeTrabajo == null || new File(rutaDirectorioDeTrabajo).exists();
     }
 
-    public Estado getEstado() {
-        return estado;
+    public boolean existe() {
+        return fichero.exists();
     }
 
     public void anadirPersona(Persona persona) {
