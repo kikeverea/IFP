@@ -36,7 +36,10 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
                 }
                 else sb.append(c);
             }
-            personas.add(Persona.fromString(sb.toString()));
+
+            // añade la última persona en el StringBuilder, si éste no está vacío
+            if(sb.length() > 0)
+                personas.add(Persona.fromString(sb.toString()));
         }
 
         return personas;
