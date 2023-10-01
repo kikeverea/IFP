@@ -12,21 +12,29 @@ import static ifp.kikeverea.main.AccionEscritura.SOBREESCIBIR_FICHERO;
 
 public class ProgramaEscritura {
 
+    private static final int SALIR = 0;
+
     private static final String MENU_ACCION_ESCRITURA =
         "El fichero ya existe. Elija una acción:\n" +
-            SOBREESCIBIR_FICHERO.numero() + "-" + SOBREESCIBIR_FICHERO.nombre() + "\n" +
-            ANADIR_A_FICHERO.numero() + "-" + ANADIR_A_FICHERO.nombre() + "\n" +
+            SOBREESCIBIR_FICHERO.numero() + "- " + SOBREESCIBIR_FICHERO.nombre() + "\n" +
+            ANADIR_A_FICHERO.numero() + "- " + ANADIR_A_FICHERO.nombre() + "\n" +
+            SALIR + "- Salir\n" +
             "Acción: ";
 
-    private static final String NUMERO_DE_PERSONAS = "Número de personas que desea escribir: ";
-
     public static void ejecutar(FicheroPersonas fichero, InputUsuario input) {
+        int numeroAccionElejida = determinarAccionEscritura(input);
+
+        if (numeroAccionElejida == SALIR) {
+            System.out.println("Programa finalizado");
+            System.exit(0);
+        }
+
         AccionEscritura accion =
             fichero.existe()
-                ? determinarAccionEscritura(input)
+                ? AccionEscritura.determinarAccion(numeroAccionElejida)
                 : CREAR_FICHERO;
 
-        int numeroDePersonas = input.solicitarEntero(NUMERO_DE_PERSONAS, ValidadorNumeros.soloPositivos());
+        int numeroDePersonas = input.solicitarEntero("Número de personas que desea escribir: ", ValidadorNumeros.enIntervalo(1, 3));
 
         solicitarPersonas(numeroDePersonas, input, fichero);
 
@@ -40,10 +48,9 @@ public class ProgramaEscritura {
         }
     }
 
-    private static AccionEscritura determinarAccionEscritura(InputUsuario input) {
-        ValidadorNumeros validadorAccion = ValidadorNumeros.enIntervalo(1,2);
-        int numeroAccion = input.solicitarEntero(MENU_ACCION_ESCRITURA, validadorAccion);
-        return AccionEscritura.determinarAccion(numeroAccion);
+    private static int determinarAccionEscritura(InputUsuario input) {
+        ValidadorNumeros validadorAccion = ValidadorNumeros.enIntervalo(0,2);
+        return input.solicitarEntero(MENU_ACCION_ESCRITURA, validadorAccion);
     }
 
     private static void solicitarPersonas(int numeroDePersonas, InputUsuario input, FicheroPersonas ficheroPersonas) {
