@@ -71,10 +71,9 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
         // Crea un nuevo escritor (FileWriter) para el fichero
         try (FileWriter writer = new FileWriter(fichero, anadir)) {
 
-            if (anadir) {
-                // añade salto de línea antes de anadir el contenido
+            // Si opción añadir y el fichero no está vacío, añadir un salto de línea antes de escribir
+            if (anadir && fichero.length() > 0)
                 writer.append('\n');
-            }
 
             for (char c : personasString.toCharArray()) {
                 // Añade cada caracter al fichero
