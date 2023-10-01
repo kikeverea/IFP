@@ -28,9 +28,12 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
         try (FileReader reader = new FileReader(fichero)) {
             int i;
             while ((i = reader.read()) != -1) {
+                // itera hasta llegar al final del archivo (read() == -1)
+
                 char c = (char) i;
-                // fin de línea, añade la Persona a la lista y vacía el StringBuilder
+
                 if (c == '\n') {
+                    // fin de línea, añade la Persona a la lista y vacía el StringBuilder
                     personas.add(Persona.fromString(sb.toString()));
                     sb.delete(0, sb.length());
                 }
@@ -75,10 +78,9 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
             if (anadir && fichero.length() > 0)
                 writer.append('\n');
 
-            for (char c : personasString.toCharArray()) {
-                // Añade cada caracter al fichero
+            // Añade cada caracter al fichero
+            for (char c : personasString.toCharArray())
                 writer.append(c);
-            }
         }
     }
 
