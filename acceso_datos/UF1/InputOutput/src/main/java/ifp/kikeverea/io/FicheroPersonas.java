@@ -40,27 +40,12 @@ public class FicheroPersonas {
             return true;
         }
 
-        // se asume que el fichero no existe
-        return crearFichero();
+        return true;
     }
 
     private boolean rutaDeTrabajoValida() {
         String rutaDirectorioDeTrabajo = fichero.getParent();
         return rutaDirectorioDeTrabajo == null || new File(rutaDirectorioDeTrabajo).exists();
-    }
-
-    private boolean crearFichero() {
-        try {
-            fichero.createNewFile();
-            estado = Estado.CREADO;
-        }
-        catch (IOException e) {
-            System.out.println("Error: La ruta del fichero no existe y/o éste no puede ser creado");
-            System.out.println("Causado por: " + e.getMessage());
-            return false;
-        }
-
-        return true;
     }
 
     public Estado getEstado() {
