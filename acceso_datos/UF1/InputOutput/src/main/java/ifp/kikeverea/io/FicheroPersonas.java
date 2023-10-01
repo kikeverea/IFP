@@ -52,4 +52,12 @@ public class FicheroPersonas {
     public Collection<Persona> leerFichero() throws IOException {
         return io.leerContenido(fichero);
     }
+
+    public Collection<Persona> leerConNombre(String nombre) throws IOException {
+        return io.leerContenido(fichero)
+            .stream()
+            .filter(persona -> persona.getNombre().equals(nombre))
+            .sorted((p1, p2) -> p1.getApellido().compareToIgnoreCase(p2.getApellido()))
+            .collect(Collectors.toList());
+    }
 }

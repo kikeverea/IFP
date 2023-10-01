@@ -1,6 +1,8 @@
-package ifp.kikeverea.persona;
+package ifp.kikeverea.main;
 
-public class Main {
+import ifp.kikeverea.persona.Persona;
+
+public class Ejercicio1 {
     public static void main(String[] args) {
         Persona persona1 = new Persona("Elsa", "Pato", "Zapata", "España", 34);
         Persona persona2 = new Persona("Susana", "Oria", "California", "Mexico", 25);
