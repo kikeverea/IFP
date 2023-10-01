@@ -19,7 +19,6 @@ public class IOFicheroTextoPersonaTest {
     );
 
     private static final String RUTA_BASE = "./src/test/java/ifp/kikeverea/io/";
-    private static final String RUTA_FICHERO = RUTA_BASE + "prueba_fichero.txt";
     private static final String RUTA_FICHERO_DINAMICO = RUTA_BASE + "prueba_fichero_dinamica.txt";
 
     private IOFichero<Persona> io;
@@ -32,21 +31,21 @@ public class IOFicheroTextoPersonaTest {
     @Test
     void escribeContenidoEnUnFichero() throws Exception {
         File fichero = new File(RUTA_FICHERO_DINAMICO);
-        fichero.deleteOnExit();
 
         io.escribirEnFichero(fichero, PERSONAS, false);
         Assertions.assertEquals(PERSONAS, io.leerContenido(fichero));
+        fichero.delete();
     }
 
     @Test
     void escribirContenidoEnUnFicheroEliminaElContenidoAnterior() throws Exception {
         File fichero = new File(RUTA_FICHERO_DINAMICO);
-        fichero.deleteOnExit();
 
         io.escribirEnFichero(fichero, List.of(PERSONAS.get(0)), false);
         io.escribirEnFichero(fichero, PERSONAS, false);
 
         Assertions.assertEquals(PERSONAS, io.leerContenido(fichero));
+        fichero.delete();
     }
 
     @Test
@@ -61,5 +60,15 @@ public class IOFicheroTextoPersonaTest {
         expected.add(personaAnadida);
 
         Assertions.assertEquals(expected, io.leerContenido(fichero));
+        fichero.delete();
+    }
+
+    @Test
+    void anadirContenidoEnUnFicheroVacionNoAlteraElContenidoQueSeAnade() throws Exception {
+        File fichero = new File(RUTA_FICHERO_DINAMICO);
+        io.escribirEnFichero(fichero, PERSONAS, true);
+
+        Assertions.assertEquals(PERSONAS, io.leerContenido(fichero));
+        fichero.delete();
     }
 }

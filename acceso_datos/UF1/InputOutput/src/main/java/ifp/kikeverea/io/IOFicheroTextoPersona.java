@@ -2,14 +2,10 @@ package ifp.kikeverea.io;
 
 import ifp.kikeverea.persona.Persona;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class IOFicheroTextoPersona implements IOFichero<Persona> {
 
@@ -22,27 +18,17 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
     public Collection<Persona> leerContenido(File fichero) throws IOException {
 
         List<Persona> personas = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
 
-        // Crea un nuevo lector (FileReader) para el fichero
-        try (FileReader reader = new FileReader(fichero)) {
-            int i;
-            while ((i = reader.read()) != -1) {
+        // Crea un nuevo lector (BufferedReader) para el fichero
+        try (FileInputStream fis = new FileInputStream(fichero);
+            InputStreamReader is = new InputStreamReader(fis);
+            BufferedReader reader = new BufferedReader(is))
+        {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 // itera hasta llegar al final del archivo (read() == -1)
-
-                char c = (char) i;
-
-                if (c == '\n') {
-                    // fin de línea, añade la Persona a la lista y vacía el StringBuilder
-                    personas.add(Persona.fromString(sb.toString()));
-                    sb.delete(0, sb.length());
-                }
-                else sb.append(c);
+                personas.add(Persona.fromString(line));
             }
-
-            // añade la última persona en el StringBuilder, si éste no está vacío
-            if(sb.length() > 0)
-                personas.add(Persona.fromString(sb.toString()));
         }
 
         return personas;
@@ -62,32 +48,21 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
     /**
      * Escribe contenido a un fichero
      * @param fichero El fichero en el que escribirá el contenido
-     * @param objetos Las Personas a escribir en el fichero
+     * @param personas Las Personas a escribir en el fichero
      * @param anadir Si es true, añade el contenido al final del archivo. Si es false los datos existentes en el fichero serán eliminados durante la escritura
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
     @Override
-    public void escribirEnFichero(File fichero, Collection<Persona> objetos, boolean anadir) throws IOException {
-        // convierte la collección de personas a String
-        String personasString = personasEnString(objetos);
-
+    public void escribirEnFichero(File fichero, Collection<Persona> personas, boolean anadir) throws IOException {
         // Crea un nuevo escritor (FileWriter) para el fichero
-        try (FileWriter writer = new FileWriter(fichero, anadir)) {
-
-            // Si opción añadir y el fichero no está vacío, añadir un salto de línea antes de escribir
-            if (anadir && fichero.length() > 0)
-                writer.append('\n');
-
-            // Añade cada caracter al fichero
-            for (char c : personasString.toCharArray())
-                writer.append(c);
+        try (FileOutputStream fos = new FileOutputStream(fichero, anadir);
+            OutputStreamWriter sw = new OutputStreamWriter(fos);
+            BufferedWriter writer = new BufferedWriter(sw))
+        {
+            for (Persona persona : personas) {
+                writer.write(persona.toString());
+                writer.newLine();
+            }
         }
-    }
-
-    private String personasEnString(Collection<Persona> personas) {
-        return personas
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.joining("\n"));
     }
 }
