@@ -16,22 +16,51 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
     public Collection<Persona> leerContenido(File fichero) throws IOException {
+        return leerContenido(fichero, null);
+    }
+
+    /**
+     * Lee el contenido de un fichero de texto. Asume que el fichero existe
+     * @param fichero Fichero del cual se lee el contenido
+     * @param filtro Filtro que se aplica a la lectura del fichero
+     * @return Collección de personas contenidas en el fichero, que han pasado el filtro
+     * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
+     */
+    public Collection<Persona> leerContenido(File fichero, FiltroPersona filtro) throws IOException {
 
         List<Persona> personas = new ArrayList<>();
 
-        // Crea un nuevo lector (BufferedReader) para el fichero
+        // Crea un nuevo flujo de entrada (BufferedReader)
         try (FileInputStream fis = new FileInputStream(fichero);
             InputStreamReader is = new InputStreamReader(fis);
             BufferedReader reader = new BufferedReader(is))
         {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // itera hasta llegar al final del archivo (read() == -1)
-                personas.add(Persona.fromString(line));
+            String linea;
+            while ((linea = reader.readLine()) != null) { // itera hasta llegar al final del archivo (linea == null)
+
+                if (filtro == null)
+                    personas.add(Persona.fromString(linea));
+
+                else if (pasaFiltro(filtro, linea))
+                    personas.add(Persona.fromString(linea));
             }
         }
 
         return personas;
+    }
+
+    private boolean pasaFiltro(FiltroPersona filtro, String linea) {
+        String atributo = filtro.atributo() + ": '";
+        int comienzaAtributo = linea.indexOf(atributo);
+
+        if (comienzaAtributo == -1) // no se encontró el atributo, no pasa el filtro
+            return false;
+
+        int terminaAtributo = comienzaAtributo + atributo.length();
+        int terminaValor = linea.indexOf(",", terminaAtributo) - 1;
+        String valor = linea.substring(terminaAtributo, terminaValor); // extrae el valor
+
+        return valor.equals(filtro.valor());
     }
 
     /**

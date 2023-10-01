@@ -4,13 +4,14 @@ import ifp.kikeverea.persona.Persona;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class FicheroPersonas {
 
     private File fichero;
-    private final List<Persona> personas = new ArrayList<>();
+    private final List<Persona> buffer = new ArrayList<>(3);
     private final IOFichero<Persona> io;
 
     /**
@@ -42,11 +43,11 @@ public class FicheroPersonas {
     }
 
     public void anadirPersona(Persona persona) {
-        personas.add(persona);
+        buffer.add(persona);
     }
 
     public void escribirFichero(boolean anadir) throws IOException {
-        io.escribirEnFichero(fichero, personas, anadir);
+        io.escribirEnFichero(fichero, buffer, anadir);
     }
 
     public Collection<Persona> leerFichero() throws IOException {
@@ -54,10 +55,6 @@ public class FicheroPersonas {
     }
 
     public Collection<Persona> leerConNombre(String nombre) throws IOException {
-        return io.leerContenido(fichero)
-            .stream()
-            .filter(persona -> persona.getNombre().equals(nombre))
-            .sorted((p1, p2) -> p1.getApellido().compareToIgnoreCase(p2.getApellido()))
-            .collect(Collectors.toList());
+        return io.leerContenido(fichero, new FiltroPersona("Nombre", nombre));
     }
 }
