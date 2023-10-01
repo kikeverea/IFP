@@ -1,8 +1,8 @@
 package ifp.kikeverea.util;
 
-interface ValidadorNumeros {
+public interface ValidadorNumeros {
 
-    boolean validarNumero(float numero);
+    boolean validarNumero(double numero);
     String mensajeError();
 
     static ValidadorNumeros soloPositivos() {
@@ -14,7 +14,7 @@ interface ValidadorNumeros {
 
     class ValidadorPositivos implements ValidadorNumeros {
         @Override
-        public boolean validarNumero(float numero) {
+        public boolean validarNumero(double numero) {
             return numero >= 0;
         }
 
@@ -26,7 +26,7 @@ interface ValidadorNumeros {
 
     class NoValidador implements ValidadorNumeros {
         @Override
-        public boolean validarNumero(float numero) {
+        public boolean validarNumero(double numero) {
             return true;
         }
 
