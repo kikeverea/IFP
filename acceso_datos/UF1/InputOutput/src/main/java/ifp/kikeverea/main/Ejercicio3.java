@@ -29,11 +29,11 @@ public class Ejercicio3 {
 
         switch (programa) {
             case ESCRIBIR:
-                fichero = solicitarFichero(input);
+                fichero = ProgramaProveerdorFicheros.solicitarFichero(new IOFicheroTextoPersona(), input);
                 ProgramaEscritura.ejecutar(fichero, input);
                 break;
             case LEER :
-                fichero = solicitarFicheroExistente(input);
+                fichero = ProgramaProveerdorFicheros.solicitarFicheroExistente(new IOFicheroTextoPersona(), input);
                 ProgramaLectura.ejecutar(fichero, input);
                 break;
             case SALIR:
@@ -41,31 +41,5 @@ public class Ejercicio3 {
                 System.exit(0);
                 break;
         }
-    }
-
-    private static FicheroPersonas solicitarFichero(InputUsuario input) {
-        FicheroPersonas fichero = new FicheroPersonas(new IOFicheroTextoPersona());
-        establecerRutaDelFichero(input, fichero);
-        return fichero;
-    }
-
-    private static FicheroPersonas solicitarFicheroExistente(InputUsuario input) {
-        do {
-            FicheroPersonas fichero = solicitarFichero(input);
-
-            if (fichero.existe())
-                return fichero;
-
-            else System.out.println("El fichero no existe");
-        }
-        while (true);
-    }
-
-    private static void establecerRutaDelFichero(InputUsuario input, FicheroPersonas fichero) {
-        String ruta;
-        do {
-            ruta = input.solicitarTexto("Ruta del fichero: ");
-        }
-        while (!fichero.establecerRuta(ruta));
     }
 }
