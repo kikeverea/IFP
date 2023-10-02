@@ -89,7 +89,8 @@ public class Persona implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Persona persona = (Persona) o;
-        return edad == persona.edad && nombre.equals(persona.nombre) && apellido.equals(persona.apellido) && ciudad.equals(persona.ciudad) && nacionalidad.equals(persona.nacionalidad);
+        return  edad == persona.edad && nombre.equals(persona.nombre) && apellido.equals(persona.apellido) &&
+                ciudad.equals(persona.ciudad) && nacionalidad.equals(persona.nacionalidad);
     }
 
     /**
