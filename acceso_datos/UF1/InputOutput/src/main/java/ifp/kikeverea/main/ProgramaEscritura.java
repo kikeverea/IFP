@@ -22,19 +22,15 @@ public class ProgramaEscritura {
             "Acción: ";
 
     public static void ejecutar(FicheroPersonas fichero, InputUsuario input) {
-        int numeroAccionElejida = determinarAccionEscritura(input);
-
-        if (numeroAccionElejida == SALIR) {
-            System.out.println("Programa finalizado");
-            System.exit(0);
-        }
-
         AccionEscritura accion =
             fichero.existe()
-                ? AccionEscritura.determinarAccion(numeroAccionElejida)
+                ? determinarAccionEscritura(input)
                 : CREAR_FICHERO;
 
-        int numeroDePersonas = input.solicitarEntero("Número de personas que desea escribir: ", ValidadorNumeros.enIntervalo(1, 3));
+
+        int numeroDePersonas = input.solicitarEntero(
+                "Número de personas que desea escribir (máx. " + MAX_PERSONAS + "): ",
+                ValidadorNumeros.enIntervalo(1, MAX_PERSONAS));
 
         solicitarPersonas(numeroDePersonas, input, fichero);
 
@@ -48,9 +44,11 @@ public class ProgramaEscritura {
         }
     }
 
-    private static int determinarAccionEscritura(InputUsuario input) {
+    private static AccionEscritura determinarAccionEscritura(InputUsuario input) {
+        System.out.println("Determinar accion");
         ValidadorNumeros validadorAccion = ValidadorNumeros.enIntervalo(0,2);
-        return input.solicitarEntero(MENU_ACCION_ESCRITURA, validadorAccion);
+        int numeroAccion = input.solicitarEntero(MENU_ACCION_ESCRITURA, validadorAccion);
+        return AccionEscritura.determinarAccion(numeroAccion);
     }
 
     private static void solicitarPersonas(int numeroDePersonas, InputUsuario input, FicheroPersonas ficheroPersonas) {
