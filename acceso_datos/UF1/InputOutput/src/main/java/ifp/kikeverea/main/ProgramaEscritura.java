@@ -21,14 +21,11 @@ public class ProgramaEscritura {
             "Acción: ";
 
     public static void ejecutar(FicheroPersonas fichero, InputUsuario input) {
-        AccionEscritura accion =
-            fichero.existe()
-                ? determinarAccionEscritura(input)
-                : CREAR_FICHERO;
+        AccionEscritura accion = determinarAccionEscritura(fichero, input);
 
         if (accion == CANCELAR) {
             System.out.println(CANCELAR.mensajeFinal());
-            System.exit(0);
+            System.exit(0);  // termina el programa
         }
 
         int numeroDePersonas = input.solicitarEntero(
@@ -47,8 +44,10 @@ public class ProgramaEscritura {
         }
     }
 
-    private static AccionEscritura determinarAccionEscritura(InputUsuario input) {
-        System.out.println("Determinar accion");
+    private static AccionEscritura determinarAccionEscritura(FicheroPersonas fichero, InputUsuario input) {
+        if (fichero.existe())
+            return CREAR_FICHERO;
+
         ValidadorNumeros validadorAccion = ValidadorNumeros.enIntervalo(0,2);
         int numeroAccion = input.solicitarEntero(MENU_ACCION_ESCRITURA, validadorAccion);
         return AccionEscritura.determinarAccion(numeroAccion);
