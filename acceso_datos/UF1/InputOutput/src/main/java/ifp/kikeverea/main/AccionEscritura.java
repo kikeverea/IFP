@@ -5,7 +5,8 @@ import java.util.Arrays;
 public enum AccionEscritura {
     SOBREESCIBIR_FICHERO(1, "Sobreescribir fichero", "Datos escritos al fichero"),
     ANADIR_A_FICHERO(2, "Añadir contenido al final", "Datos añadidos al final del fichero"),
-    CREAR_FICHERO(3, "Crear fichero", "Fichero creado correctamente");
+    CREAR_FICHERO(3, "Crear fichero", "Fichero creado correctamente"),
+    CANCELAR(0, "Cancelar", "Programa finalizado");
 
     private final int numero;
     private final String nombre;
@@ -17,12 +18,15 @@ public enum AccionEscritura {
         this.mensajeFinal = mensajeFinal;
     }
 
+
     public int numero() {
         return numero;
     }
+
     public String nombre() {
         return nombre;
     }
+
     public String mensajeFinal() {
         return mensajeFinal;
     }

@@ -8,17 +8,16 @@ import ifp.kikeverea.util.ValidadorNumeros;
 import java.io.IOException;
 
 import static ifp.kikeverea.main.AccionEscritura.*;
-import static ifp.kikeverea.main.AccionEscritura.SOBREESCIBIR_FICHERO;
 
 public class ProgramaEscritura {
 
-    private static final int SALIR = 0;
+    private static final int MAX_PERSONAS = 3;
 
     private static final String MENU_ACCION_ESCRITURA =
         "El fichero ya existe. Elija una acción:\n" +
             SOBREESCIBIR_FICHERO.numero() + "- " + SOBREESCIBIR_FICHERO.nombre() + "\n" +
             ANADIR_A_FICHERO.numero() + "- " + ANADIR_A_FICHERO.nombre() + "\n" +
-            SALIR + "- Salir\n" +
+            CANCELAR.numero() + "- " + CANCELAR.nombre() + "\n" +
             "Acción: ";
 
     public static void ejecutar(FicheroPersonas fichero, InputUsuario input) {
@@ -27,6 +26,10 @@ public class ProgramaEscritura {
                 ? determinarAccionEscritura(input)
                 : CREAR_FICHERO;
 
+        if (accion == CANCELAR) {
+            System.out.println(CANCELAR.mensajeFinal());
+            System.exit(0);
+        }
 
         int numeroDePersonas = input.solicitarEntero(
                 "Número de personas que desea escribir (máx. " + MAX_PERSONAS + "): ",
