@@ -26,7 +26,7 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
      * @return Collección de personas contenidas en el fichero, que han pasado el filtro
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
-    public Collection<Persona> leerContenido(File fichero, FiltroPersona filtro) throws IOException {
+    public Collection<Persona> leerContenido(File fichero, FiltroLectura filtro) throws IOException {
 
         List<Persona> personas = new ArrayList<>();
 
@@ -49,7 +49,7 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
         return personas;
     }
 
-    private boolean pasaFiltro(FiltroPersona filtro, String linea) {
+    private boolean pasaFiltro(FiltroLectura filtro, String linea) {
         String atributo = filtro.atributo() + ": '";
         int comienzaAtributo = linea.indexOf(atributo);
 

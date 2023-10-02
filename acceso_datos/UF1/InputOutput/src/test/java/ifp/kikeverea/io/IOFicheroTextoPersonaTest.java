@@ -61,7 +61,7 @@ public class IOFicheroTextoPersonaTest {
 
         List<Persona> expected = List.of(PERSONAS.get(1), PERSONAS.get(3));
 
-        Assertions.assertEquals(expected, io.leerContenido(fichero, new FiltroPersona("Nombre", "Elsa")));
+        Assertions.assertEquals(expected, io.leerContenido(fichero, new FiltroLectura("Nombre", "Elsa")));
     }
 
     @Test

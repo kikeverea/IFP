@@ -24,7 +24,7 @@ public class IOFicheroBinarioPersona implements IOFichero<Persona> {
     }
 
     @Override
-    public Collection<Persona> leerContenido(File fichero, FiltroPersona filtro) throws IOException {
+    public Collection<Persona> leerContenido(File fichero, FiltroLectura filtro) throws IOException {
         return leerContenido(fichero)
                 .stream()
                 .filter(persona -> extraerAtributo(persona, filtro.atributo()).equals(filtro.valor()))

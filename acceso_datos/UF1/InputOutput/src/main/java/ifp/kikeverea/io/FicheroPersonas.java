@@ -55,6 +55,6 @@ public class FicheroPersonas {
     }
 
     public Collection<Persona> leerConNombre(String nombre) throws IOException {
-        return io.leerContenido(fichero, new FiltroPersona("Nombre", nombre));
+        return io.leerContenido(fichero, new FiltroLectura("Nombre", nombre));
     }
 }
