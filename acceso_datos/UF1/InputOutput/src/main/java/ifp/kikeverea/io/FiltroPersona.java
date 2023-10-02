@@ -1,6 +1,7 @@
 package ifp.kikeverea.io;
 
 public class FiltroPersona {
+
     private final String atributo;
     private final String valor;
 

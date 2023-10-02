@@ -11,10 +11,10 @@ import java.util.Collection;
 public class ProgramaLectura {
 
     private static final String MENU_ACCION_LECTURA =
-            "Lectura. Elije una acción de lectura:\n" +
-                    "1- Leer todo el archivo:\n" +
-                    "2- Leer una persona:\n" +
-                    "Acción: ";
+        "Lectura. Elije una acción de lectura:\n" +
+            "1- Leer todo el archivo:\n" +
+            "2- Leer una persona:\n" +
+            "Acción: ";
 
     public static void ejecutar(FicheroPersonas fichero, InputUsuario input) {
         AccionLectura accion = determinarAccionLectura(input);
