@@ -3,6 +3,9 @@ package ifp.kikeverea.main;
 import ifp.kikeverea.io.FicheroPersonas;
 import ifp.kikeverea.io.IOFicheroBinarioPersona;
 import ifp.kikeverea.io.IOFicheroTextoPersona;
+import ifp.kikeverea.main.programas.ProgramaEscritura;
+import ifp.kikeverea.main.programas.ProgramaLectura;
+import ifp.kikeverea.main.programas.ProgramaProveerdorFicheros;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.ValidadorNumeros;
 

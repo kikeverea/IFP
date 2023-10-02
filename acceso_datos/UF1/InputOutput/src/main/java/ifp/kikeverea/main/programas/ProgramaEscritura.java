@@ -1,13 +1,14 @@
-package ifp.kikeverea.main;
+package ifp.kikeverea.main.programas;
 
 import ifp.kikeverea.io.FicheroPersonas;
+import ifp.kikeverea.main.programas.AccionEscritura;
 import ifp.kikeverea.persona.Persona;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.ValidadorNumeros;
 
 import java.io.IOException;
 
-import static ifp.kikeverea.main.AccionEscritura.*;
+import static ifp.kikeverea.main.programas.AccionEscritura.*;
 
 public class ProgramaEscritura {
 

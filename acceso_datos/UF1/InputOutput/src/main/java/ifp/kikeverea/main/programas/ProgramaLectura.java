@@ -1,6 +1,7 @@
-package ifp.kikeverea.main;
+package ifp.kikeverea.main.programas;
 
 import ifp.kikeverea.io.FicheroPersonas;
+import ifp.kikeverea.main.programas.AccionLectura;
 import ifp.kikeverea.persona.Persona;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.ValidadorNumeros;

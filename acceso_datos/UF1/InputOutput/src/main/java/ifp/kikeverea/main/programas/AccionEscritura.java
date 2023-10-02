@@ -1,4 +1,4 @@
-package ifp.kikeverea.main;
+package ifp.kikeverea.main.programas;
 
 import java.util.Arrays;
 

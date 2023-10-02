@@ -2,6 +2,8 @@ package ifp.kikeverea.main;
 
 import ifp.kikeverea.io.FicheroPersonas;
 import ifp.kikeverea.io.IOFicheroTextoPersona;
+import ifp.kikeverea.main.programas.ProgramaEscritura;
+import ifp.kikeverea.main.programas.ProgramaProveerdorFicheros;
 import ifp.kikeverea.util.InputUsuario;
 
 import java.util.Scanner;

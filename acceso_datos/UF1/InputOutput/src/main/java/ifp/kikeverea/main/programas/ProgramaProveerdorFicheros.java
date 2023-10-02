@@ -1,4 +1,4 @@
-package ifp.kikeverea.main;
+package ifp.kikeverea.main.programas;
 
 import ifp.kikeverea.io.FicheroPersonas;
 import ifp.kikeverea.io.IOFichero;
