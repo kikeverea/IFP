@@ -7,3 +7,5 @@ Carnet.jpg
 */maquinas/*
 *.mp4
 *.mpeg
+**/.idea/
+**/target/
