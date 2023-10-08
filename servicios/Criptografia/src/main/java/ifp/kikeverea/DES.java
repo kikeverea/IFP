@@ -30,7 +30,7 @@ public class DES {
         try {
             KeyGenerator generadorDeClaves = KeyGenerator.getInstance("DES");   // obtiene un generador de claves DES
             SecretKey clave = generadorDeClaves.generateKey();                  // genera una clave
-            Cipher cifrado = Cipher.getInstance("DES");                         // obtiene una instanci de cifrado DES
+            Cipher cifrado = Cipher.getInstance("DES");                         // obtiene una instancia de cifrado DES
 
             int opcion;
 
@@ -38,94 +38,67 @@ public class DES {
                 System.out.println("***** Cifrado de Ficheros *****");
                 opcion = input.solicitarEntero(MENU, ValidadorNumeros.enIntervalo(0, 2));
 
+                if (opcion == SALIR) {
+                    System.out.println("Programa finalizado");
+                    System.exit(0);
+                }
+
+                byte[] contenido = solicitarContenidoParaEncriptar(input);
+
                 switch (opcion) {
-                    case ENCRIPTAR -> encriptar(input, cifrado, clave);
-                    case DESENCRIPTAR -> desencriptar(input, cifrado, clave);
-                    case SALIR -> System.out.println("Programa finalizado");
+                    case ENCRIPTAR -> {
+                        cifrado.init(Cipher.ENCRYPT_MODE, clave);
+                        byte[] encriptado = cifrado.doFinal(contenido);
+                        Path rutaDestino = solicitarRutaParaEscritura(input);
+                        escribirEnRuta(rutaDestino, encriptado);
+                    }
+                    case DESENCRIPTAR -> {
+                        cifrado.init(Cipher.DECRYPT_MODE, clave);
+                        byte[] desencriptado = cifrado.doFinal(contenido);
+                        System.out.println("\n"+new String(desencriptado, StandardCharsets.UTF_8)+"\n");
+                    }
                 }
             }
-            while (opcion != SALIR);
-        }
-        catch (InvalidKeyException e) {
+            while (true);
+        } catch (InvalidKeyException e) {
             error("clave inválida");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             error("no se ha podido acceder al fichero");
-        }
-        catch (IllegalBlockSizeException | BadPaddingException e) {
+        } catch (IllegalBlockSizeException | BadPaddingException e) {
             error("no se ha podido aplicar el cifrado");
-        }
-        catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             error("no se ha podido iniciar el cifrado");
         }
     }
 
-    private static void encriptar(InputUsuario input, Cipher cifrado, SecretKey clave)
-            throws IOException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException
-    {
-        cifrado.init(Cipher.ENCRYPT_MODE, clave);
-
-        File fichero = solicitarFicheroParaLectura(input, "Ruta del fichero a encriptar: ");
-        byte[] resultado = ejecutarCifradoEnFichero(cifrado, fichero);
-
-        File ficheroDestino = solicitarFichero(input, "Ruta del fichero de destino: ");
-        escribirEnFichero(ficheroDestino, resultado);
-    }
-
-    private static void desencriptar(InputUsuario input, Cipher cifrado, SecretKey clave)
-            throws IOException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException
-    {
-        cifrado.init(Cipher.DECRYPT_MODE, clave);
-
-        File fichero = solicitarFicheroParaLectura(input, "Ruta del fichero a desencriptar: ");
-        byte[] resultado = ejecutarCifradoEnFichero(cifrado, fichero);
-
-        System.out.println();
-        System.out.println(new String(resultado, StandardCharsets.UTF_8));
-        System.out.println();
-    }
-
-    private static File solicitarFicheroParaLectura(InputUsuario input, String mensaje) {
+    private static byte[] solicitarContenidoParaEncriptar(InputUsuario input) throws IOException {
         do {
-            File fichero = solicitarFichero(input, mensaje);
+            Path ruta = Path.of(input.solicitarTexto("Ruta del fichero a desencriptar: "));
 
-            if(fichero.exists())
-                return fichero;
+            if(Files.exists(ruta))
+                return Files.readAllBytes(ruta);
 
-            System.out.println("Fichero inválido. El fichero no existe");
+            System.out.println("Ruta de fichero inválida. El fichero no existe");
         }
         while (true);
     }
 
-    private static File solicitarFichero(InputUsuario input, String mensaje) {
+    private static Path solicitarRutaParaEscritura(InputUsuario input) {
         do {
-            String ruta = input.solicitarTexto(mensaje);
-            File fichero = new File(ruta);
+            Path ruta = Path.of(input.solicitarTexto("Ruta del fichero de destino: "));
+            Path directorioDeTrabajo = ruta.getParent();
 
-            if (validarDirectorio(fichero))
-                return fichero;
+            if (directorioDeTrabajo == null || Files.exists(directorioDeTrabajo))
+                return ruta;
 
             System.out.println("Fichero inválido. La ruta del fichero no existe");
         }
         while (true);
     }
 
-    private static boolean validarDirectorio(File f) {
-        String directorioDeTrabajo = f.getParent();
-        return directorioDeTrabajo == null || new File(directorioDeTrabajo).exists();
-    }
-
-    private static byte[] ejecutarCifradoEnFichero(Cipher cifrado, File fichero)
-            throws IOException, IllegalBlockSizeException, BadPaddingException
-    {
-        Path ruta = Path.of(fichero.toURI());
-        byte[] contenidoFichero = Files.readAllBytes(ruta);     // lee el contenido entero del fichero
-        return cifrado.doFinal(contenidoFichero);               // aplica el cifrado al contenido
-    }
-
-    private static void escribirEnFichero(File fichero, byte[] contenido) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(fichero);
-             DataOutputStream dos = new DataOutputStream(fos);
+    private static void escribirEnRuta(Path ruta, byte[] contenido) throws IOException {
+        try (OutputStream os = Files.newOutputStream(ruta);
+             DataOutputStream dos = new DataOutputStream(os);
              BufferedOutputStream stream = new BufferedOutputStream(dos))
         {
             stream.write(contenido);        // escribe los datos al stream
