@@ -118,8 +118,9 @@ public class Persona implements Serializable {
 
     /**
      * Convierte una String en una Persona. La operación es el opuesto simétrico a {@link #toString() toString}
-     * @param raw La String con la info para crear una nueva persona. Se asume que su formato viene dado por {@link #toString() toString}
-     * @return Una nueva persona con los atributos encontrados en la String 'raw'
+     * @param raw String con la info para crear una nueva persona. Asume que su formato viene dado por {@link #toString() toString}
+     * @return Una nueva persona con los atributos encontrados en la String 'raw', o null si el formato de la String es inválido
+     * @throws DatosNoContienenPersonasException Si el formato de la String no se corresponde al formato que produce 'toString()'
      */
     public static Persona fromString(String raw) throws DatosNoContienenPersonasException {
         if (!formatoValido(raw))

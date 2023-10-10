@@ -10,21 +10,25 @@ import java.util.List;
 public class IOFicheroTextoPersona implements IOFichero<Persona> {
 
     /**
-     * Lee el contenido de un fichero de texto. Asume que el fichero existe
-     * @param fichero Fichero del cual se lee el contenido
+     * Lee objetos tipo Persona de un fichero de texto. Asume que el fichero existe. Asume que el formato del texto
+     * es igual al formato utilizado por los métodos de escritura de esta clase
+     * @param fichero Fichero del cual se lee los objetos de Persona
      * @return Colección de Personas contenidas en el fichero
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
+     * @throws DatosNoContienenPersonasException Si el fichero contiene instancias de Persona
      */
     public Collection<Persona> leerContenido(File fichero) throws IOException, DatosNoContienenPersonasException {
         return leerContenido(fichero, null);
     }
 
     /**
-     * Lee el contenido de un fichero de texto. Asume que el fichero existe
-     * @param fichero Fichero del cual se lee el contenido
+     * Lee objetos tipo Persona de un fichero de texto. Asume que el fichero existe. Asume que el formato del texto
+     * es igual al formato utilizado por los métodos de escritura de esta clase
+     * @param fichero Fichero del cual se lee los objetos de Persona
      * @param filtro Filtro que se aplica a la lectura del fichero
-     * @return Collección de personas contenidas en el fichero, que han pasado el filtro
+     * @return Colección de Personas contenidas en el fichero, o null si el formato del contenido es incorrecto
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
+     * @throws DatosNoContienenPersonasException Si el fichero contiene instancias de Persona
      */
     public Collection<Persona> leerContenido(File fichero, FiltroLectura<Persona> filtro) throws IOException,
             DatosNoContienenPersonasException
@@ -52,7 +56,7 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
     /**
      * Escribe contenido a un fichero. Si el fichero ya tenía contenido, este será eliminado en el proceso de escritura
      * @param fichero El fichero en el que escribirá el contenido
-     * @param objetos Las Personas a escribir en el fichero
+     * @param personas Las Personas a escribir en el fichero
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
     @Override
@@ -64,7 +68,8 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
      * Escribe contenido a un fichero
      * @param fichero El fichero en el que escribirá el contenido
      * @param personas Las Personas a escribir en el fichero
-     * @param anadir Si es true, añade el contenido al final del archivo. Si es false los datos existentes en el fichero serán eliminados durante la escritura
+     * @param anadir Si es true, añade el contenido al final del archivo. Si es false los datos existentes en el
+     *               fichero serán eliminados durante la escritura
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
     @Override

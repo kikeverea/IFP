@@ -15,6 +15,9 @@ public interface ValidadorNumeros {
         return new ValidadorEnIntervalo(start, end);
     }
 
+    /**
+     * Clase que valida números solo si son positivos
+     */
     class ValidadorPositivos implements ValidadorNumeros {
         @Override
         public boolean validarNumero(double numero) {
@@ -27,6 +30,9 @@ public interface ValidadorNumeros {
         }
     }
 
+    /**
+     * Clase que valida números solo si se encuentran dentro del intervalo establecido
+     */
     class ValidadorEnIntervalo implements ValidadorNumeros {
 
         private final int start;
@@ -48,6 +54,9 @@ public interface ValidadorNumeros {
         }
     }
 
+    /**
+     * Clase que ignora la validación de números
+     */
     class NoValidador implements ValidadorNumeros {
         @Override
         public boolean validarNumero(double numero) {
