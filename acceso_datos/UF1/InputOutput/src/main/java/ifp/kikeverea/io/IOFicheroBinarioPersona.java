@@ -3,7 +3,6 @@ package ifp.kikeverea.io;
 import ifp.kikeverea.persona.Persona;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -23,7 +22,7 @@ public class IOFicheroBinarioPersona implements IOFichero<Persona> {
              BufferedInputStream bs = new BufferedInputStream(fis);
              ObjectInputStream reader = new ObjectInputStream(bs))
         {
-            return (ArrayList<Persona>) reader.readObject();
+            return (Collection<Persona>) reader.readObject();
         }
         catch (ClassNotFoundException e) {
             throw new DatosNoContienenPersonasException("El fichero no contiene objetos de Persona");
