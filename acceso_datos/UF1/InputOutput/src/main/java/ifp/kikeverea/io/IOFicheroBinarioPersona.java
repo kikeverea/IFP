@@ -27,25 +27,8 @@ public class IOFicheroBinarioPersona implements IOFichero<Persona> {
     public Collection<Persona> leerContenido(File fichero, FiltroLectura filtro) throws IOException {
         return leerContenido(fichero)
                 .stream()
-                .filter(persona -> extraerAtributo(persona, filtro.atributo()).equals(filtro.valor()))
+                .filter(filtro::pasaFiltro)
                 .collect(Collectors.toList());
-    }
-
-    private Object extraerAtributo(Persona persona, String atributo) {
-        switch (atributo) {
-            case "Nombre" :
-                return persona.getNombre();
-            case "Apellido" :
-                return persona.getApellido();
-            case "Ciudad" :
-                return persona.getCiudad();
-            case "Nacionalidad" :
-                return persona.getNacionalidad();
-            case "Edad" :
-                return persona.getEdad();
-            default:
-                throw new IllegalArgumentException("El filtro no contiene nungún atributo de la clase Persona");
-        }
     }
 
     @Override

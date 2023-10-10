@@ -38,29 +38,14 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
             String linea;
             while ((linea = reader.readLine()) != null) { // itera hasta llegar al final del archivo (linea == null)
 
-                if (filtro == null)
-                    personas.add(Persona.fromString(linea));
+                Persona persona = Persona.fromString(linea);
 
-                else if (pasaFiltro(filtro, linea))
-                    personas.add(Persona.fromString(linea));
+                if (filtro == null || filtro.pasaFiltro(persona))
+                    personas.add(persona);
             }
         }
 
         return personas;
-    }
-
-    private boolean pasaFiltro(FiltroLectura filtro, String linea) {
-        String atributo = filtro.atributo() + ": '";
-        int comienzaAtributo = linea.indexOf(atributo);
-
-        if (comienzaAtributo == -1) // no se encontró el atributo, no pasa el filtro
-            return false;
-
-        int terminaAtributo = comienzaAtributo + atributo.length();
-        int terminaValor = linea.indexOf(",", terminaAtributo) - 1;
-        String valor = linea.substring(terminaAtributo, terminaValor); // extrae el valor
-
-        return valor.equals(filtro.valor());
     }
 
     /**
