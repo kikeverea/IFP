@@ -1,4 +1,4 @@
-package ifp.kikeverea.main.programas;
+package ifp.kikeverea.programas;
 
 import ifp.kikeverea.io.DatosNoContienenPersonasException;
 import ifp.kikeverea.io.FicheroPersonas;
@@ -12,13 +12,13 @@ import java.util.Collection;
 public class ProgramaLectura {
 
     private static final String MENU_ACCION_LECTURA =
-        "Lectura. Elije una acción de lectura:\n" +
+        "Elije una acción de lectura:\n" +
             "1- Leer todo el archivo:\n" +
             "2- Leer una persona:\n" +
             "Acción: ";
 
     public static void ejecutar(FicheroPersonas fichero, InputUsuario input) {
-        AccionLectura accion = determinarAccionLectura(input);
+        AccionLectura accion = solicitarAccionLectura(input);
 
         try {
             if (accion == AccionLectura.LEER_TODO) {
@@ -35,7 +35,7 @@ public class ProgramaLectura {
         }
     }
 
-    private static AccionLectura determinarAccionLectura(InputUsuario input) {
+    private static AccionLectura solicitarAccionLectura(InputUsuario input) {
         ValidadorNumeros validadorAccion = ValidadorNumeros.enIntervalo(1,2);
         int numeroAccion = input.solicitarEntero(MENU_ACCION_LECTURA, validadorAccion);
 

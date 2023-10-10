@@ -1,4 +1,4 @@
-package ifp.kikeverea.main.programas;
+package ifp.kikeverea.programas;
 
 public enum AccionLectura {
     LEER_TODO(1),

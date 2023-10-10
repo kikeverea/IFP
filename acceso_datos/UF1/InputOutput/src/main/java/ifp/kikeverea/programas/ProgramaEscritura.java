@@ -1,14 +1,13 @@
-package ifp.kikeverea.main.programas;
+package ifp.kikeverea.programas;
 
 import ifp.kikeverea.io.FicheroPersonas;
-import ifp.kikeverea.main.programas.AccionEscritura;
 import ifp.kikeverea.persona.Persona;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.ValidadorNumeros;
 
 import java.io.IOException;
 
-import static ifp.kikeverea.main.programas.AccionEscritura.*;
+import static ifp.kikeverea.programas.AccionEscritura.*;
 
 public class ProgramaEscritura {
 
@@ -22,7 +21,7 @@ public class ProgramaEscritura {
             "Acción: ";
 
     public static void ejecutar(FicheroPersonas fichero, InputUsuario input) {
-        AccionEscritura accion = determinarAccionEscritura(fichero, input);
+        AccionEscritura accion = solicitarAccionEscritura(fichero, input);
 
         if (accion == CANCELAR) {
             System.out.println(CANCELAR.mensajeFinal());
@@ -31,12 +30,14 @@ public class ProgramaEscritura {
 
         int numeroDePersonas = input.solicitarEntero(
                 "Número de personas que desea escribir (máx. " + MAX_PERSONAS + "): ",
-                ValidadorNumeros.enIntervalo(1, MAX_PERSONAS));
+                ValidadorNumeros.enIntervalo(1, MAX_PERSONAS)
+        );
 
         solicitarPersonas(numeroDePersonas, input, fichero);
 
         try {
-            fichero.escribirFichero(accion == ANADIR_A_FICHERO);
+            boolean anadirAlFinal = accion == ANADIR_A_FICHERO;
+            fichero.escribirFichero(anadirAlFinal);
             System.out.println(accion.mensajeFinal());
         }
         catch (IOException e) {
@@ -45,8 +46,8 @@ public class ProgramaEscritura {
         }
     }
 
-    private static AccionEscritura determinarAccionEscritura(FicheroPersonas fichero, InputUsuario input) {
-        if (fichero.existe())
+    private static AccionEscritura solicitarAccionEscritura(FicheroPersonas fichero, InputUsuario input) {
+        if (!fichero.existe())
             return CREAR_FICHERO;
 
         ValidadorNumeros validadorAccion = ValidadorNumeros.enIntervalo(0,2);

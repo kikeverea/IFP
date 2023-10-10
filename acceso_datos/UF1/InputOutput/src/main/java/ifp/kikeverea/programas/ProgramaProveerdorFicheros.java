@@ -1,4 +1,4 @@
-package ifp.kikeverea.main.programas;
+package ifp.kikeverea.programas;
 
 import ifp.kikeverea.io.FicheroPersonas;
 import ifp.kikeverea.io.IOFichero;
@@ -6,13 +6,6 @@ import ifp.kikeverea.persona.Persona;
 import ifp.kikeverea.util.InputUsuario;
 
 public class ProgramaProveerdorFicheros {
-
-    public static FicheroPersonas solicitarFichero(IOFichero<Persona> io, InputUsuario input) {
-        FicheroPersonas fichero = new FicheroPersonas(io);
-        establecerRutaDelFichero(input, fichero);
-
-        return fichero;
-    }
 
     public static FicheroPersonas solicitarFicheroExistente(IOFichero<Persona> io, InputUsuario input) {
         do {
@@ -24,6 +17,13 @@ public class ProgramaProveerdorFicheros {
             else System.out.println("El fichero no existe");
         }
         while (true);
+    }
+
+    public static FicheroPersonas solicitarFichero(IOFichero<Persona> io, InputUsuario input) {
+        FicheroPersonas fichero = new FicheroPersonas(io);
+        establecerRutaDelFichero(input, fichero);
+
+        return fichero;
     }
 
     private static void establecerRutaDelFichero(InputUsuario input, FicheroPersonas fichero) {
