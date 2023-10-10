@@ -1,7 +1,7 @@
 package ifp.kikeverea.main.programas;
 
+import ifp.kikeverea.io.DatosNoContienenPersonasException;
 import ifp.kikeverea.io.FicheroPersonas;
-import ifp.kikeverea.main.programas.AccionLectura;
 import ifp.kikeverea.persona.Persona;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.ValidadorNumeros;
@@ -29,7 +29,7 @@ public class ProgramaLectura {
                 imprimirPersonas(fichero.leerConNombre(nombre));
             }
         }
-        catch (IOException e) {
+        catch (DatosNoContienenPersonasException | IOException e) {
             System.out.println("Error: no se ha podido leer el fichero");
             System.out.println("Causa: " + e.getMessage());
         }

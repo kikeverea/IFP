@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class PersonaTest {
 
     @Test
-    void convierteUnaStringConFormatoToStringEnPersona() {
+    void convierteUnaStringConFormatoToStringEnPersona() throws Exception {
         Persona persona = new Persona("Aquiles", "Brinco", "Filadelfia", "Estados Unidos", 59);
         String personaString = persona.toString();
 

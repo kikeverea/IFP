@@ -15,7 +15,7 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
      * @return Colección de Personas contenidas en el fichero
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
-    public Collection<Persona> leerContenido(File fichero) throws IOException {
+    public Collection<Persona> leerContenido(File fichero) throws IOException, DatosNoContienenPersonasException {
         return leerContenido(fichero, null);
     }
 
@@ -26,8 +26,9 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
      * @return Collección de personas contenidas en el fichero, que han pasado el filtro
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
-    public Collection<Persona> leerContenido(File fichero, FiltroLectura filtro) throws IOException {
-
+    public Collection<Persona> leerContenido(File fichero, FiltroLectura<Persona> filtro) throws IOException,
+            DatosNoContienenPersonasException
+    {
         List<Persona> personas = new ArrayList<>();
 
         // Crea un nuevo flujo de entrada (BufferedReader)
@@ -55,8 +56,8 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
     @Override
-    public void escribirEnFichero(File fichero, Collection<Persona> objetos) throws IOException {
-        escribirEnFichero(fichero, objetos, false);
+    public void escribirEnFichero(File fichero, Collection<Persona> personas) throws IOException {
+        escribirEnFichero(fichero, personas, false);
     }
 
     /**

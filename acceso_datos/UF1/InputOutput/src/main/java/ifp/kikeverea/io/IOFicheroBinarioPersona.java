@@ -11,7 +11,7 @@ public class IOFicheroBinarioPersona implements IOFichero<Persona> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Collection<Persona> leerContenido(File fichero) throws IOException {
+    public Collection<Persona> leerContenido(File fichero) throws IOException, DatosNoContienenPersonasException {
         try (FileInputStream fis = new FileInputStream(fichero);
              BufferedInputStream bs = new BufferedInputStream(fis);
              ObjectInputStream reader = new ObjectInputStream(bs))
@@ -19,12 +19,14 @@ public class IOFicheroBinarioPersona implements IOFichero<Persona> {
             return (ArrayList<Persona>) reader.readObject();
         }
         catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("El fichero no contiene objetos tipo ArrayList<Persona>");
+            throw new DatosNoContienenPersonasException("El fichero no contiene objetos de Persona");
         }
     }
 
     @Override
-    public Collection<Persona> leerContenido(File fichero, FiltroLectura filtro) throws IOException {
+    public Collection<Persona> leerContenido(File fichero, FiltroLectura<Persona> filtro) throws IOException,
+            DatosNoContienenPersonasException
+    {
         return leerContenido(fichero)
                 .stream()
                 .filter(filtro::pasaFiltro)

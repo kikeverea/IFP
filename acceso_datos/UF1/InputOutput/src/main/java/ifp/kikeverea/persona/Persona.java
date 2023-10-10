@@ -1,6 +1,9 @@
 package ifp.kikeverea.persona;
+
+import ifp.kikeverea.io.DatosNoContienenPersonasException;
+
 import java.io.Serializable;
-import java.lang.String;
+import java.util.regex.Pattern;
 
 public class Persona implements Serializable {
     
@@ -9,6 +12,13 @@ public class Persona implements Serializable {
     private String ciudad;
     private String nacionalidad;
     private int edad;
+
+    private static final Pattern FORMATO = Pattern.compile(
+            "^Nombre: '.+', " +
+            "Apellido: '.+', " +
+            "Ciudad: '.+', " +
+            "Nacionalidad: '.+', " +
+            "Edad: '[0-9]+'$");
 
     /**
      * Constructor por defecto
@@ -111,8 +121,13 @@ public class Persona implements Serializable {
      * @param raw La String con la info para crear una nueva persona. Se asume que su formato viene dado por {@link #toString() toString}
      * @return Una nueva persona con los atributos encontrados en la String 'raw'
      */
-    public static Persona fromString(String raw) {
+    public static Persona fromString(String raw) throws DatosNoContienenPersonasException {
+        if (!formatoValido(raw))
+            throw new DatosNoContienenPersonasException("El formato de la String no se corresponde al formato " +
+                    "que produce 'toString()'. No se ha podido extraer ninguna instancia de Persona");
+
         String[] attributos = raw.split(", ");
+
         return new Persona(
                 extraerAtributo("Nombre", attributos[0]),
                 extraerAtributo("Apellido", attributos[1]),
@@ -122,10 +137,14 @@ public class Persona implements Serializable {
         );
     }
 
+    private static boolean formatoValido(String raw) {
+        return FORMATO.matcher(raw).matches();
+    }
+
     private static String extraerAtributo(String atributo, String raw) {
         // longitud del atributo + los 3 caracteres siguientes (: ')
-        int longitudAtributo = atributo.length() + 3;
+        int longitudNombreAtributo = atributo.length() + 3;
 
-        return raw.substring(longitudAtributo, raw.length() -1);
+        return raw.substring(longitudNombreAtributo, raw.length() -1);
     }
 }

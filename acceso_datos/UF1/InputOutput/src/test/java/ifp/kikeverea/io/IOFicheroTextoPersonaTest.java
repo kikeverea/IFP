@@ -47,7 +47,7 @@ public class IOFicheroTextoPersonaTest {
     }
 
     @Test
-    void escribeContenidoLuegoLeeElMismoContenido() throws IOException {
+    void escribeContenidoLuegoLeeElMismoContenido() throws IOException, DatosNoContienenPersonasException {
         File fichero = new File(RUTA_FICHERO);
         io.escribirEnFichero(fichero, PERSONAS, true);
 

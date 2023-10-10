@@ -50,11 +50,11 @@ public class FicheroPersonas {
         io.escribirEnFichero(fichero, buffer, anadir);
     }
 
-    public Collection<Persona> leerFichero() throws IOException {
+    public Collection<Persona> leerFichero() throws IOException, DatosNoContienenPersonasException {
         return io.leerContenido(fichero);
     }
 
-    public Collection<Persona> leerConNombre(String nombre) throws IOException {
-        return io.leerContenido(fichero, new FiltroLectura("Nombre", nombre));
+    public Collection<Persona> leerConNombre(String nombre) throws IOException, DatosNoContienenPersonasException {
+        return io.leerContenido(fichero, new FiltroNombrePersona(nombre));
     }
 }
