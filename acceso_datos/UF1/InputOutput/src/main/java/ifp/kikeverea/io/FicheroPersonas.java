@@ -26,10 +26,15 @@ public class FicheroPersonas {
         this.io = io;
     }
 
+    /**
+     * Valida y establece la ruta recibida como la ruta con la que trabajará esta clase
+     * @param ruta La ruta a validar y establecer
+     * @return true si la ruta es válida, false si es inválida
+     */
     public boolean establecerRuta(String ruta) {
         fichero = new File(ruta);
 
-        if (!rutaDeTrabajoValida()) {
+        if (!rutaDeDirectorioValida()) {
             System.out.println("La ruta del directorio de trabajo no existe");
             return false;
         }
@@ -37,7 +42,7 @@ public class FicheroPersonas {
         return true;
     }
 
-    private boolean rutaDeTrabajoValida() {
+    private boolean rutaDeDirectorioValida() {
         String rutaDirectorioDeTrabajo = fichero.getParent();
         return rutaDirectorioDeTrabajo == null || new File(rutaDirectorioDeTrabajo).exists();
     }
@@ -56,7 +61,7 @@ public class FicheroPersonas {
 
     /**
      * Escribe el contenido del buffer en la ruta establecida
-     * @param anadir Si es true, añade el contenido al final del fichero, de lo contrario sobreescribe el conrenido del fichero
+     * @param anadir Si es true, añade el contenido al final del fichero, si no, sobreescribe el contenido del fichero
      * @throws IOException Si el fichero no existe, o hay excepciones de tipo input/output
      */
     public void escribirFichero(boolean anadir) throws IOException {

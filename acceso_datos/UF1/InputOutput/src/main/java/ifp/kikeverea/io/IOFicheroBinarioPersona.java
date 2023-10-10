@@ -22,7 +22,7 @@ public class IOFicheroBinarioPersona implements IOFichero<Persona> {
              BufferedInputStream bs = new BufferedInputStream(fis);
              ObjectInputStream reader = new ObjectInputStream(bs))
         {
-            return (Collection<Persona>) reader.readObject();
+            return (Collection<Persona>) reader.readObject();   // lee y reconstruye un objeto de Persona del fichero
         }
         catch (ClassNotFoundException e) {
             throw new DatosNoContienenPersonasException("El fichero no contiene objetos de Persona");
@@ -57,9 +57,9 @@ public class IOFicheroBinarioPersona implements IOFichero<Persona> {
     public void escribirEnFichero(File fichero, Collection<Persona> personas) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(fichero);
              BufferedOutputStream bs = new BufferedOutputStream(fos);
-             ObjectOutputStream writer = new ObjectOutputStream(bs))
+             ObjectOutputStream writer = new ObjectOutputStream(bs)) // crea un flujo de salida de objetos al fichero
         {
-            writer.writeObject(personas);
+            writer.writeObject(personas);   // escribe un objeto de Persona serializado en el fichero
         }
     }
 

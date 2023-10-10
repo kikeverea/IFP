@@ -43,13 +43,12 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
             String linea;
             while ((linea = reader.readLine()) != null) { // itera hasta llegar al final del archivo (linea == null)
 
-                Persona persona = Persona.fromString(linea);
+                Persona persona = Persona.fromString(linea);  // reconstruye una Persona a partir de la línea
 
                 if (filtro == null || filtro.pasaFiltro(persona))
                     personas.add(persona);
             }
         }
-
         return personas;
     }
 
@@ -74,14 +73,13 @@ public class IOFicheroTextoPersona implements IOFichero<Persona> {
      */
     @Override
     public void escribirEnFichero(File fichero, Collection<Persona> personas, boolean anadir) throws IOException {
-        // Crea un nuevo escritor (FileWriter) para el fichero
         try (FileOutputStream fos = new FileOutputStream(fichero, anadir);
             OutputStreamWriter sw = new OutputStreamWriter(fos);
-            BufferedWriter writer = new BufferedWriter(sw))
+            BufferedWriter writer = new BufferedWriter(sw)) // Crea un nuevo escritor con buffer para el fichero
         {
             for (Persona persona : personas) {
-                writer.write(persona.toString());
-                writer.newLine();
+                writer.write(persona.toString());   // escribe una String con los atributos de Persona en el fichero
+                writer.newLine();                   // escribe un salto de línea en el fichero
             }
         }
     }
