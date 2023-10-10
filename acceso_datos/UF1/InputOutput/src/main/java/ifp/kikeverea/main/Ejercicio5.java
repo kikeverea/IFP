@@ -48,7 +48,7 @@ public class Ejercicio5 {
                 ProgramaEscritura.ejecutar(fichero, input);
                 break;
             case LEER_BINARIO:
-                fichero = ProgramaProveerdorFicheros.solicitarFichero(new IOFicheroBinarioPersona(), input);
+                fichero = ProgramaProveerdorFicheros.solicitarFicheroExistente(new IOFicheroBinarioPersona(), input);
                 ProgramaLectura.ejecutar(fichero, input);
                 break;
             case SALIR:
