@@ -1,28 +1,45 @@
-package ifp.kikeverea;
+package ifp.kikeverea.util;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-class InputUsuario {
+/**
+ * Clase que facilita la solicitud de datos al usuario por entrada estándar
+ */
+public class InputUsuario {
 
     private final Scanner scanner;
-    private final ValidadorNumeros validador;
-
+    
     public InputUsuario(Scanner scanner) {
-        this(scanner, ValidadorNumeros.sinValidacion());
-    }
-
-    public InputUsuario(Scanner scanner, ValidadorNumeros validador) {
         this.scanner = scanner;
-        this.validador = validador;
     }
 
+    /**
+     * Solicita una entrada de texto al usuario
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada 
+     * @return El texto proporcionado por el usuario
+     */
     public String solicitarTexto(String mensaje) {
         System.out.print(mensaje);
         return scanner.nextLine();
     }
 
+    /**
+     * Solicita una entrada de entero al usuario
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada 
+     * @return El entero proporcionado por el usuario
+     */
     public int solicitarEntero(String mensaje) {
+        return solicitarEntero(mensaje, ValidadorNumeros.sinValidacion());
+    }
+
+    /**
+     * Solicita una entrada de entero al usuario, hasta que ésta sea válida
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada
+     * @param validador el objeto que dará validez a la entrada del usuario
+     * @return El entero proporcionado por el usuario, una vez validado
+     */
+    public int solicitarEntero(String mensaje, ValidadorNumeros validador) {
         while (true) {
             try {
                 // imprime el mensaje al usuario en pantalla y lee el siguiente entero introducido
@@ -32,7 +49,7 @@ class InputUsuario {
                 // consume el resto de la línea
                 scanner.nextLine();
 
-                // comprobar validez
+                // comprueba validez
                 if (!validador.validarNumero(entero)) {
                     System.out.println(validador.mensajeError());
                     continue;
@@ -46,12 +63,27 @@ class InputUsuario {
         }
     }
 
-    public float solicitarDecimal(String mensaje) {
+    /**
+     * Solicita una entrada de número al usuario
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada
+     * @return El número proporcionado por el usuario
+     */
+    public double solicitarDecimal(String mensaje) {
+        return solicitarDecimal(mensaje, ValidadorNumeros.sinValidacion());
+    }
+
+    /**
+     * Solicita una entrada de número al usuario, hasta que ésta sea válida
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada
+     * @param validador el objeto que dará validez a la entrada del usuario
+     * @return El número proporcionado por el usuario, una vez validado
+     */
+    public double solicitarDecimal(String mensaje, ValidadorNumeros validador) {
         while (true) {
             try {
                 // imprime el mensaje al usuario en pantalla y lee el siguiente flotante introducido
                 System.out.print(mensaje);
-                float decimal = scanner.nextFloat();
+                double decimal = scanner.nextDouble();
 
                 // consume el resto de la línea
                 scanner.nextLine();
