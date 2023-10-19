@@ -2,6 +2,7 @@ package ifp.kikeverea;
 
 public class Montana {
 
+    private int id;
     private String nombre;
     private int altura;
     private int primeraAscencion;
@@ -14,6 +15,10 @@ public class Montana {
         this.primeraAscencion = primeraAscencion;
         this.region = region;
         this.pais = pais;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNombre() {
@@ -34,6 +39,10 @@ public class Montana {
 
     public String getPais() {
         return pais;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setNombre(String nombre) {
