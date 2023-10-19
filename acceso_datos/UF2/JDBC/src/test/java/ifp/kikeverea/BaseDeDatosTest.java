@@ -13,7 +13,15 @@ public class BaseDeDatosTest {
     void realizaUnaConexionConExito() throws Exception {
         BaseDeDatos bd = new BaseDeDatos();
         bd.connectar(URL);
-
         Assertions.assertTrue(bd.isConectada());
+    }
+
+    @Test
+    void realizaUnaDesconexionConExito() throws Exception {
+        BaseDeDatos bd = new BaseDeDatos();
+        bd.connectar(URL);
+        bd.desconectar();
+
+        Assertions.assertFalse(bd.isConectada());
     }
 }
