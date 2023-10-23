@@ -40,7 +40,7 @@ public class Atributo {
         return tipo;
     }
 
-    public boolean esPrimaryKey() {
+    public boolean esClavePrimaria() {
         return esPrimaryKey;
     }
 

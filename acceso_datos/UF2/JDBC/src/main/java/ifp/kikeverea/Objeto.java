@@ -7,17 +7,29 @@ import java.util.stream.Collectors;
 public class Objeto {
 
     private final List<ValorAtributo> valores;
+    private final ValorAtributo clavePrimaria;
 
     Objeto(Entidad entidad) {
-        this.valores = entidad.getAtributos()
+        clavePrimaria = new ValorAtributo(entidad.getClavePrimaria());
+        valores = entidad.getAtributos()
                 .stream()
+                .filter(atributo -> !atributo.esClavePrimaria())
                 .map(ValorAtributo::new)
                 .collect(Collectors.toList());
+        valores.add(clavePrimaria);
     }
 
     public void setValor(String nombreAtributo, Object valor) {
         ValorAtributo valorAtributo = getAtributo(nombreAtributo);
         valorAtributo.setValor(valor);
+    }
+
+    public void setClavePrimaria(Object valor) {
+        clavePrimaria.setValor(valor);
+    }
+
+    public ValorAtributo getClavePrimaria() {
+        return clavePrimaria;
     }
 
     public List<ValorAtributo> getAtributos() {
@@ -44,5 +56,12 @@ public class Objeto {
     @Override
     public int hashCode() {
         return Objects.hash(valores);
+    }
+
+    @Override
+    public String toString() {
+        return "Objeto{" +
+                "valores=" + valores +
+                '}';
     }
 }

@@ -17,7 +17,7 @@ public class Entidad {
     private Atributo extraerPrimaryKey(List<Atributo> atributos) {
         return atributos
                 .stream()
-                .filter(Atributo::esPrimaryKey)
+                .filter(Atributo::esClavePrimaria)
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("La entidad debe tener una clave primaria (primary key)"));
     }

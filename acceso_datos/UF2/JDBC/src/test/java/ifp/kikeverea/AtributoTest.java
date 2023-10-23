@@ -28,7 +28,7 @@ public class AtributoTest {
         Atributo primaryKey = Atributo.nuevoAtributo("prueba").deTipo(TipoAtributo.NUMERO, RestriccionAtributo.PRIMARY_KEY);
         Atributo noPrimaryKey = Atributo.nuevoAtributo("prueba").deTipo(TipoAtributo.NUMERO);
 
-        Assertions.assertTrue(primaryKey.esPrimaryKey());
-        Assertions.assertFalse(noPrimaryKey.esPrimaryKey());
+        Assertions.assertTrue(primaryKey.esClavePrimaria());
+        Assertions.assertFalse(noPrimaryKey.esClavePrimaria());
     }
 }

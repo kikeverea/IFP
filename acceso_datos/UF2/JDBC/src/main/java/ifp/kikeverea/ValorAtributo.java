@@ -23,6 +23,10 @@ public class ValorAtributo {
         return valor;
     }
 
+    public boolean esClavePrimaria() {
+        return atributo.esClavePrimaria();
+    }
+
     public void setValor(Object valor) {
         this.valor = valor;
     }
@@ -43,7 +47,7 @@ public class ValorAtributo {
     @Override
     public String toString() {
         return "ValorAtributo{" +
-                "atributo=" + atributo +
+                "atributo=" + atributo.getNombre() +
                 ", valor=" + valor +
                 '}';
     }
