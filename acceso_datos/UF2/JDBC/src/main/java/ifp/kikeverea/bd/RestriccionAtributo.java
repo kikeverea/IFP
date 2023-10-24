@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.bd;
 
 public enum RestriccionAtributo {
     PRIMARY_KEY("PRIMARY KEY"),

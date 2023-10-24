@@ -1,5 +1,9 @@
 package ifp.kikeverea;
 
+import ifp.kikeverea.bd.*;
+import ifp.kikeverea.datos.Objeto;
+import ifp.kikeverea.datos.Repositorio;
+import ifp.kikeverea.datos.ValorAtributo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,9 +35,9 @@ public class RepositorioTest {
 
         entidad = new Entidad(TABLA, atributos);
 
-        bd = new BaseDeDatos();
+        bd = new BaseDeDatos(BASE_DE_DATOS);
         bd.connectar(URL);
-        bd.anadirEntidad(entidad);
+        bd.crearEntidad(entidad);
 
         repositorio = bd.repositorioParaEntidad(entidad);
     }
@@ -130,7 +134,7 @@ public class RepositorioTest {
     }
 
     private Objeto mock() {
-        int numeroMock = ++mocks;
+        int numeroMock = mocks++;
         Objeto mock = entidad.nuevaInstancia();
         mock.setValor("nombre", "mock"+numeroMock);
         mock.setValor("serie", numeroMock);

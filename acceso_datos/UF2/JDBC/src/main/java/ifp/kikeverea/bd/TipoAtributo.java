@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.bd;
 
 import java.sql.Types;
 
@@ -22,8 +22,14 @@ public enum TipoAtributo {
         return tipoSql;
     }
 
-    public String conLongitud(int longitud) {
-        return this +"("+longitud+")";
+    public static TipoAtributo getTipo(String nombreSql) {
+        nombreSql = nombreSql.replaceAll("\\s", "").toUpperCase();
+
+        return switch (nombreSql) {
+            case "INTEGER", "INT" -> NUMERO;
+            case "VARCHAR" -> TEXTO;
+            default -> throw new IllegalArgumentException("No da soporte a tipo " + nombreSql);
+        };
     }
 
     @Override

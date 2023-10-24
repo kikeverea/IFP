@@ -1,5 +1,6 @@
-package ifp.kikeverea;
+package ifp.kikeverea.bd;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -10,13 +11,29 @@ public class Atributo {
     private final String nombre;
     private final TipoAtributo tipo;
     private final List<RestriccionAtributo> restricciones;
-    private final boolean esPrimaryKey;
+    private final boolean esClavePrimaria;
 
     private Atributo(AtributoBuilder builder) {
         this.nombre = builder.nombre;
         this.tipo = builder.tipo;
-        this.restricciones = builder.restricciones;
-        this.esPrimaryKey = builder.esPrimaryKey;
+        this.esClavePrimaria = builder.esClavePrimaria;
+        this.restricciones = builder.restricciones != null
+                ? validarRestricciones(builder.restricciones)
+                : null;
+    }
+
+    private List<RestriccionAtributo> validarRestricciones(List<RestriccionAtributo> restricciones) {
+        restricciones = new ArrayList<>(restricciones);
+
+        if (esClavePrimaria) {
+            if (!restricciones.contains(RestriccionAtributo.AUTO_INCREMENT))
+                restricciones.add(RestriccionAtributo.AUTO_INCREMENT);
+
+            if (!restricciones.contains(RestriccionAtributo.NOT_NULL))
+                restricciones.add(RestriccionAtributo.NOT_NULL);
+        }
+
+        return restricciones;
     }
 
     public String definicion() {
@@ -41,7 +58,7 @@ public class Atributo {
     }
 
     public boolean esClavePrimaria() {
-        return esPrimaryKey;
+        return esClavePrimaria;
     }
 
     @Override
@@ -62,9 +79,10 @@ public class Atributo {
     @Override
     public String toString() {
         return "Atributo{" +
-                ", nombre='" + nombre + '\'' +
+                "nombre='" + nombre + '\'' +
                 ", tipo=" + tipo +
                 ", restricciones=" + restricciones +
+                ", esClavePrimaria=" + esClavePrimaria +
                 '}';
     }
 
@@ -76,7 +94,7 @@ public class Atributo {
         private final String nombre;
         private TipoAtributo tipo;
         private List<RestriccionAtributo> restricciones;
-        private boolean esPrimaryKey = false;
+        private boolean esClavePrimaria = false;
 
         private AtributoBuilder(String nombre) {
             if (nombre == null || nombre.strip().equals(""))
@@ -93,7 +111,7 @@ public class Atributo {
         public Atributo deTipo(TipoAtributo tipo, RestriccionAtributo... restricciones) {
             this.tipo = tipo;
             this.restricciones = Arrays.asList(restricciones);
-            this.esPrimaryKey = this.restricciones.contains(RestriccionAtributo.PRIMARY_KEY);
+            this.esClavePrimaria = this.restricciones.contains(RestriccionAtributo.PRIMARY_KEY);
             return new Atributo(this);
         }
     }

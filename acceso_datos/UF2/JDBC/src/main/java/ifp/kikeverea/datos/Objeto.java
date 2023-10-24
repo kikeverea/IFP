@@ -1,4 +1,6 @@
-package ifp.kikeverea;
+package ifp.kikeverea.datos;
+
+import ifp.kikeverea.bd.Entidad;
 
 import java.util.List;
 import java.util.Objects;

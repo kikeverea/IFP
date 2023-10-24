@@ -1,4 +1,8 @@
-package ifp.kikeverea;
+package ifp.kikeverea.datos;
+
+import ifp.kikeverea.bd.Atributo;
+import ifp.kikeverea.bd.BaseDeDatos;
+import ifp.kikeverea.bd.Entidad;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -77,8 +81,8 @@ public class Repositorio {
     }
 
     public Objeto buscarPorId(int id) throws SQLException {
-        Atributo primaryKey = entidad.getClavePrimaria();
-        return buscar(primaryKey.getNombre(), id, primaryKey.getTipo().getTipoSql());
+        Atributo clavePrimaria = entidad.getClavePrimaria();
+        return buscar(clavePrimaria.getNombre(), id, clavePrimaria.getTipo().getTipoSql());
     }
 
     public Objeto buscar(ValorAtributo atributo) throws SQLException {
