@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.bd;
 
 import ifp.kikeverea.bd.Atributo;
 import ifp.kikeverea.bd.RestriccionAtributo;

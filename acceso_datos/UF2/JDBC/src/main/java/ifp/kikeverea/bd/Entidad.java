@@ -1,7 +1,5 @@
 package ifp.kikeverea.bd;
 
-import ifp.kikeverea.datos.Objeto;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -38,10 +36,6 @@ public class Entidad {
 
     public List<Atributo> getAtributos() {
         return atributos;
-    }
-
-    public Objeto nuevaInstancia() {
-        return new Objeto(this);
     }
 
     @Override

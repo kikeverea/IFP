@@ -1,9 +1,6 @@
-package ifp.kikeverea;
+package ifp.kikeverea.datos;
 
 import ifp.kikeverea.bd.*;
-import ifp.kikeverea.datos.Objeto;
-import ifp.kikeverea.datos.Repositorio;
-import ifp.kikeverea.datos.ValorAtributo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +36,7 @@ public class RepositorioTest {
         bd.connectar(URL);
         bd.crearEntidad(entidad);
 
-        repositorio = bd.repositorioParaEntidad(entidad);
+        repositorio = new Repositorio(bd, entidad);
     }
 
     @SuppressWarnings("resource")
@@ -135,7 +132,7 @@ public class RepositorioTest {
 
     private Objeto mock() {
         int numeroMock = mocks++;
-        Objeto mock = entidad.nuevaInstancia();
+        Objeto mock = Objeto.instanciaDe(entidad);
         mock.setValor("nombre", "mock"+numeroMock);
         mock.setValor("serie", numeroMock);
         return mock;

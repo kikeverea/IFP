@@ -1,7 +1,5 @@
 package ifp.kikeverea.bd;
 
-import ifp.kikeverea.datos.Repositorio;
-
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,10 +47,6 @@ public class BaseDeDatos {
                 .stream()
                 .map(Atributo::definicion)
                 .collect(Collectors.joining(", "));
-    }
-
-    public Repositorio repositorioParaEntidad(Entidad entidad) {
-        return new Repositorio(this, entidad);
     }
 
     public void eliminarEntidad(String nombreEntidad) throws SQLException {

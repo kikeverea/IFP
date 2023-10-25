@@ -11,7 +11,7 @@ public class Objeto {
     private final List<ValorAtributo> valores;
     private final ValorAtributo clavePrimaria;
 
-    Objeto(Entidad entidad) {
+    private Objeto(Entidad entidad) {
         clavePrimaria = new ValorAtributo(entidad.getClavePrimaria());
         valores = entidad.getAtributos()
                 .stream()
@@ -19,6 +19,10 @@ public class Objeto {
                 .map(ValorAtributo::new)
                 .collect(Collectors.toList());
         valores.add(clavePrimaria);
+    }
+
+    public static Objeto instanciaDe(Entidad entidad) {
+        return new Objeto(entidad);
     }
 
     public void setValor(String nombreAtributo, Object valor) {

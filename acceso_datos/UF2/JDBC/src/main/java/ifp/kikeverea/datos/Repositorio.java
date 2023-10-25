@@ -153,7 +153,7 @@ public class Repositorio {
     }
 
     private Objeto extraerObjeto(ResultSet set, ResultSetMetaData meta) throws SQLException {
-        Objeto objeto = entidad.nuevaInstancia();
+        Objeto objeto = Objeto.instanciaDe(entidad);
         for (int i = 0; i < meta.getColumnCount(); i++) {
             String nombreAtributo = meta.getColumnName(i + 1);
             Object valor = set.getObject(i + 1);

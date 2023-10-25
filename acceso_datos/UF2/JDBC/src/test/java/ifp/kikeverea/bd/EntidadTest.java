@@ -1,9 +1,5 @@
-package ifp.kikeverea;
+package ifp.kikeverea.bd;
 
-import ifp.kikeverea.bd.Atributo;
-import ifp.kikeverea.bd.Entidad;
-import ifp.kikeverea.bd.RestriccionAtributo;
-import ifp.kikeverea.bd.TipoAtributo;
 import ifp.kikeverea.datos.Objeto;
 import ifp.kikeverea.datos.ValorAtributo;
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +39,7 @@ public class EntidadTest {
                 Atributo.nuevoAtributo("descripcionombre").deTipo(TipoAtributo.TEXTO)
         );
         Entidad entidad = new Entidad("prueba", atributos);
-        Objeto objeto = entidad.nuevaInstancia();
+        Objeto objeto = Objeto.instanciaDe(entidad);
 
         List<ValorAtributo> valorAtributos = objeto.getAtributos();
 

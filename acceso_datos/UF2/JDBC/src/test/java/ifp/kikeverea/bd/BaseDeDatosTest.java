@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.bd;
 
 import ifp.kikeverea.bd.*;
 import org.junit.jupiter.api.AfterEach;
