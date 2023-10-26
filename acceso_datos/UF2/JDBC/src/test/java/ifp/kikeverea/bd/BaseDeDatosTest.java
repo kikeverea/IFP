@@ -104,6 +104,17 @@ public class BaseDeDatosTest {
         Assertions.assertFalse(bd.isConectada());
     }
 
+    @Test
+    void determinaSiUnaEntidadExiste() throws Exception {
+        Entidad mock1 = mock();
+        Entidad mock2 = mock();
+
+        bd.crearEntidad(mock1);
+
+        Assertions.assertTrue(bd.entidadExiste(mock1.getNombre()));
+        Assertions.assertFalse(bd.entidadExiste(mock2.getNombre()));
+    }
+
     private Entidad mock() {
         return new Entidad(TABLA+mocks++, List.of(
                 Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, ClausulaAtributo.PRIMARY_KEY),

@@ -126,4 +126,20 @@ public class BaseDeDatos {
 
         return clausulas;
     }
+
+    public boolean entidadExiste(String nombreEntidad) throws SQLException {
+        try (PreparedStatement query = statementEntidadExiste(nombreEntidad);
+             ResultSet result = query.executeQuery())
+        {
+            return result.next();
+        }
+    }
+
+    private PreparedStatement statementEntidadExiste(String nombreEntidad) throws SQLException {
+        String declaracion = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ?";
+        PreparedStatement statement = conexion.prepareStatement(declaracion);
+        statement.setString(1, nombreEntidad);
+
+        return statement;
+    }
 }
