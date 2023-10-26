@@ -1,6 +1,9 @@
 package ifp.kikeverea;
 
 import ifp.kikeverea.bd.*;
+import ifp.kikeverea.programas.Programa;
+import ifp.kikeverea.programas.ProgramaBorradoTablas;
+import ifp.kikeverea.programas.ProgramaCreacionTablas;
 import ifp.kikeverea.util.OpcionMenu;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.Menu;

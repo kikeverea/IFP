@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.programas;
 
 import ifp.kikeverea.bd.BaseDeDatos;
 import ifp.kikeverea.util.InputUsuario;

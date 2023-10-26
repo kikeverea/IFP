@@ -1,4 +1,4 @@
-package ifp.kikeverea;
+package ifp.kikeverea.programas;
 
 public class Programa {
 
