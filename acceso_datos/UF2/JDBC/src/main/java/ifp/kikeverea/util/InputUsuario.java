@@ -114,6 +114,11 @@ public class InputUsuario {
         }
     }
 
+    public OpcionMenu solicitarOpcionMenu(Menu menu) {
+        int numTipo = solicitarEntero(menu.mostrar(), ValidadorNumeros.enIntervalo(0, menu.count() -1));
+        return menu.getOpcion(numTipo);
+    }
+
     private void resolverInputNumericoInvalido(String mensaje) {
         // imprime el mensaje en pantalla
         System.out.println(mensaje);
