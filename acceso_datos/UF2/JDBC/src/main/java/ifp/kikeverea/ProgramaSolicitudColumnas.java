@@ -50,7 +50,7 @@ public class ProgramaSolicitudColumnas {
         }
     }
 
-    public static Menu MENU_ACCIONES = new Menu("Añadir atributos", "Acción: ", Accion.values());
+    public static Menu MENU_ACCIONES = new Menu("****** Añadir atributos ******", "Acción: ", Accion.values());
     public static Menu MENU_TIPOS = new Menu("Tipo de argumento", "Tipo: ", OpcionTipos.values());
 
     public static List<Atributo> solicitarColumnas(InputUsuario input) {

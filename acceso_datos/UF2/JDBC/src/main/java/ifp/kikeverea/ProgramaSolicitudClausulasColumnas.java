@@ -33,7 +33,7 @@ public class ProgramaSolicitudClausulasColumnas {
         }
     }
 
-    public static Menu MENU_CLAUSULAS = new Menu("Información adicional", "Añadir: ", OpcionClausulas.values());
+    public static Menu MENU_CLAUSULAS = new Menu("Información adicional", "Añadir nuevo: ", OpcionClausulas.values());
 
     private static String resultado;
 
