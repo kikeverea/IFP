@@ -1,5 +1,5 @@
 package ifp.kikeverea.util;
 
-public interface ArticuloMenu {
+public interface OpcionMenu {
     String mostrar(String... args);
 }

@@ -1,14 +1,20 @@
 package ifp.kikeverea.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Menu {
 
-    private final ArticuloMenu[] articulos;
+    private final List<OpcionMenu> opciones;
+    private final List<OpcionMenu> opcionesAMostrar;
 
     public Menu(ArticuloMenu... articulos) {
         if (articulos.length == 0)
             throw new IllegalArgumentException("Al menos un artículo es necesario para instanciar un Menu");
 
-        this.articulos = articulos;
+        this.opciones = Arrays.asList(opciones);
+        this.opcionesAMostrar = new ArrayList<>(this.opciones);
     }
 
     public String mostrar(String... args) {
