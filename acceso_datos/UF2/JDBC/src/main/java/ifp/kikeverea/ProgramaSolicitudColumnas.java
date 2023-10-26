@@ -24,7 +24,7 @@ public class ProgramaSolicitudColumnas {
         }
 
         @Override
-        public String mostrar(String... args) {
+        public String mensaje(String... args) {
             return mensaje;
         }
     }
@@ -45,7 +45,7 @@ public class ProgramaSolicitudColumnas {
         }
 
         @Override
-        public String mostrar(String... args) {
+        public String mensaje(String... args) {
             return mensaje;
         }
     }

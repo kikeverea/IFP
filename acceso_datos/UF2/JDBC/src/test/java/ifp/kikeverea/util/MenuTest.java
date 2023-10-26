@@ -95,7 +95,7 @@ public class MenuTest {
         }
 
         @Override
-        public String mostrar(String... args) {
+        public String mensaje(String... args) {
             return getNombre();
         }
     }
@@ -107,7 +107,7 @@ public class MenuTest {
         }
 
         @Override
-        public String mostrar(String... args) {
+        public String mensaje(String... args) {
             return getNombre() + " " + args[0] + " " + args[1];
         }
     }

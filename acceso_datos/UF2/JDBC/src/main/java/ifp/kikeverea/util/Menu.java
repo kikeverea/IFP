@@ -35,7 +35,7 @@ public class Menu {
 
             int numeroOpcion = indiceOpcionANumero(indiceOpcion);
 
-            String display = opcion.mostrar(args);
+            String display = opcion.mensaje(args);
             sb.append(numeroOpcion).append("- ");
             sb.append(display);
             sb.append("\n");

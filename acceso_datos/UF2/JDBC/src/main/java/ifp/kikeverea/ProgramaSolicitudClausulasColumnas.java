@@ -28,7 +28,7 @@ public class ProgramaSolicitudClausulasColumnas {
         }
 
         @Override
-        public String mostrar(String... args) {
+        public String mensaje(String... args) {
             return mensaje+": "+descripcion;
         }
     }
