@@ -13,4 +13,9 @@ public class Programa {
         System.err.println(resultado);
         System.err.println("----------------------------------------");
     }
+
+    public static <T> T operacionCancelada() {
+        imprimirResultado("Operación cancelada");
+        return null;
+    }
 }
