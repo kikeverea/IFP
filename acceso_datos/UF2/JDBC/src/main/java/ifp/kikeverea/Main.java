@@ -49,7 +49,8 @@ public class Main {
             try {
                 switch (accion) {
                     case MOSTRAR_TABLAS -> mostrarTablas(bd);
-                    case CREAR_TABLA -> ProgramaCreacionTablas.crearTabla(input, bd);
+                    case CREAR_TABLA -> ProgramaCreacionTablas.crearTabla(bd, input);
+                    case BORRAR_TABLA -> ProgramaBorradoTablas.ejecutar(bd, input);
                 }
             }
             catch (SQLException e) {
