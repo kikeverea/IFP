@@ -50,7 +50,7 @@ public class BaseDeDatos {
     }
 
     public void eliminarEntidad(String nombreEntidad) throws SQLException {
-        String definicion = "DROP TABLE IF EXISTS " + nombreEntidad;
+        String definicion = "DROP TABLE " + nombreEntidad;
 
         try (PreparedStatement statement = conexion.prepareStatement(definicion)) {
             statement.execute();
