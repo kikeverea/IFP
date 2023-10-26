@@ -70,7 +70,7 @@ public class InputUsuario {
                 return entero;
             }
             catch (InputMismatchException e) {
-                resolverInputInvalido("Por favor, introducir un número entero.");
+                resolverInputNumericoInvalido("Por favor, introducir un número entero.");
             }
         }
     }
@@ -109,14 +109,14 @@ public class InputUsuario {
                 return decimal;
             }
             catch (InputMismatchException e) {
-                resolverInputInvalido("Por favor, introducir un número.");
+                resolverInputNumericoInvalido("Por favor, introducir un número.");
             }
         }
     }
 
-    private void resolverInputInvalido(String mensaje) {
+    private void resolverInputNumericoInvalido(String mensaje) {
         // imprime el mensaje en pantalla
-        System.out.println("Ha introducido un valor erróneo en uno de los campos. " + mensaje);
+        System.out.println(mensaje);
 
         // consume el resto de la línea
         scanner.nextLine();
