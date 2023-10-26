@@ -1,7 +1,5 @@
 package ifp.kikeverea.bd;
 
-import ifp.kikeverea.bd.Atributo;
-import ifp.kikeverea.bd.TipoAtributo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,14 +20,31 @@ public class AtributoTest {
     }
 
     @Test
-    void anadeAutoIncrementYNotNullSiEsClavePrimariaYNoSeEspecifica() {
+    void anadeAutoIncrementYNotNullSiEsClavePrimariaNumeroYNoSeEspecifica() {
         Atributo atributo = Atributo.nuevoAtributo("cp").deTipo(
                 TipoAtributo.NUMERO,
                 ClausulaAtributo.PRIMARY_KEY);
 
     }
 
-        Assertions.assertEquals(expected, atributo);
+    @Test
+    void anadeNotNullSiEsClavePrimariaTextoYNoSeEspecifica() {
+        Atributo atributo = Atributo.nuevoAtributo("cp").deTipo(
+                TipoAtributo.TEXTO,
+                ClausulaAtributo.PRIMARY_KEY);
+
+        List<ClausulaAtributo> expected = List.of(
+                ClausulaAtributo.PRIMARY_KEY,
+                ClausulaAtributo.NOT_NULL);
+
+        Assertions.assertEquals(expected, atributo.getClausulas());
+    }
+
+    @Test
+    void noPermiteLaCreacionConDeTipoTextoAutoIncrement() {
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> Atributo.nuevoAtributo("cp").deTipo(
+                        TipoAtributo.TEXTO,
+                        ClausulaAtributo.AUTO_INCREMENT));
     }
 
     @Test

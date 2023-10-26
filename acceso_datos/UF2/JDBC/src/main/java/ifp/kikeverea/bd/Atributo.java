@@ -22,6 +22,8 @@ public class Atributo {
     private List<ClausulaAtributo> validarClausulas(List<ClausulaAtributo> clausulas) {
         clausulas = new ArrayList<>(clausulas);
 
+        if (tipo == TipoAtributo.TEXTO && clausulas.contains(ClausulaAtributo.AUTO_INCREMENT))
+            throw new IllegalArgumentException("Atributos tipo Texto no pueden ser autoincrementales");
 
         if (esClavePrimaria) {
             if (tipo == TipoAtributo.NUMERO && !clausulas.contains(ClausulaAtributo.AUTO_INCREMENT))
@@ -59,12 +61,15 @@ public class Atributo {
         return esClavePrimaria;
     }
 
+    public List<ClausulaAtributo> getClausulas() {
+        return List.copyOf(clausulas);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Atributo atributo = (Atributo) o;
-
 
         return nombre.equals(atributo.nombre) && tipo == atributo.tipo && Objects.equals(clausulas, atributo.clausulas);
     }
