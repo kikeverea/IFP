@@ -48,6 +48,7 @@ public class Main {
 
             try {
                 switch (accion) {
+                    case MOSTRAR_TABLAS -> mostrarTablas(bd);
                     case CREAR_TABLA -> ProgramaCreacionTablas.crearTabla(input, bd);
                 }
             }
@@ -58,6 +59,11 @@ public class Main {
             }
         }
         while (true);
+    }
+
+    private static void mostrarTablas(BaseDeDatos bd) throws SQLException {
+        String tablas = String.join(", ", bd.listarEntidades());
+        Programa.imprimirResultado("TABLAS:\n" + tablas);
     }
 
     private static void conectarBaseDeDatos(BaseDeDatos bd) {
