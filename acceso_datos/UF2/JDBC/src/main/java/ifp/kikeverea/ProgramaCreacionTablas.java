@@ -11,13 +11,18 @@ import java.util.stream.Collectors;
 
 public class ProgramaCreacionTablas {
 
-    public static void crearTabla(InputUsuario input, BaseDeDatos bd) throws SQLException {
+    public static void crearTabla(BaseDeDatos bd, InputUsuario input) throws SQLException {
         String nombre = solicitarNombreEntidad(bd, input);
+
+        if (nombre.isBlank()) {
+            Programa.operacionCancelada();
+            return;
+        }
 
         List<Atributo> atributos = ProgramaSolicitudColumnas.solicitarColumnas(input);
 
         if (atributos.isEmpty()) {
-            Programa.imprimirResultado("No se ha creado la tabla. Al menos un atributo debe ser proporcionado");
+            Programa.operacionCancelada();
             return;
         }
 
