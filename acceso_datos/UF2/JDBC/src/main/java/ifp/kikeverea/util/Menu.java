@@ -6,19 +6,29 @@ import java.util.List;
 
 public class Menu {
 
+    private final String mensajeInicial;
+    private final String prompt;
     private final List<OpcionMenu> opciones;
     private final List<OpcionMenu> opcionesAMostrar;
 
-    public Menu(ArticuloMenu... articulos) {
-        if (articulos.length == 0)
+    public Menu(String prompt, OpcionMenu... opciones) {
+        this(null, prompt, opciones);
+    }
+    public Menu(String mensajeInicial, String prompt, OpcionMenu... opciones) {
+        if (opciones.length == 0)
             throw new IllegalArgumentException("Al menos un artículo es necesario para instanciar un Menu");
 
+        this.mensajeInicial = mensajeInicial;
+        this.prompt = prompt;
         this.opciones = Arrays.asList(opciones);
         this.opcionesAMostrar = new ArrayList<>(this.opciones);
     }
 
     public String mostrar(String... args) {
         StringBuilder sb = new StringBuilder();
+
+        if (mensajeInicial != null)
+            sb.append(mensajeInicial).append("\n");
 
         for (int indiceOpcion = 0; indiceOpcion < opcionesAMostrar.size(); indiceOpcion++) {
             OpcionMenu opcion = opcionesAMostrar.get(indiceOpcion);
@@ -30,6 +40,7 @@ public class Menu {
             sb.append(display);
             sb.append("\n");
         }
+        sb.append(prompt);
         return sb.toString();
     }
 
