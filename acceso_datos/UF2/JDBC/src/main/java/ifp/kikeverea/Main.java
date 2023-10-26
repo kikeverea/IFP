@@ -12,9 +12,9 @@ public class Main {
 
     private enum AccionTablas implements OpcionMenu {
         MOSTRAR_TABLAS("Mostrar tablas"),
+        ELEGIR_TABLA("Elegir tabla"),
         CREAR_TABLA("Crear tabla"),
         BORRAR_TABLA("Borrar tabla"),
-        ELEGIR_TABLA("Elegir tabla"),
         SALIR("Salir");
 
         private final String mensaje;
@@ -23,7 +23,7 @@ public class Main {
         }
 
         @Override
-        public String mostrar(String... args) {
+        public String mensaje(String... args) {
             return mensaje;
         }
     }
@@ -61,11 +61,6 @@ public class Main {
         while (true);
     }
 
-    private static void mostrarTablas(BaseDeDatos bd) throws SQLException {
-        String tablas = String.join(", ", bd.listarEntidades());
-        Programa.imprimirResultado("TABLAS:\n" + tablas);
-    }
-
     private static void conectarBaseDeDatos(BaseDeDatos bd) {
         try {
             bd.connectar(URI_BD);
@@ -74,5 +69,10 @@ public class Main {
             Programa.imprimirError("No se ha podido realizar una conexión a la base de datos");
             System.exit(1);
         }
+    }
+
+    private static void mostrarTablas(BaseDeDatos bd) throws SQLException {
+        String tablas = String.join(", ", bd.listarEntidades());
+        Programa.imprimirResultado("TABLAS:\n" + tablas);
     }
 }
