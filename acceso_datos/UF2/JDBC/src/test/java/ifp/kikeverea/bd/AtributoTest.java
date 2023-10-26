@@ -25,6 +25,12 @@ public class AtributoTest {
                 TipoAtributo.NUMERO,
                 ClausulaAtributo.PRIMARY_KEY);
 
+        List<ClausulaAtributo> expected = List.of(
+                ClausulaAtributo.PRIMARY_KEY,
+                ClausulaAtributo.AUTO_INCREMENT,
+                ClausulaAtributo.NOT_NULL);
+
+        Assertions.assertEquals(expected, atributo.getClausulas());
     }
 
     @Test
