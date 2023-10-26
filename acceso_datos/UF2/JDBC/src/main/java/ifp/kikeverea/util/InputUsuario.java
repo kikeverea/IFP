@@ -1,7 +1,9 @@
 package ifp.kikeverea.util;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * Clase que facilita la solicitud de datos al usuario por entrada estándar
@@ -24,6 +26,11 @@ public class InputUsuario {
         return scanner.nextLine().strip();
     }
 
+    /**
+     * Solicita una entrada de texto al usuario. El texto debe contener letras, no puede consistir únicamente de números
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada
+     * @return El texto proporcionado por el usuario
+     */
     public String solicitarSoloTexto(String mensaje) {
         while (true) {
             String texto = solicitarTexto(mensaje);
@@ -33,7 +40,28 @@ public class InputUsuario {
 
             else return texto;
         }
+    }
 
+    /**
+     * Solicita al usuario elegir entre una opción positiva y una negativa
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada
+     * @param positivos Los valores que representan la opción positiva
+     * @param negativos Los valores que representan la opción negativa
+     * @return true si el texto entrado por el usuario se encuentra entre los valores positivos, false de lo contrario
+     */
+    public boolean solicitarEleccion(String mensaje, String[] positivos, String[] negativos) {
+        // une las dos arrays
+        String[] valoresValidos = Stream.concat(Arrays.stream(positivos), Arrays.stream(negativos)).toArray(String[]::new);
+
+        while (true) {
+            String texto = solicitarTexto(mensaje);
+            boolean valido = Arrays.asList(valoresValidos).contains(texto);
+
+            if (valido)
+                return Arrays.asList(positivos).contains(texto);
+
+            System.out.println("Por favor, introducir uno de los siguientes valores: " + String.join(", ", valoresValidos));
+        }
     }
 
     /**
