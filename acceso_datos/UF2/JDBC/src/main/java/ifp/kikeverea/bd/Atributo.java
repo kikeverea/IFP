@@ -1,46 +1,44 @@
 package ifp.kikeverea.bd;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Atributo {
 
     private final String nombre;
     private final TipoAtributo tipo;
-    private final List<RestriccionAtributo> restricciones;
+    private final List<ClausulaAtributo> clausulas;
     private final boolean esClavePrimaria;
 
     private Atributo(AtributoBuilder builder) {
         this.nombre = builder.nombre;
         this.tipo = builder.tipo;
         this.esClavePrimaria = builder.esClavePrimaria;
-        this.restricciones = builder.restricciones != null
-                ? validarRestricciones(builder.restricciones)
+        this.clausulas = builder.clausulas != null
+                ? validarClausulas(builder.clausulas)
                 : null;
     }
 
-    private List<RestriccionAtributo> validarRestricciones(List<RestriccionAtributo> restricciones) {
-        restricciones = new ArrayList<>(restricciones);
+    private List<ClausulaAtributo> validarClausulas(List<ClausulaAtributo> clausulas) {
+        clausulas = new ArrayList<>(clausulas);
+
 
         if (esClavePrimaria) {
-            if (!restricciones.contains(RestriccionAtributo.AUTO_INCREMENT))
-                restricciones.add(RestriccionAtributo.AUTO_INCREMENT);
+            if (tipo == TipoAtributo.NUMERO && !clausulas.contains(ClausulaAtributo.AUTO_INCREMENT))
+                clausulas.add(ClausulaAtributo.AUTO_INCREMENT);
 
-            if (!restricciones.contains(RestriccionAtributo.NOT_NULL))
-                restricciones.add(RestriccionAtributo.NOT_NULL);
+            if (!clausulas.contains(ClausulaAtributo.NOT_NULL))
+                clausulas.add(ClausulaAtributo.NOT_NULL);
         }
 
-        return restricciones;
+        return clausulas;
     }
 
     public String definicion() {
         String base = nombre + " " + tipo.nombre();
 
-        if (restricciones != null) {
-            base = base + " " + restricciones
+        if (clausulas != null) {
+            base = base + " " + clausulas
                     .stream()
                     .map(Objects::toString)
                     .collect(Collectors.joining(" "));
@@ -66,14 +64,14 @@ public class Atributo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Atributo atributo = (Atributo) o;
-        return  Objects.equals(nombre, atributo.nombre) &&
-                tipo == atributo.tipo &&
-                Objects.equals(restricciones, atributo.restricciones);
+
+
+        return nombre.equals(atributo.nombre) && tipo == atributo.tipo && Objects.equals(clausulas, atributo.clausulas);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre, tipo, restricciones);
+        return Objects.hash(nombre, tipo, clausulas);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class Atributo {
         return "Atributo{" +
                 "nombre='" + nombre + '\'' +
                 ", tipo=" + tipo +
-                ", restricciones=" + restricciones +
+                ", clausulas=" + clausulas +
                 ", esClavePrimaria=" + esClavePrimaria +
                 '}';
     }
@@ -93,7 +91,7 @@ public class Atributo {
     public static final class AtributoBuilder {
         private final String nombre;
         private TipoAtributo tipo;
-        private List<RestriccionAtributo> restricciones;
+        private List<ClausulaAtributo> clausulas;
         private boolean esClavePrimaria = false;
 
         private AtributoBuilder(String nombre) {
@@ -108,10 +106,10 @@ public class Atributo {
             return new Atributo(this);
         }
 
-        public Atributo deTipo(TipoAtributo tipo, RestriccionAtributo... restricciones) {
+        public Atributo deTipo(TipoAtributo tipo, ClausulaAtributo... clausulas) {
             this.tipo = tipo;
-            this.restricciones = Arrays.asList(restricciones);
-            this.esClavePrimaria = this.restricciones.contains(RestriccionAtributo.PRIMARY_KEY);
+            this.clausulas = Arrays.asList(clausulas);
+            this.esClavePrimaria = this.clausulas.contains(ClausulaAtributo.PRIMARY_KEY);
             return new Atributo(this);
         }
     }

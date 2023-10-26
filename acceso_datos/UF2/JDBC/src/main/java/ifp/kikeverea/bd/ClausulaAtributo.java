@@ -1,6 +1,6 @@
 package ifp.kikeverea.bd;
 
-public enum RestriccionAtributo {
+public enum ClausulaAtributo {
     PRIMARY_KEY("PRIMARY KEY"),
     AUTO_INCREMENT("AUTO_INCREMENT"),
     UNIQUE("UNIQUE"),
@@ -8,7 +8,7 @@ public enum RestriccionAtributo {
 
     private final String definicion;
 
-    RestriccionAtributo(String definicion) {
+    ClausulaAtributo(String definicion) {
         this.definicion = definicion;
     }
 

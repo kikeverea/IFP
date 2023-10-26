@@ -92,11 +92,11 @@ public class BaseDeDatos {
             while (set.next()) {
                 String nombreAtributo = set.getString(set.findColumn("COLUMN_NAME"));
                 TipoAtributo tipo = TipoAtributo.getTipo(set.getString(set.findColumn("DATA_TYPE")));
-                List<RestriccionAtributo> restricciones = extraerRestricciones(set);
+                List<ClausulaAtributo> clausulas = extraerClausulas(set);
 
                 Atributo atributo = Atributo
                         .nuevoAtributo(nombreAtributo)
-                        .deTipo(tipo, restricciones.toArray(new RestriccionAtributo[0]));
+                        .deTipo(tipo, clausulas.toArray(new ClausulaAtributo[0]));
 
                 atributos.add(atributo);
             }
@@ -106,24 +106,24 @@ public class BaseDeDatos {
         }
     }
 
-    private List<RestriccionAtributo> extraerRestricciones(ResultSet set) throws SQLException {
+    private List<ClausulaAtributo> extraerClausulas(ResultSet set) throws SQLException {
 
         String clave = set.getString(set.findColumn("COLUMN_KEY"));
         boolean clavePrimaria = clave.equals("PRI");
         boolean unique = clave.equals("UNI");
         boolean notNull = set.getString(set.findColumn("IS_NULLABLE")).equals("NO");
 
-        List<RestriccionAtributo> restricciones = new ArrayList<>();
+        List<ClausulaAtributo> clausulas = new ArrayList<>();
 
         if (clavePrimaria) {
-            restricciones.add(RestriccionAtributo.PRIMARY_KEY);
-            restricciones.add(RestriccionAtributo.AUTO_INCREMENT);
+            clausulas.add(ClausulaAtributo.PRIMARY_KEY);
+            clausulas.add(ClausulaAtributo.AUTO_INCREMENT);
         } else if (unique)
-            restricciones.add(RestriccionAtributo.UNIQUE);
+            clausulas.add(ClausulaAtributo.UNIQUE);
 
         if (notNull)
-            restricciones.add(RestriccionAtributo.NOT_NULL);
+            clausulas.add(ClausulaAtributo.NOT_NULL);
 
-        return restricciones;
+        return clausulas;
     }
 }

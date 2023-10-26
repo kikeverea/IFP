@@ -1,10 +1,11 @@
 package ifp.kikeverea.bd;
 
 import ifp.kikeverea.bd.Atributo;
-import ifp.kikeverea.bd.RestriccionAtributo;
 import ifp.kikeverea.bd.TipoAtributo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class AtributoTest {
 
@@ -24,12 +25,9 @@ public class AtributoTest {
     void anadeAutoIncrementYNotNullSiEsClavePrimariaYNoSeEspecifica() {
         Atributo atributo = Atributo.nuevoAtributo("cp").deTipo(
                 TipoAtributo.NUMERO,
-                RestriccionAtributo.PRIMARY_KEY);
+                ClausulaAtributo.PRIMARY_KEY);
 
-        Atributo expected = Atributo.nuevoAtributo("cp").deTipo(
-                TipoAtributo.NUMERO,
-                RestriccionAtributo.PRIMARY_KEY,
-                RestriccionAtributo.AUTO_INCREMENT);
+    }
 
         Assertions.assertEquals(expected, atributo);
     }
@@ -42,7 +40,7 @@ public class AtributoTest {
 
     @Test
     void seIdentificaComoClavePrimariaCorrectamente() {
-        Atributo ClavePrimaria = Atributo.nuevoAtributo("prueba").deTipo(TipoAtributo.NUMERO, RestriccionAtributo.PRIMARY_KEY);
+        Atributo ClavePrimaria = Atributo.nuevoAtributo("prueba").deTipo(TipoAtributo.NUMERO, ClausulaAtributo.PRIMARY_KEY);
         Atributo noClavePrimaria = Atributo.nuevoAtributo("prueba").deTipo(TipoAtributo.NUMERO);
 
         Assertions.assertTrue(ClavePrimaria.esClavePrimaria());

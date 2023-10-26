@@ -26,9 +26,9 @@ public class RepositorioTest {
     @BeforeEach
     void init() throws Exception {
         List<Atributo> atributos = List.of(
-                Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, RestriccionAtributo.PRIMARY_KEY, RestriccionAtributo.AUTO_INCREMENT),
-                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, RestriccionAtributo.NOT_NULL),
-                Atributo.nuevoAtributo("serie").deTipo(TipoAtributo.NUMERO, RestriccionAtributo.UNIQUE));
+                Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, ClausulaAtributo.PRIMARY_KEY, ClausulaAtributo.AUTO_INCREMENT),
+                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, ClausulaAtributo.NOT_NULL),
+                Atributo.nuevoAtributo("serie").deTipo(TipoAtributo.NUMERO, ClausulaAtributo.UNIQUE));
 
         entidad = new Entidad(TABLA, atributos);
 

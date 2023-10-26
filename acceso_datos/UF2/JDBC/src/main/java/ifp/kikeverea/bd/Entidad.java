@@ -22,8 +22,8 @@ public class Entidad {
                 .findAny()
                 .orElse(Atributo.nuevoAtributo("id").deTipo(
                         TipoAtributo.NUMERO,
-                        RestriccionAtributo.PRIMARY_KEY,
-                        RestriccionAtributo.AUTO_INCREMENT));
+                        ClausulaAtributo.PRIMARY_KEY,
+                        ClausulaAtributo.AUTO_INCREMENT));
     }
 
     public String getNombre() {

@@ -1,6 +1,5 @@
 package ifp.kikeverea.bd;
 
-import ifp.kikeverea.bd.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,8 +106,8 @@ public class BaseDeDatosTest {
 
     private Entidad mock() {
         return new Entidad(TABLA+mocks++, List.of(
-                Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, RestriccionAtributo.PRIMARY_KEY),
-                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, RestriccionAtributo.UNIQUE)
+                Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, ClausulaAtributo.PRIMARY_KEY),
+                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, ClausulaAtributo.UNIQUE)
         ));
     }
 

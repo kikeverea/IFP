@@ -11,9 +11,9 @@ public class EntidadTest {
 
     @Test
     void identificaLaClavePrimariaEntreLaListaDeAtributos() {
-        Atributo clavePrimaria = Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, RestriccionAtributo.PRIMARY_KEY);
+        Atributo clavePrimaria = Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, ClausulaAtributo.PRIMARY_KEY);
         List<Atributo> atributos = List.of(
-                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, RestriccionAtributo.UNIQUE, RestriccionAtributo.NOT_NULL),
+                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, ClausulaAtributo.UNIQUE, ClausulaAtributo.NOT_NULL),
                 clavePrimaria,
                 Atributo.nuevoAtributo("descripcionombre").deTipo(TipoAtributo.TEXTO)
         );
@@ -34,8 +34,8 @@ public class EntidadTest {
     @Test
     void generaObjetosDeEstaEntidad() {
         List<Atributo> atributos = List.of(
-                Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, RestriccionAtributo.PRIMARY_KEY),
-                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, RestriccionAtributo.UNIQUE, RestriccionAtributo.NOT_NULL),
+                Atributo.nuevoAtributo("id").deTipo(TipoAtributo.NUMERO, ClausulaAtributo.PRIMARY_KEY),
+                Atributo.nuevoAtributo("nombre").deTipo(TipoAtributo.TEXTO, ClausulaAtributo.UNIQUE, ClausulaAtributo.NOT_NULL),
                 Atributo.nuevoAtributo("descripcionombre").deTipo(TipoAtributo.TEXTO)
         );
         Entidad entidad = new Entidad("prueba", atributos);
@@ -50,8 +50,8 @@ public class EntidadTest {
     private Atributo clavePrimariaValida(String nombre) {
         return Atributo.nuevoAtributo(nombre).deTipo(
                 TipoAtributo.NUMERO,
-                RestriccionAtributo.PRIMARY_KEY,
-                RestriccionAtributo.AUTO_INCREMENT);
+                ClausulaAtributo.PRIMARY_KEY,
+                ClausulaAtributo.AUTO_INCREMENT);
     }
 
     private boolean contieneTodos(List<Atributo> atributos, List<ValorAtributo> valorAtributos) {
