@@ -21,7 +21,19 @@ public class InputUsuario {
      */
     public String solicitarTexto(String mensaje) {
         System.out.print(mensaje);
-        return scanner.nextLine();
+        return scanner.nextLine().strip();
+    }
+
+    public String solicitarSoloTexto(String mensaje) {
+        while (true) {
+            String texto = solicitarTexto(mensaje);
+
+            if (texto.matches("^-?\\d+(\\.\\d+)?$"))
+                System.out.println("El texto no puede ser únicamente numérico");
+
+            else return texto;
+        }
+
     }
 
     /**
