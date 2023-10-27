@@ -30,7 +30,7 @@ public class ProgramaManipulacionDatos {
     public static void ejecutar(Repositorio repositorio, InputUsuario input) throws SQLException {
         do {
             Programa.imprimirMensaje(
-                    repositorio.nombreEntidad() + " " +
+                    "TABLA: " + repositorio.nombreEntidad() + " " +
                     "(" + Presentador.separadoPorComas(repositorio.atributos(), Atributo::getNombre) + ")");
 
             String accion = input.solicitarOpcionMenu(MENU_DATOS);
@@ -40,7 +40,7 @@ public class ProgramaManipulacionDatos {
 
             switch (accion) {
                 case CONSULTAR_TABLA -> consultarTabla(repositorio);
-//                    case CONSULTAR -> ejecutarProgramaManipulacionDatos(bd, input);
+                case CONSULTAR -> consultarPorAtributo(repositorio, input);
                 case CREAR -> crearObjeto(repositorio, input);
                 case EDITAR -> editarObjeto(repositorio, input);
 //                    case BORRAR -> ejecutarProgramaBorrado(bd, input);
@@ -57,18 +57,37 @@ public class ProgramaManipulacionDatos {
             return;
         }
 
-        String nombreEntidad = repositorio.nombreEntidad();
-        StringBuilder instancias = new StringBuilder();
-        for (int i = 0; i < objetos.size(); i++) {
-            Objeto objeto = objetos.get(i);
+        String textoObjetos = Presentador.objetosATexto(objetos, repositorio.nombreEntidad());
 
-            String textoObjeto = Presentador.objetoATexto(objeto, nombreEntidad);
-            instancias.append(textoObjeto);
+        Programa.imprimirMensaje("ENTRADAS\n" + textoObjetos);
+    }
 
-            if (i < objetos.size() -1)
-                instancias.append("\n");
+    private static void consultarPorAtributo(Repositorio repositorio, InputUsuario input) throws SQLException {
+        Programa.imprimirMensaje("Consultar por atributos");
+
+        List<Atributo> atributos = repositorio.atributos();
+        Menu<Atributo> menuAtributos = Menu.nuevoMenu(Atributo.class)
+                .mensajeInicial("Atributos disponibles:")
+                .prompt("Consultar por atributo: ")
+                .opciones(OpcionMenu.opciones(atributos, Atributo::getNombre))
+                .salida(OpcionMenu.opcionNull("Salida"))
+                .build();
+
+        Atributo atributo = input.solicitarOpcionMenu(menuAtributos);
+        Object valorQuery = atributo.getTipo() == TipoAtributo.NUMERO
+                ? input.solicitarEntero(atributo.getNombre() + " a buscar: ")
+                : input.solicitarTexto(atributo.getNombre() + " a buscar: ");
+
+        List<Objeto> objetos = repositorio.buscar(new ValorAtributo(atributo, valorQuery));
+
+        if (objetos.isEmpty()) {
+            Programa.imprimirMensaje("No hay registros con los parámetros deseados");
+            return;
         }
-        Programa.imprimirMensaje("ENTRADAS\n" + instancias.toString());
+
+        String textoObjetos = Presentador.objetosATexto(objetos, repositorio.nombreEntidad());
+        Programa.imprimirMensaje("ENTRADAS\n" + textoObjetos);
+
     }
 
     private static void crearObjeto(Repositorio repositorio, InputUsuario input) throws SQLException {
@@ -97,7 +116,7 @@ public class ProgramaManipulacionDatos {
                 .mensajeInicial("Entradas:")
                 .prompt("Editar entrada: ")
                 .opciones(OpcionMenu.opciones(objetos, objeto -> Presentador.objetoATexto(objeto, repositorio.nombreEntidad())))
-                .salida(OpcionMenu.opcion(null, obj -> "Cancelar"))
+                .salida(OpcionMenu.opcionNull("Cancelar"))
                 .build();
         
         Objeto objeto = inputUsuario.solicitarOpcionMenu(menuObjetos);
@@ -112,7 +131,7 @@ public class ProgramaManipulacionDatos {
                 .mensajeInicial("Valores:")
                 .prompt("Editar valor: ")
                 .opciones(OpcionMenu.opciones(valoresAEditar, Objects::toString))
-                .salida(OpcionMenu.opcion(null, obj -> "Cancelar"))
+                .salida(OpcionMenu.opcionNull("Cancelar"))
                 .build();
 
         ValorAtributo valorAtributo = inputUsuario.solicitarOpcionMenu(menuValores);

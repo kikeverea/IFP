@@ -67,17 +67,21 @@ public class Repositorio {
         ValorAtributo valorClavePrimaria = new ValorAtributo(clavePrimaria);
         valorClavePrimaria.setValor(id);
 
-        return buscar(valorClavePrimaria);
+        return buscar(valorClavePrimaria).get(0);
     }
 
-    private Objeto buscar(ValorAtributo valorAtributo) throws SQLException {
+    public List<Objeto> buscar(ValorAtributo valorAtributo) throws SQLException {
         try (PreparedStatement statement = Statements
                     .selectFrom(entidad.getNombre())
                     .where(valorAtributo)
                     .statement(bd.getConexion());
              ResultSet set = statement.executeQuery())
         {
-            return set.next() ? extraerObjeto(set, set.getMetaData()) : null;
+            List<Objeto> objetos = new ArrayList<>();
+            while (set.next())
+                objetos.add(extraerObjeto(set, set.getMetaData()));
+
+            return objetos;
         }
     }
 

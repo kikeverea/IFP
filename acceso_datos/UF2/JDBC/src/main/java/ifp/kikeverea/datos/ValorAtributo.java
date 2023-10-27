@@ -14,6 +14,11 @@ public class ValorAtributo {
         this.atributo = atributo;
     }
 
+    public ValorAtributo(Atributo atributo, Object valor) {
+        this.atributo = atributo;
+        this.valor = valor;
+    }
+
     public String nombreAtributo() {
         return atributo.getNombre();
     }
@@ -32,6 +37,10 @@ public class ValorAtributo {
 
     public boolean esClavePrimaria() {
         return atributo.esClavePrimaria();
+    }
+
+    public boolean esAutoIncremental() {
+        return atributo.esAutoIncremental();
     }
 
     public void setValor(Object valor) {
