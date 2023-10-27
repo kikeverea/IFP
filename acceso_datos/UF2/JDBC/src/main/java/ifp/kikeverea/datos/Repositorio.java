@@ -1,5 +1,6 @@
 package ifp.kikeverea.datos;
 
+import ifp.kikeverea.Statements;
 import ifp.kikeverea.bd.Atributo;
 import ifp.kikeverea.bd.BaseDeDatos;
 import ifp.kikeverea.bd.Entidad;
@@ -18,56 +19,37 @@ public class Repositorio {
         this.entidad = entidad;
     }
 
-    public void insertar(Objeto objeto) throws SQLException {
-        String insert = "INSERT INTO " + entidad.getNombre() + " " + declaracionValores(objeto.getAtributos());
+    public String nombreEntidad() {
+        return entidad.getNombre();
+    }
 
-        try (PreparedStatement statement = bd.getConexion().prepareStatement(insert, Statement.RETURN_GENERATED_KEYS)) {
-            establecerValores(statement, objeto.getAtributos());
+    public Objeto nuevoObjeto() {
+        return Objeto.instanciaDe(entidad);
+    }
+
+    public List<Atributo> atributos() {
+        return entidad.getAtributos();
+    }
+
+    public void insertar(Objeto objeto) throws SQLException {
+        try (PreparedStatement statement = Statements
+                .insertInto(entidad.getNombre())
+                .valores(objeto.getValoresAtributos())
+                .statement(bd.getConexion(), Statement.RETURN_GENERATED_KEYS))
+        {
             statement.executeUpdate();
 
             ResultSet claveGenerada = statement.getGeneratedKeys();
             claveGenerada.next();
             objeto.setClavePrimaria(claveGenerada.getInt(1));
-        }
-    }
-
-    private String declaracionValores(List<ValorAtributo> atributos) {
-        StringBuilder lista = new StringBuilder();
-        StringBuilder valores = new StringBuilder();
-
-        lista.append("(");
-        valores.append(" VALUES(");
-
-        for (int i = 0; i < atributos.size(); i++) {
-            ValorAtributo valorAtributo = atributos.get(i);
-
-            lista.append(valorAtributo.nombreAtributo());
-            valores.append("?");
-
-            if (i < atributos.size() - 1) { //añade coma a todos los nombres y valores menos los últimos
-                lista.append(", ");
-                valores.append(", ");
-            }
-        }
-
-        lista.append(")");
-        valores.append(")");
-
-        return lista + " " + valores;
-    }
-
-    private void establecerValores(PreparedStatement statement, List<ValorAtributo> atributos) throws SQLException {
-        for (int i = 0; i < atributos.size(); i++) {
-            ValorAtributo valorAtributo = atributos.get(i);
-            statement.setObject(i+1, valorAtributo.valor(), valorAtributo.tipoSql());
+            claveGenerada.close();
         }
     }
 
     public List<Objeto> listarTodo() throws SQLException {
-        String declaration = "SELECT * FROM " + entidad.getNombre();
         List<Objeto> resultado = new ArrayList<>();
 
-        try (PreparedStatement statement = bd.getConexion().prepareStatement(declaration);
+        try (PreparedStatement statement = Statements.selectFrom(entidad.getNombre()).statement(bd.getConexion());
              ResultSet set = statement.executeQuery())
         {
             ResultSetMetaData meta = set.getMetaData();
@@ -82,74 +64,42 @@ public class Repositorio {
 
     public Objeto buscarPorId(int id) throws SQLException {
         Atributo clavePrimaria = entidad.getClavePrimaria();
-        return buscar(clavePrimaria.getNombre(), id, clavePrimaria.getTipo().getTipoSql());
+        ValorAtributo valorClavePrimaria = new ValorAtributo(clavePrimaria);
+        valorClavePrimaria.setValor(id);
+
+        return buscar(valorClavePrimaria);
     }
 
-    public Objeto buscar(ValorAtributo atributo) throws SQLException {
-        return buscar(atributo.nombreAtributo(), atributo.valor(), atributo.tipoSql());
-    }
-
-    private Objeto buscar(String nombreAtributo, Object valor, int tipoSql) throws SQLException {
-        String declaracion = "SELECT * FROM " + entidad.getNombre() + " WHERE " + nombreAtributo + " = ?";
-
-        try (PreparedStatement statement = bd.getConexion().prepareStatement(declaracion))
+    private Objeto buscar(ValorAtributo valorAtributo) throws SQLException {
+        try (PreparedStatement statement = Statements
+                    .selectFrom(entidad.getNombre())
+                    .where(valorAtributo)
+                    .statement(bd.getConexion());
+             ResultSet set = statement.executeQuery())
         {
-            statement.setObject(1, valor, tipoSql);
-            ResultSet set = statement.executeQuery();
-
-            Objeto objeto = set.next() ? extraerObjeto(set, set.getMetaData()) : null;
-            set.close();
-
-            return objeto;
+            return set.next() ? extraerObjeto(set, set.getMetaData()) : null;
         }
     }
 
-    public void actualizarObjeto(Objeto objeto) throws SQLException {
-        List<ValorAtributo> atributos = objeto.getAtributos();
-        ValorAtributo clavePrimaria = objeto.getClavePrimaria();
-        String declaracion =
-                "UPDATE " + entidad.getNombre() + declaracionValoresSet(atributos) +
-                " WHERE " + clavePrimaria.nombreAtributo() + " = ?";
-
-        try (PreparedStatement statement = bd.getConexion().prepareStatement(declaracion))
+    public void actualizar(Objeto objeto) throws SQLException {
+      try (PreparedStatement statement = Statements
+              .update(entidad.getNombre())
+              .set(objeto)
+              .where(objeto.getClavePrimaria())
+              .statement(bd.getConexion()))
         {
-
-            establecerValores(statement, atributos);
-            statement.setObject(atributos.size(), clavePrimaria.valor(), clavePrimaria.tipoSql());
             statement.executeUpdate();
         }
     }
 
     public void eliminar(Objeto objeto) throws SQLException {
-        ValorAtributo clavePrimaria = objeto.getClavePrimaria();
-        String declaracion = "DELETE FROM " + entidad.getNombre() + " WHERE " + clavePrimaria.nombreAtributo() + " = ?";
-
-        try (PreparedStatement statement = bd.getConexion().prepareStatement(declaracion))
+        try (PreparedStatement statement = Statements
+                .deleteFrom(entidad.getNombre())
+                .where(objeto.getClavePrimaria())
+                .statement(bd.getConexion()))
         {
-
-            statement.setObject(1, clavePrimaria.valor(), clavePrimaria.tipoSql());
             statement.executeUpdate();
         }
-    }
-
-    private String declaracionValoresSet(List<ValorAtributo> atributos) {
-        StringBuilder sb = new StringBuilder(" SET ");
-        int numeroValores = atributos.size() - 1; // valores, menos la clave primaria
-
-        for (int i = 0; i < atributos.size(); i++) {
-            ValorAtributo atributo = atributos.get(i);
-
-            if (atributo.esClavePrimaria())
-                continue;
-
-            sb.append(atributo.nombreAtributo());
-            sb.append(" = ");
-            sb.append("?");
-
-            if (i < numeroValores -1)
-                sb.append(", ");
-        }
-        return sb.toString();
     }
 
     private Objeto extraerObjeto(ResultSet set, ResultSetMetaData meta) throws SQLException {
