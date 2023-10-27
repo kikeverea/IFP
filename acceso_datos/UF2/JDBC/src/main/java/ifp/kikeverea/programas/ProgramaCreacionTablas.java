@@ -27,7 +27,7 @@ public class ProgramaCreacionTablas {
         }
 
         bd.crearEntidad(new Entidad(nombre, atributos));
-        Programa.imprimirResultado(resultadoCrearEntidad(nombre, atributos));
+        Programa.imprimirMensaje(resultadoCrearEntidad(nombre, atributos));
     }
 
     private static String solicitarNombreEntidad(BaseDeDatos bd, InputUsuario input) throws SQLException {

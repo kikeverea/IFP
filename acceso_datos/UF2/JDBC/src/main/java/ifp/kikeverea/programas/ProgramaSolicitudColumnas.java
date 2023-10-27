@@ -54,6 +54,7 @@ public class ProgramaSolicitudColumnas {
     public static Menu MENU_TIPOS = new Menu("Tipo de argumento", "Tipo: ", OpcionTipos.values());
 
     public static List<Atributo> solicitarColumnas(InputUsuario input) {
+        Programa.imprimirMensaje("Añadir atributos");
         List<Atributo> atributos = new ArrayList<>();
 
         do {
@@ -72,7 +73,7 @@ public class ProgramaSolicitudColumnas {
 
     private static List<Atributo> terminar(List<Atributo> atributos) {
         if (atributos.isEmpty()) {
-            Programa.imprimirResultado("No se han añadido atributos");
+            Programa.imprimirMensaje("No se han añadido atributos");
         }
         else {
             String mensaje = Presentador.separadoPorComas(atributos, atributo -> "'"+atributo.getNombre()+"'");
@@ -81,16 +82,11 @@ public class ProgramaSolicitudColumnas {
         return atributos;
     }
 
-    private static <T> T cancelar() {
-        Programa.imprimirResultado("Operación cancelada");
-        return null; // regresa null por diseño
-    }
-
     private static Atributo solicitarAtributo(InputUsuario input) {
         String nombre = input.solicitarSoloTexto("Nombre del atributo: ");
 
         if (nombre.isBlank())
-            return cancelar();
+            return Programa.operacionCancelada();
 
         OpcionTipos opcionTipo = (OpcionTipos) input.solicitarOpcionMenu(MENU_TIPOS);
         if (opcionTipo == OpcionTipos.CANCELAR)
@@ -98,7 +94,7 @@ public class ProgramaSolicitudColumnas {
 
         List<ClausulaAtributo> clausulas = ProgramaSolicitudClausulasColumnas.solicitarClausulas(input, opcionTipo == OpcionTipos.TEXTO);
         if (clausulas == null)
-            return cancelar();
+            return Programa.operacionCancelada();
 
         TipoAtributo tipoAtributo = opcionTipo == OpcionTipos.NUMERO ? TipoAtributo.NUMERO : TipoAtributo.TEXTO;
 
@@ -106,7 +102,7 @@ public class ProgramaSolicitudColumnas {
                 .nuevoAtributo(nombre)
                 .deTipo(tipoAtributo, clausulas.toArray(new ClausulaAtributo[0]));
 
-       Programa.imprimirResultado("Atributo creado: '" +
+        Programa.imprimirMensaje("Atributo creado: '" +
                atributo.getNombre() + "', " +
                opcionTipo.mensaje + " (" +
                ProgramaSolicitudClausulasColumnas.mostrarResultado() + ")");

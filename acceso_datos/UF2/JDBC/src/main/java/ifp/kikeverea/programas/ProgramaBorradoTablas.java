@@ -38,11 +38,11 @@ public class ProgramaBorradoTablas {
         }
 
         try {
-            bd.eliminarEntidad(nombreEntidad);
-            Programa.imprimirResultado("La tabla " + nombreEntidad + " ha sido eliminada");
+            bd.eliminarEntidad(entidad);
+            Programa.imprimirMensaje("La tabla " + entidad + " ha sido eliminada");
         }
         catch (SQLException e) {
-            Programa.imprimirError("No se ha podido borrar la tabla " + nombreEntidad);
+            Programa.imprimirError("No se ha podido borrar la tabla " + entidad);
         }
     }
 

@@ -42,12 +42,7 @@ public class Main {
         conectarBaseDeDatos(bd);
 
         do {
-            AccionTablas accion = (AccionTablas) input.solicitarOpcionMenu(MENU_TABLAS);
-
-            if (accion == AccionTablas.SALIR) {
-                Programa.imprimirResultado("Programa finalizado");
-                System.exit(0);
-            }
+            Programa.imprimirMensaje("Tablas");
 
             try {
                 switch (accion) {
@@ -77,6 +72,13 @@ public class Main {
 
     private static void mostrarTablas(BaseDeDatos bd) throws SQLException {
         String tablas = String.join(", ", bd.listarEntidades());
-        Programa.imprimirResultado("TABLAS:\n" + tablas);
+        Programa.imprimirMensaje("TABLAS:\n" + tablas);
+    }
+
+    private static void terminarPrograma() {
+        Programa.imprimirMensaje("Programa finalizado");
+        System.exit(0);
+    }
+
     }
 }
