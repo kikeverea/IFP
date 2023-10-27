@@ -39,6 +39,10 @@ public interface OpcionMenu<T> {
                 .collect(Collectors.toList());
     }
 
+    static <T> Opcion<T> opcionNull(String nombre) {
+        return new Opcion<>(null, o -> nombre);
+    }
+
     class Opcion<T> implements OpcionMenu<T> {
 
         private final T objeto;
