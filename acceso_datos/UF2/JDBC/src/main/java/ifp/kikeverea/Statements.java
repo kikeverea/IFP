@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Statements {
 
@@ -74,6 +75,7 @@ public class Statements {
         }
 
         public StatementBuilder where(ValorAtributo valorAtributo) {
+            valores.add(valorAtributo);
             return new StatementBuilder(query + " WHERE " + valorAtributo.nombreAtributo() + " = ?", valores);
         }
 
@@ -91,27 +93,29 @@ public class Statements {
         }
 
         public Where set(Objeto objeto) {
-            List<ValorAtributo> atributos = objeto.getValoresAtributos();
+            List<ValorAtributo> atributos = atributosNoAutoincrementales(objeto);
 
             StringBuilder update = new StringBuilder();
             update.append("UPDATE ").append(nombreEntidad).append(" SET ");
 
-            int numeroValores = atributos.size() - 1; // numero valores, menos la clave primaria
-
             for (int i = 0; i < atributos.size(); i++) {
                 ValorAtributo atributo = atributos.get(i);
-
-                if (atributo.esClavePrimaria())
-                    continue;
 
                 update.append(atributo.nombreAtributo());
                 update.append(" = ");
                 update.append("?");
 
-                if (i < numeroValores -1)
+                if (i < atributos.size() -1)
                     update.append(", ");
             }
             return new Where(update.toString(), atributos);
+        }
+
+        private List<ValorAtributo> atributosNoAutoincrementales(Objeto objeto) {
+            return objeto.getValoresAtributos()
+                    .stream()
+                    .filter(atributo -> !atributo.esAutoIncremental())
+                    .collect(Collectors.toList());
         }
     }
 
