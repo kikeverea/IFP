@@ -1,6 +1,7 @@
 package ifp.kikeverea.datos;
 
 import ifp.kikeverea.bd.Atributo;
+import ifp.kikeverea.bd.TipoAtributo;
 
 import java.util.Objects;
 
@@ -19,6 +20,10 @@ public class ValorAtributo {
 
     public int tipoSql() {
         return atributo.getTipo().getTipoSql();
+    }
+
+    public TipoAtributo tipo() {
+        return atributo.getTipo();
     }
 
     public Object valor() {
@@ -48,9 +53,7 @@ public class ValorAtributo {
 
     @Override
     public String toString() {
-        return "ValorAtributo{" +
-                "atributo=" + atributo.getNombre() +
-                ", valor=" + valor +
-                '}';
+        String valor = tipo() == TipoAtributo.TEXTO ? "'"+this.valor+"'" : this.valor.toString();
+        return atributo.getNombre()+": "+valor;
     }
 }

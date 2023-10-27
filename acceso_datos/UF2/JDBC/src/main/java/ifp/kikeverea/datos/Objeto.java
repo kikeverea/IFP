@@ -38,7 +38,7 @@ public class Objeto {
         return clavePrimaria;
     }
 
-    public List<ValorAtributo> getAtributos() {
+    public List<ValorAtributo> getValoresAtributos() {
         return valores;
     }
 
