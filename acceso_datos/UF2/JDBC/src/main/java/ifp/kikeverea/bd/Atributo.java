@@ -10,11 +10,13 @@ public class Atributo {
     private final TipoAtributo tipo;
     private final List<ClausulaAtributo> clausulas;
     private final boolean esClavePrimaria;
+    private final boolean esAutoIncremental;
 
     private Atributo(AtributoBuilder builder) {
         this.nombre = builder.nombre;
         this.tipo = builder.tipo;
         this.esClavePrimaria = builder.esClavePrimaria;
+        this.esAutoIncremental = builder.esAutoIncremental;
         this.clausulas = builder.clausulas != null
                 ? validarClausulas(builder.clausulas)
                 : null;
@@ -58,6 +60,10 @@ public class Atributo {
         return esClavePrimaria;
     }
 
+    public boolean esAutoIncremental() {
+        return esAutoIncremental;
+    }
+
     public List<ClausulaAtributo> getClausulas() {
         return List.copyOf(clausulas);
     }
@@ -95,6 +101,7 @@ public class Atributo {
         private TipoAtributo tipo;
         private List<ClausulaAtributo> clausulas;
         private boolean esClavePrimaria = false;
+        private boolean esAutoIncremental = false;
 
         private AtributoBuilder(String nombre) {
             if (nombre == null || nombre.strip().equals(""))
@@ -112,6 +119,7 @@ public class Atributo {
             this.tipo = tipo;
             this.clausulas = Arrays.asList(clausulas);
             this.esClavePrimaria = this.clausulas.contains(ClausulaAtributo.PRIMARY_KEY);
+            this.esAutoIncremental = this.clausulas.contains(ClausulaAtributo.AUTO_INCREMENT);
             return new Atributo(this);
         }
     }
