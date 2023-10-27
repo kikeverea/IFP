@@ -4,6 +4,7 @@ import ifp.kikeverea.bd.ClausulaAtributo;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.Menu;
 import ifp.kikeverea.util.OpcionMenu;
+import ifp.kikeverea.util.Presentador;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,9 +71,10 @@ public class ProgramaSolicitudClausulasColumnas {
 
     private static List<ClausulaAtributo> terminar(List<OpcionClausulas> clausulas) {
         MENU_CLAUSULAS.rehabilitarOpciones();
-        resultado = mostrarClausulas(clausulas);
+        resultado = Presentador.separadoPorComas(clausulas, OpcionClausulas::mensaje);
         return mapearClausulas(clausulas);
     }
+
     private static List<ClausulaAtributo> mapearClausulas(List<OpcionClausulas> clausulas) {
         return clausulas
                 .stream()
@@ -92,12 +94,5 @@ public class ProgramaSolicitudClausulasColumnas {
 
     public static String mostrarResultado() {
         return resultado;
-    }
-
-    private static String mostrarClausulas(List<OpcionClausulas> clausulas) {
-        return clausulas
-                .stream()
-                .map(clausula -> clausula.mensaje)
-                .collect(Collectors.joining(", "));
     }
 }

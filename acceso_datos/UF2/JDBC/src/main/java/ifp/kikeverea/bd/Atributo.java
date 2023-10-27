@@ -1,7 +1,8 @@
 package ifp.kikeverea.bd;
 
+import ifp.kikeverea.util.Presentador;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Atributo {
 
@@ -39,12 +40,8 @@ public class Atributo {
     public String definicion() {
         String base = nombre + " " + tipo.nombre();
 
-        if (clausulas != null) {
-            base = base + " " + clausulas
-                    .stream()
-                    .map(Objects::toString)
-                    .collect(Collectors.joining(" "));
-        }
+        if (clausulas != null)
+            base = base + " " + Presentador.separadoPorComas(clausulas, Objects::toString);
 
         return base;
     }

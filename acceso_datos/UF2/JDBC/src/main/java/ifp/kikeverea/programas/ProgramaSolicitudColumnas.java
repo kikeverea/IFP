@@ -6,11 +6,11 @@ import ifp.kikeverea.bd.TipoAtributo;
 import ifp.kikeverea.util.OpcionMenu;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.Menu;
+import ifp.kikeverea.util.Presentador;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class ProgramaSolicitudColumnas {
 
@@ -75,10 +75,8 @@ public class ProgramaSolicitudColumnas {
             Programa.imprimirResultado("No se han añadido atributos");
         }
         else {
-            String mensaje = atributos.stream()
-                    .map(atributo -> "'"+atributo.getNombre()+"'")
-                    .collect(Collectors.joining(", "));
-            Programa.imprimirResultado("Atributos añadidos: " + mensaje);
+            String mensaje = Presentador.separadoPorComas(atributos, atributo -> "'"+atributo.getNombre()+"'");
+            Programa.imprimirMensaje("Atributos añadidos: " + mensaje);
         }
         return atributos;
     }
@@ -90,6 +88,7 @@ public class ProgramaSolicitudColumnas {
 
     private static Atributo solicitarAtributo(InputUsuario input) {
         String nombre = input.solicitarSoloTexto("Nombre del atributo: ");
+
         if (nombre.isBlank())
             return cancelar();
 

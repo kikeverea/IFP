@@ -4,10 +4,10 @@ import ifp.kikeverea.bd.Atributo;
 import ifp.kikeverea.bd.BaseDeDatos;
 import ifp.kikeverea.bd.Entidad;
 import ifp.kikeverea.util.InputUsuario;
+import ifp.kikeverea.util.Presentador;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProgramaCreacionTablas {
 
@@ -44,11 +44,7 @@ public class ProgramaCreacionTablas {
     }
 
     private static String resultadoCrearEntidad(String nombre, List<Atributo> atributos) {
-        String nombresAtributos = atributos
-                .stream()
-                .map(Atributo::getNombre)
-                .collect(Collectors.joining(","));
-
+        String nombresAtributos = Presentador.separadoPorComas(atributos, Atributo::getNombre);
         return "Tabla: " + nombre + " ("+nombresAtributos+"), creada con éxito";
     }
 }

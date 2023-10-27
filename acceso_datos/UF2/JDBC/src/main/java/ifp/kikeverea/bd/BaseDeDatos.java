@@ -1,8 +1,9 @@
 package ifp.kikeverea.bd;
 
+import ifp.kikeverea.util.Presentador;
+
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BaseDeDatos {
 
@@ -31,7 +32,7 @@ public class BaseDeDatos {
     }
 
     public void crearEntidad(Entidad entidad) throws SQLException {
-        String definicionAtributos = extraerDefinicionDeAtributos(entidad.getAtributos());
+        String definicionAtributos = Presentador.separadoPorComas(entidad.getAtributos(), Atributo::definicion);
 
         String definicion =
                 "CREATE TABLE IF NOT EXISTS " + entidad.getNombre() + "(" + definicionAtributos + ")";
@@ -43,10 +44,7 @@ public class BaseDeDatos {
     }
 
     private String extraerDefinicionDeAtributos(List<Atributo> atributos) {
-        return atributos
-                .stream()
-                .map(Atributo::definicion)
-                .collect(Collectors.joining(", "));
+        return Presentador.separadoPorComas(atributos, Atributo::definicion);
     }
 
     public void eliminarEntidad(String nombreEntidad) throws SQLException {
