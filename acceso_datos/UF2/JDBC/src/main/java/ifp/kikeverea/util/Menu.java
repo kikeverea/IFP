@@ -1,74 +1,118 @@
 package ifp.kikeverea.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class Menu {
+public class Menu<T> {
+
+    private static final int NUMERO_SALIDA = 0;
 
     private final String mensajeInicial;
     private final String prompt;
-    private final List<OpcionMenu> opciones;
-    private final List<OpcionMenu> opcionesAMostrar;
+    private final List<OpcionMenu<T>> opciones;
+    private final List<OpcionMenu<T>> opcionesIniciales;
+    private final OpcionMenu<T> salida;
 
-    public Menu(String prompt, OpcionMenu... opciones) {
-        this(null, prompt, opciones);
+    private Menu(MenuBuilder<T> builder) {
+        List<OpcionMenu<T>> opciones = new ArrayList<>(builder.opciones);
+
+        if (opciones.size() == 0)
+            throw new IllegalArgumentException("Al menos una opción es necesaria para instanciar un Menu");
+
+        if (builder.salida != null)
+            opciones.removeIf(opcion -> opcion.nombre().equals(builder.salida.nombre()));
+
+        this.mensajeInicial = builder.mensajeInicial;
+        this.prompt = builder.prompt;
+        this.opciones = new ArrayList<>(opciones);
+        this.opcionesIniciales = new ArrayList<>(opciones);
+        this.salida = builder.salida;
     }
-    public Menu(String mensajeInicial, String prompt, OpcionMenu... opciones) {
-        if (opciones.length == 0)
-            throw new IllegalArgumentException("Al menos un artículo es necesario para instanciar un Menu");
 
-        this.mensajeInicial = mensajeInicial;
-        this.prompt = prompt;
-        this.opciones = Arrays.asList(opciones);
-        this.opcionesAMostrar = new ArrayList<>(this.opciones);
-    }
-
-    public String mostrar(String... args) {
+    public String mostrar() {
         StringBuilder sb = new StringBuilder();
 
         if (mensajeInicial != null)
             sb.append(mensajeInicial).append("\n");
 
-        for (int indiceOpcion = 0; indiceOpcion < opcionesAMostrar.size(); indiceOpcion++) {
-            OpcionMenu opcion = opcionesAMostrar.get(indiceOpcion);
+        for (int i = 0, numeroOpcion = 1; i < opciones.size(); i++, numeroOpcion++)
+            appendOpcion(numeroOpcion, opciones.get(i).nombre(), sb);
 
-            int numeroOpcion = indiceOpcionANumero(indiceOpcion);
+        if (salida != null)
+            appendOpcion(NUMERO_SALIDA, salida.nombre(), sb);
 
-            String display = opcion.mensaje(args);
-            sb.append(numeroOpcion).append("- ");
-            sb.append(display);
-            sb.append("\n");
-        }
         sb.append(prompt);
         return sb.toString();
     }
 
-    private int numeroOpcionAIndice(int numeroOpcion) {
-        // índice = numeroOpcion - 1, excepto la última opción '0' (opción de salida), que tiene índice 'length - 1'
-        return numeroOpcion != 0 ? numeroOpcion - 1 : opcionesAMostrar.size() -1;
+    private void appendOpcion(int numeroOpcion, String nombreOpcion, StringBuilder sb) {
+        sb.append(numeroOpcion).append("- ");
+        sb.append(nombreOpcion);
+        sb.append("\n");
     }
 
-    private int indiceOpcionANumero(int indiceOpcion) {
-        // numero opcion = i + 1, excepto la última opción (opción de salida), a la que se le asigna el número '0'
-        return indiceOpcion < opcionesAMostrar.size() -1 ? indiceOpcion + 1 : 0;
+    public T getOpcion(int numeroOpcion) {
+        OpcionMenu<T> opcion = salida != null && numeroOpcion == NUMERO_SALIDA ? salida : opciones.get(numeroOpcion - 1);
+        return opcion.objeto();
     }
 
-    public OpcionMenu getOpcion(int numeroOpcion) {
-        int indiceOpcion = numeroOpcionAIndice(numeroOpcion);
-        return opcionesAMostrar.get(indiceOpcion);
-    }
-
-    public void inhabilitarOpcion(OpcionMenu opcion) {
-        opcionesAMostrar.remove(opcion);
+    public void inhabilitarOpcion(T opcion) {
+        opciones.removeIf(o -> o.equals(opcion));
     }
 
     public void rehabilitarOpciones() {
-        opcionesAMostrar.clear();
-        opcionesAMostrar.addAll(opciones);
+        opciones.clear();
+        opciones.addAll(opcionesIniciales);
     }
 
     public int count() {
-        return opcionesAMostrar.size();
+        return opciones.size();
+    }
+
+    public int min() {
+        return salida != null ? 0 : 1;
+    }
+
+    public int max() {
+        return opciones.size();
+    }
+
+    public static MenuBuilder<String> menuSimple() {
+        return new MenuBuilder<>();
+    }
+
+    public static <T> MenuBuilder<T> nuevoMenu(Class<T> c) {
+        return new MenuBuilder<>();
+    }
+    
+    public static class MenuBuilder<T> {
+        private String mensajeInicial;
+        private String prompt;
+        private List<OpcionMenu<T>> opciones;
+        private OpcionMenu<T> salida;
+        
+        public MenuBuilder<T> mensajeInicial(String mensajeInicial) {
+            this.mensajeInicial = mensajeInicial;
+            return this;
+        }
+
+        public MenuBuilder<T> prompt(String prompt) {
+            this.prompt = prompt;
+            return this;
+        }
+
+        public MenuBuilder<T> opciones(List<OpcionMenu<T>> opciones) {
+            this.opciones = opciones;
+            return this;
+        }
+
+        public MenuBuilder<T> salida(OpcionMenu<T> salida) {
+            this.salida = salida;
+            return this;
+        }
+        
+        public Menu<T> build() {
+            return new Menu<>(this);
+        }
     }
 }

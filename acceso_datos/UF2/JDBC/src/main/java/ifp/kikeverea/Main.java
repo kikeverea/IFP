@@ -1,39 +1,37 @@
 package ifp.kikeverea;
 
 import ifp.kikeverea.bd.*;
+import ifp.kikeverea.datos.Repositorio;
 import ifp.kikeverea.programas.Programa;
 import ifp.kikeverea.programas.ProgramaBorradoTablas;
 import ifp.kikeverea.programas.ProgramaCreacionTablas;
-import ifp.kikeverea.util.OpcionMenu;
+import ifp.kikeverea.programas.ProgramaManipulacionDatos;
 import ifp.kikeverea.util.InputUsuario;
 import ifp.kikeverea.util.Menu;
+import ifp.kikeverea.util.OpcionMenu;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-    private enum AccionTablas implements OpcionMenu {
-        MOSTRAR_TABLAS("Mostrar tablas"),
-        ELEGIR_TABLA("Elegir tabla"),
-        CREAR_TABLA("Crear tabla"),
-        BORRAR_TABLA("Borrar tabla"),
-        SALIR("Salir");
-
-        private final String mensaje;
-        AccionTablas(String mensaje) {
-            this.mensaje = mensaje;
-        }
-
-        @Override
-        public String mensaje(String... args) {
-            return mensaje;
-        }
-    }
+    private static final String MOSTRAR_TABLAS = "Mostrar tablas";
+    private static final String ELEGIR_TABLA = "Elegir tabla";
+    private static final String CREAR_TABLA = "Crear tabla";
+    private static final String BORRAR_TABLA = "Borrar tabla";
+    private static final String SALIR = "Salir";
 
     private static final String NOMBRE_BD = "bd_uf2";
     private static final String URI_BD = "jdbc:mysql://kike:asd@localhost:3306/"+NOMBRE_BD;
-    private static final Menu MENU_TABLAS = new Menu("Acción: ", AccionTablas.values());
+
+    private static final Menu<String> MENU_TABLAS = Menu.menuSimple()
+            .prompt("Acción: ")
+            .opciones(OpcionMenu.opcionesSimples(MOSTRAR_TABLAS, ELEGIR_TABLA, CREAR_TABLA, BORRAR_TABLA))
+            .salida(OpcionMenu.opcionSimple(SALIR))
+            .build();
+
+    private static final String CANCELAR = "Cancelar";
 
     public static void main(String[] args) {
         InputUsuario input = new InputUsuario(new Scanner(System.in));
@@ -43,17 +41,20 @@ public class Main {
 
         do {
             Programa.imprimirMensaje("Tablas");
+            String accion = input.solicitarOpcionMenu(MENU_TABLAS);
 
             try {
                 switch (accion) {
                     case MOSTRAR_TABLAS -> mostrarTablas(bd);
+                    case ELEGIR_TABLA -> ejecutarProgramaManipulacionDatos(bd, input);
                     case CREAR_TABLA -> ProgramaCreacionTablas.crearTabla(bd, input);
-                    case BORRAR_TABLA -> ProgramaBorradoTablas.ejecutar(bd, input);
+                    case BORRAR_TABLA -> ejecutarProgramaBorrado(bd, input);
+                    case SALIR -> terminarPrograma();
                 }
             }
             catch (SQLException e) {
                 System.err.println("Error: error durante la ejecución del programa");
-                System.out.println("Causa: " + e.getMessage());
+                System.err.println("Causa: " + e.getMessage());
                 System.exit(e.getErrorCode());
             }
         }
@@ -80,5 +81,38 @@ public class Main {
         System.exit(0);
     }
 
+    private static void ejecutarProgramaManipulacionDatos(BaseDeDatos bd, InputUsuario input) throws SQLException {
+        String entidad = escojerEntidad(bd, input);
+
+        if (entidad == null)
+            return;
+
+        ProgramaManipulacionDatos.ejecutar(new Repositorio(bd, bd.getEntidad(entidad)), input);
+    }
+
+    private static void ejecutarProgramaBorrado(BaseDeDatos bd, InputUsuario input) throws SQLException {
+        String entidad = escojerEntidad(bd, input);
+
+        if (entidad == null) {
+            Programa.operacionCancelada();
+            return;
+        }
+
+        ProgramaBorradoTablas.ejecutar(bd, entidad, input);
+    }
+
+    private static String escojerEntidad(BaseDeDatos bd, InputUsuario input) throws SQLException {
+        List<String> entidades = bd.listarEntidades();
+
+        Menu<String> menuEntidades = Menu.menuSimple()
+                .mensajeInicial("Tablas disponibles:")
+                .prompt("Escoger: ")
+                .opciones(OpcionMenu.opcionesSimples(entidades))
+                .salida(OpcionMenu.opcionSimple(CANCELAR))
+                .build();
+
+        String opcionElejida = input.solicitarOpcionMenu(menuEntidades);
+
+        return !opcionElejida.equals(CANCELAR) ? opcionElejida : null;
     }
 }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class ProgramaSolicitudClausulasColumnas {
 
-    private enum OpcionClausulas implements OpcionMenu {
+    private enum OpcionClausulas {
         ID("Id", "este atributo será utilizado para identificar los valores de esta tabla"),
         UNICO("Único", "los valores de este atributo deberán ser únicos"),
         AUTO_INCREMENT("Autoincremental", "los valores de este atributo autoincrementan por cada instancia de la entidad"),
@@ -28,13 +28,17 @@ public class ProgramaSolicitudClausulasColumnas {
             this.descripcion = descripcion;
         }
 
-        @Override
-        public String mensaje(String... args) {
+        public String mensaje() {
             return mensaje+": "+descripcion;
         }
     }
 
-    public static Menu MENU_CLAUSULAS = new Menu("Información adicional", "Añadir nuevo: ", OpcionClausulas.values());
+    public static Menu<OpcionClausulas> MENU_CLAUSULAS = Menu.nuevoMenu(OpcionClausulas.class)
+            .mensajeInicial("Información adicional")
+            .prompt("Añadir nuevo: ")
+            .opciones(OpcionMenu.opciones(OpcionClausulas::mensaje, OpcionClausulas.values()))
+            .salida(OpcionMenu.opcion(OpcionClausulas.CANCELAR, OpcionClausulas::mensaje))
+            .build();
 
     private static String resultado;
 
@@ -46,7 +50,7 @@ public class ProgramaSolicitudClausulasColumnas {
             MENU_CLAUSULAS.inhabilitarOpcion(OpcionClausulas.AUTO_INCREMENT);
 
         do {
-            OpcionClausulas opcionClausula = (OpcionClausulas) input.solicitarOpcionMenu(MENU_CLAUSULAS);
+            OpcionClausulas opcionClausula = input.solicitarOpcionMenu(MENU_CLAUSULAS);
 
             if (opcionClausula == OpcionClausulas.CANCELAR)
                 return cancelar();

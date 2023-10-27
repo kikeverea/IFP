@@ -142,8 +142,8 @@ public class InputUsuario {
         }
     }
 
-    public OpcionMenu solicitarOpcionMenu(Menu menu) {
-        int numTipo = solicitarEntero(menu.mostrar(), ValidadorNumeros.enIntervalo(0, menu.count() -1));
+    public <T> T solicitarOpcionMenu(Menu<T> menu) {
+        int numTipo = solicitarEntero(menu.mostrar(), ValidadorNumeros.enIntervalo(menu.min(), menu.max()));
         return menu.getOpcion(numTipo);
     }
 
