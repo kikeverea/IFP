@@ -10,7 +10,6 @@ import ifp.kikeverea.util.Presentador;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ProgramaSolicitudColumnas {
 
@@ -20,11 +19,6 @@ public class ProgramaSolicitudColumnas {
 
     private static final String ACCION_ANADIR = "Añadir";
     private static final String ACCION_TERMINAR = "Terminar";
-
-    public static void main(String[] args) {
-        InputUsuario input = new InputUsuario(new Scanner(System.in));
-        solicitarColumnas(input);
-    }
 
     public static Menu<String> MENU_ACCIONES = Menu.menuSimple()
             .prompt("Acción: ")
