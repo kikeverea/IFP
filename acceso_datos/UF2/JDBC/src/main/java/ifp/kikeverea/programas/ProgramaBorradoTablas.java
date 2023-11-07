@@ -7,13 +7,8 @@ import java.sql.SQLException;
 
 public class ProgramaBorradoTablas {
     
-    public static void ejecutar(BaseDeDatos bd, String entidad, InputUsuario input) throws SQLException {
-        
-        boolean proceder = input.solicitarEleccion(
-                "¿Borrar tabla '" + entidad + "'? [Si/No] ",
-                new String[]{"SI", "Si", "si", "S", "s"},
-                new String[]{"NO", "No", "no", "N", "n"}
-        );
+    public static void ejecutar(BaseDeDatos bd, String entidad, InputUsuario input) {
+        boolean proceder = input.solicitarSioNo("¿Borrar tabla '" + entidad + "'? [Si/No] ");
 
         if (!proceder) {
             Programa.operacionCancelada();
