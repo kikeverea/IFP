@@ -43,7 +43,7 @@ public class ProgramaManipulacionDatos {
                 case CONSULTAR -> consultarPorAtributo(repositorio, input);
                 case CREAR -> crearObjeto(repositorio, input);
                 case EDITAR -> editarObjeto(repositorio, input);
-//                    case BORRAR -> ejecutarProgramaBorrado(bd, input);
+                case BORRAR -> borrarObjeto(repositorio, input);
             }
         }
         while (true);
@@ -57,7 +57,7 @@ public class ProgramaManipulacionDatos {
             return;
         }
 
-        String textoObjetos = Presentador.objetosATexto(objetos, repositorio.nombreEntidad());
+        String textoObjetos = objetosATexto(objetos, repositorio.nombreEntidad());
 
         Programa.imprimirMensaje("ENTRADAS\n" + textoObjetos);
     }
@@ -66,18 +66,20 @@ public class ProgramaManipulacionDatos {
         Programa.imprimirMensaje("Consultar por atributos");
 
         List<Atributo> atributos = repositorio.atributos();
+
         Menu<Atributo> menuAtributos = Menu.nuevoMenu(Atributo.class)
                 .mensajeInicial("Atributos disponibles:")
                 .prompt("Consultar por atributo: ")
                 .opciones(OpcionMenu.opciones(atributos, Atributo::getNombre))
-                .salida(OpcionMenu.opcionNull("Salida"))
+                .salida(OpcionMenu.opcionNull("Regresar"))
                 .build();
 
         Atributo atributo = input.solicitarOpcionMenu(menuAtributos);
-        Object valorQuery = atributo.getTipo() == TipoAtributo.NUMERO
-                ? input.solicitarEntero(atributo.getNombre() + " a buscar: ")
-                : input.solicitarTexto(atributo.getNombre() + " a buscar: ");
 
+        if (atributo == null)
+            return;
+
+        Object valorQuery = solicitarValorParaAtributo(atributo.getNombre()+" a buscar: ", atributo.getTipo(), input);
         List<Objeto> objetos = repositorio.buscar(new ValorAtributo(atributo, valorQuery));
 
         if (objetos.isEmpty()) {
@@ -85,12 +87,14 @@ public class ProgramaManipulacionDatos {
             return;
         }
 
-        String textoObjetos = Presentador.objetosATexto(objetos, repositorio.nombreEntidad());
+        String textoObjetos = objetosATexto(objetos, repositorio.nombreEntidad());
         Programa.imprimirMensaje("ENTRADAS\n" + textoObjetos);
 
     }
 
-    private static void crearObjeto(Repositorio repositorio, InputUsuario input) throws SQLException {
+    private static void crearObjeto(Repositorio repositorio, InputUsuario input) {
+        Programa.imprimirMensaje("Crear nuevo");
+
         Objeto objeto = repositorio.nuevoObjeto();
         List<Atributo> atributos = repositorio.atributos();
 
@@ -99,54 +103,79 @@ public class ProgramaManipulacionDatos {
             if (atributo.esAutoIncremental()) // no es necesario solicitar un valor, éste se genera automáticamente
                 continue;
 
-            Object valor = atributo.getTipo() == TipoAtributo.NUMERO
-                    ? input.solicitarEntero(atributo.getNombre()+": ")
-                    : input.solicitarTexto(atributo.getNombre()+": ");
-
+            Object valor = solicitarValorParaAtributo(atributo.getNombre()+": ", atributo.getTipo(), input);
             objeto.setValor(atributo.getNombre(), valor);
         }
 
-        repositorio.insertar(objeto);
+        try {
+            repositorio.insertar(objeto);
+            Programa.imprimirMensaje(
+                    "Registro " + objetoATexto(objeto, repositorio.nombreEntidad()) + " creado con éxito");
+        }
+        catch (SQLException e) {
+            Programa.imprimirError("No se ha podido crear la entrada.\nCausa: " + e.getMessage());
+        }
     }
 
-    private static void editarObjeto(Repositorio repositorio, InputUsuario inputUsuario) throws SQLException {
-        List<Objeto> objetos = repositorio.listarTodo();
+    private static Object solicitarValorParaAtributo(String mensaje, TipoAtributo tipo, InputUsuario input) {
+        return tipo == TipoAtributo.NUMERO
+                ? input.solicitarEntero(mensaje)
+                : input.solicitarTexto(mensaje);
+    }
 
-        Menu<Objeto> menuObjetos = Menu.nuevoMenu(Objeto.class)
-                .mensajeInicial("Entradas:")
-                .prompt("Editar entrada: ")
-                .opciones(OpcionMenu.opciones(objetos, objeto -> Presentador.objetoATexto(objeto, repositorio.nombreEntidad())))
-                .salida(OpcionMenu.opcionNull("Cancelar"))
-                .build();
-        
-        Objeto objeto = inputUsuario.solicitarOpcionMenu(menuObjetos);
+    private static void editarObjeto(Repositorio repositorio, InputUsuario input) throws SQLException {
+        Programa.imprimirMensaje("Editar registros");
+
+        Objeto objeto = solicitarObjeto(repositorio, input, "Editar entrada: ");
 
         if (objeto == null) {
             Programa.operacionCancelada();
             return;
         }
 
+        while (true) {
+            ValorAtributo valorAtributo = solicitarValorAtributo(objeto, input);
+
+            if (valorAtributo == null)
+                break;
+
+            Object nuevoValor = solicitarValorParaAtributo(valorAtributo.nombreAtributo()+": ", valorAtributo.tipo(), input);
+            valorAtributo.setValor(nuevoValor);
+        }
+
+        try {
+            repositorio.actualizar(objeto);
+            Programa.imprimirMensaje(
+                    "Registro " + objetoATexto(objeto, repositorio.nombreEntidad()) + " editada con éxito");
+        }
+        catch (SQLException e) {
+            Programa.imprimirError("No se ha podido editar la entrada.\nCausa: " + e.getMessage());
+        }
+    }
+
+    private static Objeto solicitarObjeto(Repositorio repositorio, InputUsuario input, String prompt) throws SQLException{
+        List<Objeto> objetos = repositorio.listarTodo();
+
+        Menu<Objeto> menuObjetos = Menu.nuevoMenu(Objeto.class)
+                .mensajeInicial("Registros:")
+                .prompt(prompt)
+                .opciones(OpcionMenu.opciones(objetos, objeto -> objetoATexto(objeto, repositorio.nombreEntidad())))
+                .salida(OpcionMenu.opcionNull("Cancelar"))
+                .build();
+
+        return input.solicitarOpcionMenu(menuObjetos);
+    }
+
+    private static ValorAtributo solicitarValorAtributo(Objeto objeto, InputUsuario input) {
         List<ValorAtributo> valoresAEditar = valoresAEditar(objeto);
         Menu<ValorAtributo> menuValores = Menu.nuevoMenu(ValorAtributo.class)
                 .mensajeInicial("Valores:")
                 .prompt("Editar valor: ")
                 .opciones(OpcionMenu.opciones(valoresAEditar, Objects::toString))
-                .salida(OpcionMenu.opcionNull("Cancelar"))
+                .salida(OpcionMenu.opcionNull("Terminar"))
                 .build();
 
-        ValorAtributo valorAtributo = inputUsuario.solicitarOpcionMenu(menuValores);
-
-        if (valorAtributo == null) {
-            Programa.operacionCancelada();
-            return;
-        }
-
-        Object nuevoValor = valorAtributo.tipo() == TipoAtributo.NUMERO
-                ? inputUsuario.solicitarEntero(valorAtributo.nombreAtributo()+": ")
-                : inputUsuario.solicitarTexto(valorAtributo.nombreAtributo()+": ");
-
-        valorAtributo.setValor(nuevoValor);
-        repositorio.actualizar(objeto);
+        return input.solicitarOpcionMenu(menuValores);
     }
 
     private static List<ValorAtributo> valoresAEditar(Objeto objeto) {
@@ -154,5 +183,52 @@ public class ProgramaManipulacionDatos {
                 .stream()
                 .filter(atributo -> !atributo.esClavePrimaria())
                 .collect(Collectors.toList());
+    }
+
+    private static void borrarObjeto(Repositorio repositorio, InputUsuario input) throws SQLException {
+        Programa.imprimirMensaje("Borrar entrada");
+        Objeto objetoAEliminar = solicitarObjeto(repositorio, input, "Eliminar entrada: ");;
+
+        if (objetoAEliminar == null) {
+            Programa.operacionCancelada();
+            return;
+        }
+        
+        boolean continuar = input.solicitarSioNo(
+                "¿Borrar entrada: " +
+                        objetoATexto(objetoAEliminar, repositorio.nombreEntidad()) + "'? [Si/No] ");
+
+        if (!continuar) {
+            Programa.operacionCancelada();
+            return;
+        }
+
+        try {
+            repositorio.eliminar(objetoAEliminar);
+            Programa.imprimirMensaje("Registro borrado con éxito");
+        }
+        catch (SQLException e) {
+            Programa.imprimirError("No se ha podido borrar la entrada.\nCausa: " + e.getMessage());
+        }
+    }
+
+    private static String objetosATexto(List<Objeto> objetos, String nombreEntidad) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < objetos.size(); i++) {
+            Objeto objeto = objetos.get(i);
+
+            String textoObjeto = objetoATexto(objeto, nombreEntidad);
+            sb.append(textoObjeto);
+
+            if (i < objetos.size() -1)
+                sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    private static String objetoATexto(Objeto objeto, String nombreEntidad) {
+        String atributos = Presentador.separadoPorComas(objeto.getValoresAtributos(), ValorAtributo::toString);
+        return "("+nombreEntidad+") "+ atributos;
     }
 }
