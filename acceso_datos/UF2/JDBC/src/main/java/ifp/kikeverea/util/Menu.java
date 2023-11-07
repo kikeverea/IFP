@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Menu<T> {
 
-    private static final int NUMERO_SALIDA = 0;
+    private static final int NUMERO_OPCION_DE_SALIDA = 0;
 
     private final String mensajeInicial;
     private final String prompt;
@@ -46,28 +46,31 @@ public class Menu<T> {
             sb.append(mensajeInicial).append("\n");
 
         for (int i = 0, numeroOpcion = 1; i < opciones.size(); i++, numeroOpcion++)
-            appendOpcion(numeroOpcion, opciones.get(i).nombre(), sb);
+            anadirOpcion(numeroOpcion, opciones.get(i).nombre(), sb);
 
         if (salida != null)
-            appendOpcion(NUMERO_SALIDA, salida.nombre(), sb);
+            anadirOpcion(NUMERO_OPCION_DE_SALIDA, salida.nombre(), sb);
 
         sb.append(prompt);
         return sb.toString();
     }
 
-    private void appendOpcion(int numeroOpcion, String nombreOpcion, StringBuilder sb) {
+    private void anadirOpcion(int numeroOpcion, String nombreOpcion, StringBuilder sb) {
         sb.append(numeroOpcion).append("- ");
         sb.append(nombreOpcion);
         sb.append("\n");
     }
 
     public T getOpcion(int numeroOpcion) {
-        OpcionMenu<T> opcion = salida != null && numeroOpcion == NUMERO_SALIDA ? salida : opciones.get(numeroOpcion - 1);
+        OpcionMenu<T> opcion = salida != null && numeroOpcion == NUMERO_OPCION_DE_SALIDA
+                ? salida
+                : opciones.get(numeroOpcion - 1);
+
         return opcion.objeto();
     }
 
     public void inhabilitarOpcion(T opcion) {
-        opciones.removeIf(o -> o.equals(opcion));
+        opciones.removeIf(opcionHabilitada -> opcionHabilitada.objeto().equals(opcion));
     }
 
     public void rehabilitarOpciones() {
@@ -75,15 +78,15 @@ public class Menu<T> {
         opciones.addAll(opcionesIniciales);
     }
 
-    public int count() {
-        return opciones.size();
-    }
-
     public int min() {
         return salida != null ? 0 : 1;
     }
 
     public int max() {
+        return opciones.size();
+    }
+
+    public int cantidadDeOpciones() {
         return opciones.size();
     }
 
