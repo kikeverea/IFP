@@ -35,10 +35,9 @@ public class BaseDeDatos {
         String definicionAtributos = Presentador.separadoPorComas(entidad.getAtributos(), Atributo::definicion);
 
         String definicion =
-                "CREATE TABLE IF NOT EXISTS " + entidad.getNombre() + "(" + definicionAtributos + ")";
+                "CREATE TABLE " + entidad.getNombre() + "(" + definicionAtributos + ")";
 
-        try (PreparedStatement statement = conexion.prepareStatement(definicion))
-        {
+        try (PreparedStatement statement = conexion.prepareStatement(definicion)) {
             statement.executeUpdate();
         }
     }
