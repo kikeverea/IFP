@@ -41,7 +41,7 @@ public class Atributo {
         String base = nombre + " " + tipo.nombre();
 
         if (clausulas != null)
-            base = base + " " + Presentador.separadoPorComas(clausulas, Objects::toString);
+            base = base + " " + Presentador.separadoPorEspacios(clausulas, Objects::toString);
 
         return base;
     }
