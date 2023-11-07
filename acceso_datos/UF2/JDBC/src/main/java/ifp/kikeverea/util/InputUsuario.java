@@ -35,13 +35,18 @@ public class InputUsuario {
         while (true) {
             String texto = solicitarTexto(mensaje);
 
-            if (texto.matches("^-?\\d+(\\.\\d+)?$"))
+            if (texto.matches("^-?\\d+(\\.\\d+)?$")) // si el texto consiste únicamente en números
                 System.out.println("El texto no puede ser únicamente numérico");
 
             else return texto;
         }
     }
 
+    /**
+     * Solicita al usuario elegir entre las opciones 'Si' o 'No', y sus variantes
+     * @param mensaje El mensaje que se imprime al usuario al pedir la entrada
+     * @return true si el texto entrado por el usuario se encuentra es igual a Si o sus variantes, false de lo contrario
+     */
     public boolean solicitarSioNo(String mensaje) {
         return solicitarEleccion(mensaje,
                 new String[]{"SI", "Si", "si", "S", "s"},

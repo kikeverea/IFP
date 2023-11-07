@@ -39,6 +39,14 @@ public class Menu<T> {
             throw new IllegalArgumentException("Al menos dos opciónes son necesarias para instanciar un Menu");
     }
 
+    /**
+     * Produce una String representando este Menu. Se imprimen los atributos de la siguiente manera:<br>
+     * - Mensaje inicial (si tiene uno)<br>
+     * - Lista numerada de las opciones del Menu (no incluye opciones invalidaddas por el método {@link #inhabilitarOpcion(T)}<br>
+     * - La opción 'salida', con número '0' (si tiene una)<br>
+     * - El 'prompt' para el usuario
+     * @return la String que representa esta instancia de Menu
+     */
     public String mostrar() {
         StringBuilder sb = new StringBuilder();
 
@@ -69,19 +77,34 @@ public class Menu<T> {
         return opcion.objeto();
     }
 
+    /**
+     * Inhabilita la opción. Las opciones inhabilitadas no serán mostradas por el método {@link #mostrar()}
+     * @param opcion La opción que será inhabilitada
+     */
     public void inhabilitarOpcion(T opcion) {
         opciones.removeIf(opcionHabilitada -> opcionHabilitada.objeto().equals(opcion));
     }
 
+    /**
+     * Habilitar todas las opciónes, incluyendo las inhabilitadas por el método {@link #inhabilitarOpcion(T)} ()}
+     */
     public void rehabilitarOpciones() {
         opciones.clear();
         opciones.addAll(opcionesIniciales);
     }
 
+    /**
+     * La numeración mínima de este Menu
+     * @return Un int que representa el valor mínimo de la numeración de este Menu
+     */
     public int min() {
         return salida != null ? 0 : 1;
     }
 
+    /**
+     * La numeración máxima de este Menu
+     * @return Un int que representa el valor máximo de la numeración de este Menu
+     */
     public int max() {
         return opciones.size();
     }
