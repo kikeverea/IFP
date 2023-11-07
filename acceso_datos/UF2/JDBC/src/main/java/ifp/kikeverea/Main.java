@@ -22,9 +22,6 @@ public class Main {
     private static final String BORRAR_TABLA = "Borrar tabla";
     private static final String SALIR = "Salir";
 
-    private static final String NOMBRE_BD = "bd_uf2";
-    private static final String URI_BD = "jdbc:mysql://kike:asd@localhost:3306/"+NOMBRE_BD;
-
     private static final Menu<String> MENU_TABLAS = Menu.menuSimple()
             .prompt("Acción: ")
             .opciones(OpcionMenu.opcionesSimples(MOSTRAR_TABLAS, ELEGIR_TABLA, CREAR_TABLA, BORRAR_TABLA))
@@ -32,6 +29,9 @@ public class Main {
             .build();
 
     private static final String CANCELAR = "Cancelar";
+
+    private static final String NOMBRE_BD = "bd_uf2";
+    private static final String URI_BD = "jdbc:mysql://root@localhost:3306/"+NOMBRE_BD;
 
     public static void main(String[] args) {
         InputUsuario input = new InputUsuario(new Scanner(System.in));
@@ -49,7 +49,7 @@ public class Main {
                     case ELEGIR_TABLA -> ejecutarProgramaManipulacionDatos(bd, input);
                     case CREAR_TABLA -> ProgramaCreacionTablas.crearTabla(bd, input);
                     case BORRAR_TABLA -> ejecutarProgramaBorrado(bd, input);
-                    case SALIR -> terminarPrograma();
+                    case SALIR -> terminarPrograma(bd);
                 }
             }
             catch (SQLException e) {
@@ -71,15 +71,32 @@ public class Main {
         }
     }
 
-    private static void mostrarTablas(BaseDeDatos bd) throws SQLException {
-        String tablas = String.join(", ", bd.listarEntidades());
-        Programa.imprimirMensaje("TABLAS:\n" + tablas);
+    private static void desconectarBaseDeDatos(BaseDeDatos bd) {
+        try {
+            bd.desconectar();
+        }
+        catch (SQLException e) {
+            System.err.println("No se ha podido terminar la conexión con la base de datos");
+        }
     }
 
-    private static void terminarPrograma() {
+    private static void terminarPrograma(BaseDeDatos bd) {
+        desconectarBaseDeDatos(bd);
         Programa.imprimirMensaje("Programa finalizado");
         System.exit(0);
     }
+
+    private static void mostrarTablas(BaseDeDatos bd) throws SQLException {
+        List<String> tablas = bd.listarEntidades();
+
+        String textoTablas = tablas.isEmpty()
+                ? "No hay tablas en la base de datos"
+                : "TABLAS:\n" + String.join(", ", tablas);
+
+        Programa.imprimirMensaje(textoTablas);
+    }
+
+
 
     private static void ejecutarProgramaManipulacionDatos(BaseDeDatos bd, InputUsuario input) throws SQLException {
         String entidad = escojerEntidad(bd, input);
@@ -87,10 +104,12 @@ public class Main {
         if (entidad == null)
             return;
 
-        ProgramaManipulacionDatos.ejecutar(new Repositorio(bd, bd.getEntidad(entidad)), input);
+        ProgramaManipulacionDatos.ejecutar(new Repositorio(bd, bd.buscarEntidad(entidad)), input);
     }
 
     private static void ejecutarProgramaBorrado(BaseDeDatos bd, InputUsuario input) throws SQLException {
+        Programa.imprimirMensaje("Borrar tabla");
+
         String entidad = escojerEntidad(bd, input);
 
         if (entidad == null) {
@@ -103,6 +122,11 @@ public class Main {
 
     private static String escojerEntidad(BaseDeDatos bd, InputUsuario input) throws SQLException {
         List<String> entidades = bd.listarEntidades();
+
+        if(entidades.isEmpty()) {
+            Programa.imprimirMensaje("No hay tablas en la base de datos");
+            return null;
+        }
 
         Menu<String> menuEntidades = Menu.menuSimple()
                 .mensajeInicial("Tablas disponibles:")
