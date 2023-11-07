@@ -20,16 +20,20 @@ public class ProgramaSolicitudClausulasColumnas {
         CANCELAR("(Cancelar)", "cancela la operación"),
         TERMINAR("(Terminar)", "añade la información al atributo");
 
-        private final String mensaje;
+        private final String nombre;
         private final String descripcion;
 
-        OpcionClausulas(String mensaje, String descripcion) {
-            this.mensaje = mensaje;
+        OpcionClausulas(String nombre, String descripcion) {
+            this.nombre = nombre;
             this.descripcion = descripcion;
         }
 
+        public String nombre() {
+            return nombre;
+        }
+
         public String mensaje() {
-            return mensaje+": "+descripcion;
+            return nombre +": "+descripcion;
         }
     }
 
@@ -44,7 +48,7 @@ public class ProgramaSolicitudClausulasColumnas {
 
     public static List<ClausulaAtributo> solicitarClausulas(InputUsuario input, boolean tipoTexto) {
         List<OpcionClausulas> clausulas = new ArrayList<>();
-        int numeroDeOpciones = MENU_CLAUSULAS.count() - 2;
+        int numeroDeOpciones = MENU_CLAUSULAS.cantidadDeOpciones() - 1;
 
         if (tipoTexto)
             MENU_CLAUSULAS.inhabilitarOpcion(OpcionClausulas.AUTO_INCREMENT);
@@ -75,7 +79,7 @@ public class ProgramaSolicitudClausulasColumnas {
 
     private static List<ClausulaAtributo> terminar(List<OpcionClausulas> clausulas) {
         MENU_CLAUSULAS.rehabilitarOpciones();
-        resultado = Presentador.separadoPorComas(clausulas, OpcionClausulas::mensaje);
+        resultado = Presentador.separadoPorComas(clausulas, OpcionClausulas::nombre);
         return mapearClausulas(clausulas);
     }
 
@@ -92,7 +96,7 @@ public class ProgramaSolicitudClausulasColumnas {
             case UNICO -> ClausulaAtributo.UNIQUE;
             case AUTO_INCREMENT -> ClausulaAtributo.AUTO_INCREMENT;
             case NOT_NULL -> ClausulaAtributo.NOT_NULL;
-            default -> throw new IllegalArgumentException("No hay clausulas de tipo " + clausula.mensaje);
+            default -> throw new IllegalArgumentException("No hay clausulas de tipo " + clausula.nombre);
         };
     }
 
