@@ -13,6 +13,9 @@ public class Atributo {
     private final boolean esAutoIncremental;
 
     private Atributo(AtributoBuilder builder) {
+        if (builder.nombre == null || builder.nombre.strip().equals(""))
+            throw new IllegalArgumentException("El nombre del atributo no puede estar vacío");
+
         this.nombre = builder.nombre;
         this.tipo = builder.tipo;
         this.esClavePrimaria = builder.esClavePrimaria;
@@ -28,13 +31,8 @@ public class Atributo {
         if (tipo == TipoAtributo.TEXTO && clausulas.contains(ClausulaAtributo.AUTO_INCREMENT))
             throw new IllegalArgumentException("Atributos tipo Texto no pueden ser autoincrementales");
 
-        if (esClavePrimaria) {
-            if (tipo == TipoAtributo.NUMERO && !clausulas.contains(ClausulaAtributo.AUTO_INCREMENT))
-                clausulas.add(ClausulaAtributo.AUTO_INCREMENT);
-
-            if (!clausulas.contains(ClausulaAtributo.NOT_NULL))
-                clausulas.add(ClausulaAtributo.NOT_NULL);
-        }
+        if (esClavePrimaria && !clausulas.contains(ClausulaAtributo.NOT_NULL))
+            clausulas.add(ClausulaAtributo.NOT_NULL);
 
         return clausulas;
     }
@@ -104,9 +102,6 @@ public class Atributo {
         private boolean esAutoIncremental = false;
 
         private AtributoBuilder(String nombre) {
-            if (nombre == null || nombre.strip().equals(""))
-                throw new IllegalArgumentException("El nombre del atributo no puede estar vacío");
-
             this.nombre = nombre;
         }
 
