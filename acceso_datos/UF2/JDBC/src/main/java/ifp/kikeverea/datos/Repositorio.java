@@ -1,6 +1,5 @@
 package ifp.kikeverea.datos;
 
-import ifp.kikeverea.Statements;
 import ifp.kikeverea.bd.Atributo;
 import ifp.kikeverea.bd.BaseDeDatos;
 import ifp.kikeverea.bd.Entidad;
@@ -39,11 +38,18 @@ public class Repositorio {
         {
             statement.executeUpdate();
 
-            ResultSet claveGenerada = statement.getGeneratedKeys();
-            claveGenerada.next();
-            objeto.setClavePrimaria(claveGenerada.getInt(1));
-            claveGenerada.close();
+            int claveGenerada = obtenerClaveGenerada(statement);
+            objeto.setClavePrimaria(claveGenerada);
         }
+    }
+
+    private int obtenerClaveGenerada(PreparedStatement statement) throws SQLException {
+        ResultSet setClaveGenerada = statement.getGeneratedKeys();
+        setClaveGenerada.next();
+        int claveGenerada = setClaveGenerada.getInt(1);
+        setClaveGenerada.close();
+
+        return claveGenerada;
     }
 
     public List<Objeto> listarTodo() throws SQLException {
@@ -85,6 +91,16 @@ public class Repositorio {
         }
     }
 
+    private Objeto extraerObjeto(ResultSet set, ResultSetMetaData meta) throws SQLException {
+        Objeto objeto = Objeto.instanciaDe(entidad);
+        for (int i = 0; i < meta.getColumnCount(); i++) {
+            String nombreAtributo = meta.getColumnName(i + 1);
+            Object valor = set.getObject(i + 1);
+            objeto.setValor(nombreAtributo, valor);
+        }
+        return objeto;
+    }
+
     public void actualizar(Objeto objeto) throws SQLException {
       try (PreparedStatement statement = Statements
               .update(entidad.getNombre())
@@ -106,13 +122,5 @@ public class Repositorio {
         }
     }
 
-    private Objeto extraerObjeto(ResultSet set, ResultSetMetaData meta) throws SQLException {
-        Objeto objeto = Objeto.instanciaDe(entidad);
-        for (int i = 0; i < meta.getColumnCount(); i++) {
-            String nombreAtributo = meta.getColumnName(i + 1);
-            Object valor = set.getObject(i + 1);
-            objeto.setValor(nombreAtributo, valor);
-        }
-        return objeto;
-    }
+
 }
