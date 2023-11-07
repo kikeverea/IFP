@@ -26,8 +26,13 @@ public class ProgramaCreacionTablas {
             return;
         }
 
-        bd.crearEntidad(new Entidad(nombre, atributos));
-        Programa.imprimirMensaje(resultadoCrearEntidad(nombre, atributos));
+        try {
+            bd.crearEntidad(new Entidad(nombre, atributos));
+            Programa.imprimirMensaje(resultadoCrearEntidad(nombre, atributos));
+        }
+        catch (SQLException e) {
+            Programa.imprimirError("No se ha podido crear la tabla '" + nombre + "'\nCausa: " + e.getMessage());
+        }
     }
 
     private static String solicitarNombreEntidad(BaseDeDatos bd, InputUsuario input) throws SQLException {
