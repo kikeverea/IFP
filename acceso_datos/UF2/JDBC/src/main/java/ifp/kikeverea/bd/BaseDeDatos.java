@@ -42,10 +42,6 @@ public class BaseDeDatos {
         }
     }
 
-    private String extraerDefinicionDeAtributos(List<Atributo> atributos) {
-        return Presentador.separadoPorComas(atributos, Atributo::definicion);
-    }
-
     public void eliminarEntidad(String nombreEntidad) throws SQLException {
         String definicion = "DROP TABLE " + nombreEntidad;
 
@@ -55,73 +51,25 @@ public class BaseDeDatos {
     }
 
     public List<String> listarEntidades() throws SQLException {
-        String statementTablas = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?";
+
 
         List<String> entidades = new ArrayList<>();
 
-        try(PreparedStatement statement = conexion.prepareStatement(statementTablas)) {
-            statement.setString(1, nombre);
-            ResultSet set = statement.executeQuery();
-
+        try(PreparedStatement statement = statementListarEntidades();
+            ResultSet set = statement.executeQuery())
+        {
             while (set.next())
                 entidades.add(set.getString(1));
-
-            set.close();
         }
 
         return entidades;
     }
 
-    public Entidad getEntidad(String nombreEntidad) throws SQLException {
-
-        String declaracion =
-                "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_KEY, IS_NULLABLE " +
-                        "FROM INFORMATION_SCHEMA.COLUMNS " +
-                        "WHERE TABLE_NAME = ?";
-
-        try(PreparedStatement statement = conexion.prepareStatement(declaracion)) {
-
-            statement.setString(1, nombreEntidad);
-
-            ResultSet set = statement.executeQuery();
-            List<Atributo> atributos = new ArrayList<>();
-
-            while (set.next()) {
-                String nombreAtributo = set.getString(set.findColumn("COLUMN_NAME"));
-                TipoAtributo tipo = TipoAtributo.getTipo(set.getString(set.findColumn("DATA_TYPE")));
-                List<ClausulaAtributo> clausulas = extraerClausulas(set);
-
-                Atributo atributo = Atributo
-                        .nuevoAtributo(nombreAtributo)
-                        .deTipo(tipo, clausulas.toArray(new ClausulaAtributo[0]));
-
-                atributos.add(atributo);
-            }
-            Entidad entidad = new Entidad(nombreEntidad, atributos);
-            set.close();
-            return entidad;
-        }
-    }
-
-    private List<ClausulaAtributo> extraerClausulas(ResultSet set) throws SQLException {
-
-        String clave = set.getString(set.findColumn("COLUMN_KEY"));
-        boolean clavePrimaria = clave.equals("PRI");
-        boolean unique = clave.equals("UNI");
-        boolean notNull = set.getString(set.findColumn("IS_NULLABLE")).equals("NO");
-
-        List<ClausulaAtributo> clausulas = new ArrayList<>();
-
-        if (clavePrimaria) {
-            clausulas.add(ClausulaAtributo.PRIMARY_KEY);
-            clausulas.add(ClausulaAtributo.AUTO_INCREMENT);
-        } else if (unique)
-            clausulas.add(ClausulaAtributo.UNIQUE);
-
-        if (notNull)
-            clausulas.add(ClausulaAtributo.NOT_NULL);
-
-        return clausulas;
+    private PreparedStatement statementListarEntidades() throws SQLException {
+        String query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?";
+        PreparedStatement statement = conexion.prepareStatement(query);
+        statement.setString(1, nombre);
+        return statement;
     }
 
     public boolean entidadExiste(String nombreEntidad) throws SQLException {
@@ -138,5 +86,61 @@ public class BaseDeDatos {
         statement.setString(1, nombreEntidad);
 
         return statement;
+    }
+
+    public Entidad buscarEntidad(String nombreEntidad) throws SQLException {
+
+        try(PreparedStatement statement = statementBuscarAtributos(nombreEntidad);
+            ResultSet set = statement.executeQuery())
+        {
+            List<Atributo> atributos = new ArrayList<>();
+
+            while (set.next()) {
+                String nombreAtributo = set.getString(set.findColumn("COLUMN_NAME"));
+                TipoAtributo tipo = TipoAtributo.getTipo(set.getString(set.findColumn("DATA_TYPE")));
+                List<ClausulaAtributo> clausulas = extraerClausulas(set);
+
+                Atributo atributo = Atributo
+                        .nuevoAtributo(nombreAtributo)
+                        .deTipo(tipo, clausulas.toArray(new ClausulaAtributo[0]));
+
+                atributos.add(atributo);
+            }
+            return atributos.isEmpty() ? null : new Entidad(nombreEntidad, atributos);
+        }
+    }
+
+    private PreparedStatement statementBuscarAtributos(String nombreEntidad) throws SQLException {
+        String query =
+                "SELECT COLUMN_NAME, DATA_TYPE, COLUMN_KEY, IS_NULLABLE " +
+                        "FROM INFORMATION_SCHEMA.COLUMNS " +
+                        "WHERE TABLE_NAME = ?";
+
+        PreparedStatement statement = conexion.prepareStatement(query);
+        statement.setString(1, nombreEntidad);
+
+        return statement;
+    }
+
+    private List<ClausulaAtributo> extraerClausulas(ResultSet set) throws SQLException {
+
+        String clave = set.getString(set.findColumn("COLUMN_KEY"));
+        boolean clavePrimaria = clave.equals("PRI");
+        boolean unique = clave.equals("UNI");
+        boolean notNull = set.getString(set.findColumn("IS_NULLABLE")).equals("NO");
+
+        List<ClausulaAtributo> clausulas = new ArrayList<>();
+
+        if (clavePrimaria) {
+            clausulas.add(ClausulaAtributo.PRIMARY_KEY);
+            clausulas.add(ClausulaAtributo.AUTO_INCREMENT);
+        }
+        else if (unique)
+            clausulas.add(ClausulaAtributo.UNIQUE);
+
+        if (notNull)
+            clausulas.add(ClausulaAtributo.NOT_NULL);
+
+        return clausulas;
     }
 }
