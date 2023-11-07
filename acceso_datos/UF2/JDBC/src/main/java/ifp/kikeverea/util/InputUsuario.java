@@ -149,8 +149,8 @@ public class InputUsuario {
     }
 
     public <T> T solicitarOpcionMenu(Menu<T> menu) {
-        int numTipo = solicitarEntero(menu.mostrar(), ValidadorNumeros.enIntervalo(menu.min(), menu.max()));
-        return menu.getOpcion(numTipo);
+        int numeroOpcion = solicitarEntero(menu.mostrar(), ValidadorNumeros.enIntervalo(menu.min(), menu.max()));
+        return menu.getOpcion(numeroOpcion);
     }
 
     private void resolverInputNumericoInvalido(String mensaje) {
