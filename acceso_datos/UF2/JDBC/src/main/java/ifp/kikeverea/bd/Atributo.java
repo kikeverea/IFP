@@ -37,6 +37,11 @@ public class Atributo {
         return clausulas;
     }
 
+    /**
+     * Definición de este atributo
+     * @return Una String con el nombre del atributo, su tipo {@link ifp.kikeverea.bd.TipoAtributo}
+     * y sus cláusulas {@link ifp.kikeverea.bd.ClausulaAtributo}
+     */
     public String definicion() {
         String base = nombre + " " + tipo.nombre();
 

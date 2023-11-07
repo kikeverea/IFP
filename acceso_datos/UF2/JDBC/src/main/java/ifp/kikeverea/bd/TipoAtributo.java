@@ -22,6 +22,11 @@ public enum TipoAtributo {
         return tipoSql;
     }
 
+    /**
+     * Regresa el TipoAtributo correspondiente al su nombre SQL
+     * @param nombreSql El nombre o <i>keyword</i> SQL
+     * @return El TipoAtributo correspondiente al nombre SQL
+     */
     public static TipoAtributo getTipo(String nombreSql) {
         nombreSql = nombreSql.replaceAll("\\s", "").toUpperCase();
 
