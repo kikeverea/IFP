@@ -14,7 +14,7 @@ import java.util.List;
 public class RepositorioTest {
 
     private static final String BASE_DE_DATOS = "test";
-    private static final String URL = "jdbc:mysql://kike:asd@localhost:3306/"+BASE_DE_DATOS;
+    private static final String URL = "jdbc:mysql://root@localhost:3306/"+BASE_DE_DATOS;
     private static final String TABLA = "entidad_prueba";
     
     private static int mocks = 1;
@@ -73,8 +73,8 @@ public class RepositorioTest {
         Objeto mock = mock();
         insertarMock(mock);
 
-        Objeto porSerie = repositorio.buscar(mock.getAtributo("serie"));
-        Objeto porNombre = repositorio.buscar(mock.getAtributo("nombre"));
+        Objeto porSerie = repositorio.buscar(mock.getAtributo("serie")).get(0);
+        Objeto porNombre = repositorio.buscar(mock.getAtributo("nombre")).get(0);
 
         Assertions.assertEquals(mock, porSerie);
         Assertions.assertEquals(mock, porNombre);
@@ -112,7 +112,7 @@ public class RepositorioTest {
 
         repositorio.insertar(mock);
         mock.setValor("serie", serieFinal);
-        repositorio.actualizarObjeto(mock);
+        repositorio.actualizar(mock);
 
         Objeto actualizado = repositorio.buscarPorId(1);
         Assertions.assertEquals(serieFinal, actualizado.getAtributo("serie").valor());

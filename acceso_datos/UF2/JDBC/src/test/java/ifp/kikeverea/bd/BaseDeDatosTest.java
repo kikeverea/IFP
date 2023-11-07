@@ -13,7 +13,7 @@ import java.util.List;
 public class BaseDeDatosTest {
 
     private static final String BASE_DE_DATOS = "test";
-    private static final String URL = "jdbc:mysql://kike:asd@localhost:3306/"+BASE_DE_DATOS;
+    private static final String URI = "jdbc:mysql://root@localhost:3306/"+BASE_DE_DATOS;
     private static final String TABLA = "tabla_prueba";
     private BaseDeDatos bd;
 
@@ -21,8 +21,8 @@ public class BaseDeDatosTest {
 
     @BeforeEach
     void init() throws Exception {
-        bd = new BaseDeDatos(BASE_DE_DATOS);
-        bd.connectar(URL);
+//        bd = new BaseDeDatos(BASE_DE_DATOS);
+//        bd.connectar(URI);
     }
 
     @AfterEach
@@ -82,7 +82,7 @@ public class BaseDeDatosTest {
         bd.crearEntidad(entidad2);
         bd.crearEntidad(entidad3);
 
-        Assertions.assertEquals(entidad2, bd.getEntidad(entidad2.getNombre()));
+        Assertions.assertEquals(entidad2, bd.buscarEntidad(entidad2.getNombre()));
     }
 
     @Test
@@ -98,9 +98,14 @@ public class BaseDeDatosTest {
 
     @Test
     void realizaUnaDesconexionConExito() throws Exception {
-        bd.connectar(URL);
+        System.out.println("Conectando a base de datos");
+        System.out.println("URI: " + URI);
+        bd = new BaseDeDatos(BASE_DE_DATOS);
+        bd.connectar(URI);
+        System.out.println("Base de datos conectada = " + bd.isConectada());
+        System.out.println("Desconectando de la base de datos");
         bd.desconectar();
-
+        System.out.println("Base de datos conectada = " + bd.isConectada());
         Assertions.assertFalse(bd.isConectada());
     }
 

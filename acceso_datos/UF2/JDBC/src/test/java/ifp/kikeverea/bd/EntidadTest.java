@@ -41,7 +41,7 @@ public class EntidadTest {
         Entidad entidad = new Entidad("prueba", atributos);
         Objeto objeto = Objeto.instanciaDe(entidad);
 
-        List<ValorAtributo> valorAtributos = objeto.getAtributos();
+        List<ValorAtributo> valorAtributos = objeto.getValoresAtributos();
 
         Assertions.assertEquals(atributos.size(), valorAtributos.size());
         Assertions.assertTrue(contieneTodos(atributos, valorAtributos));

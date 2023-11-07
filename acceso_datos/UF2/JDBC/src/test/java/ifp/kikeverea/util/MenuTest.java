@@ -19,21 +19,8 @@ public class MenuTest {
     }
 
     @Test
-    void muestraTodasLasOpcionesConSusArgumentos() {
-        String expected = """
-                Menu con argumentos:
-                1- mock1 arg1 arg2
-                2- mock2 arg1 arg2
-                3- mock3 arg1 arg2
-                0- mock4 arg1 arg2
-                Opcion:\040""";
-
-        Assertions.assertEquals(expected, menuConArgs().mostrar("arg1", "arg2"));
-    }
-
-    @Test
     void muestraTodasLasOpcionesMenosLasInhabilitados() {
-        Menu menu = menuSimple();
+        Menu<MockOpcion> menu = menuSimple();
         menu.inhabilitarOpcion(menu.getOpcion(2));
 
         String expected = """
@@ -46,28 +33,20 @@ public class MenuTest {
         Assertions.assertEquals(expected, menu.mostrar());
     }
 
-    private Menu menuSimple() {
-        return new Menu(
-                "Menu simple:",
-                "Opcion: ",
-                MockOpcion.sinArgs(1),
-                MockOpcion.sinArgs(2),
-                MockOpcion.sinArgs(3),
-                MockOpcion.sinArgs(4));
+    private Menu<MockOpcion> menuSimple() {
+        return Menu.nuevoMenu(MockOpcion.class)
+                .mensajeInicial("Menu simple:")
+                .prompt("Opcion: ")
+                .opciones(OpcionMenu.opciones(
+                        MockOpcion::getNombre,
+                        MockOpcion.sinArgs(1),
+                        MockOpcion.sinArgs(2),
+                        MockOpcion.sinArgs(3),
+                        MockOpcion.sinArgs(4)))
+                .build();
     }
 
-    private Menu menuConArgs() {
-        return new Menu(
-                "Menu con argumentos:",
-                "Opcion: ",
-                MockOpcion.conArgs(1),
-                MockOpcion.conArgs(2),
-                MockOpcion.conArgs(3),
-                MockOpcion.conArgs(4));
-    }
-
-
-    private static abstract class MockOpcion implements OpcionMenu {
+    private static abstract class MockOpcion {
 
         private final String nombre;
 
@@ -82,10 +61,6 @@ public class MenuTest {
         public static MockOpcion sinArgs(int mock) {
             return new Simple(mock);
         }
-
-        public static MockOpcion conArgs(int mock) {
-            return new ConArgs(mock);
-        }
     }
 
     private static class Simple extends MockOpcion {
@@ -94,21 +69,8 @@ public class MenuTest {
             super(mock);
         }
 
-        @Override
-        public String mensaje(String... args) {
+        public String mensaje() {
             return getNombre();
-        }
-    }
-
-    private static class ConArgs extends MockOpcion {
-
-        private ConArgs(int mock) {
-            super(mock);
-        }
-
-        @Override
-        public String mensaje(String... args) {
-            return getNombre() + " " + args[0] + " " + args[1];
         }
     }
 }
