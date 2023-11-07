@@ -14,19 +14,29 @@ public class Menu<T> {
     private final OpcionMenu<T> salida;
 
     private Menu(MenuBuilder<T> builder) {
-        List<OpcionMenu<T>> opciones = new ArrayList<>(builder.opciones);
+        validarConstruccion(builder);
 
-        if (opciones.size() == 0)
-            throw new IllegalArgumentException("Al menos una opción es necesaria para instanciar un Menu");
+        List<OpcionMenu<T>> opciones = new ArrayList<>(builder.opciones);
 
         if (builder.salida != null)
             opciones.removeIf(opcion -> opcion.nombre().equals(builder.salida.nombre()));
 
         this.mensajeInicial = builder.mensajeInicial;
         this.prompt = builder.prompt;
-        this.opciones = new ArrayList<>(opciones);
-        this.opcionesIniciales = new ArrayList<>(opciones);
+        this.opciones = opciones;
+        this.opcionesIniciales = List.copyOf(opciones); // lista inmutable, para evitar modificaciones accidentales
         this.salida = builder.salida;
+    }
+
+    private void validarConstruccion(MenuBuilder<T> builder) {
+        if (builder.prompt == null || builder.prompt.isBlank())
+            throw new IllegalArgumentException("Un 'prompt' es necesario para instanciar este Menu");
+
+        int cantidadDeOpciones = builder.opciones.size();
+        boolean tamanoValido = cantidadDeOpciones >= 2 || cantidadDeOpciones == 1 && builder.salida != null;
+
+        if (!tamanoValido)
+            throw new IllegalArgumentException("Al menos dos opciónes son necesarias para instanciar un Menu");
     }
 
     public String mostrar() {
