@@ -13,12 +13,12 @@ public class Objeto {
 
     private Objeto(Entidad entidad) {
         clavePrimaria = new ValorAtributo(entidad.getClavePrimaria());
-        valores = entidad.getAtributos()
+        valores = entidad.getAtributos() // valores sin la clave primaria
                 .stream()
                 .filter(atributo -> !atributo.esClavePrimaria())
                 .map(ValorAtributo::new)
                 .collect(Collectors.toList());
-        valores.add(clavePrimaria);
+        valores.add(0, clavePrimaria); // añade la clave primaria como primer valor
     }
 
     public static Objeto instanciaDe(Entidad entidad) {

@@ -8,6 +8,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Encapsula toda la lógica de manipulación de datos de una tabla de la base de datos
+ */
 public class Repositorio {
 
     private final BaseDeDatos bd;
@@ -30,6 +33,12 @@ public class Repositorio {
         return entidad.getAtributos();
     }
 
+    /**
+     * Crea un nuevo registro en la tabla, correspondiente a la instancia de Objeto.
+     * El valor de clave primaria generada al crear el registro será asignada al Objeto
+     * @param objeto El Objeto a insertar
+     * @throws SQLException si ocurre un error de acceso a la base de datos, o este método es invocado con una conexión cerrada
+     */
     public void insertar(Objeto objeto) throws SQLException {
         try (PreparedStatement statement = Statements
                 .insertInto(entidad.getNombre())
@@ -52,6 +61,11 @@ public class Repositorio {
         return claveGenerada;
     }
 
+    /**
+     * Produce un listado de Objetos correspondientes a cada registro en la tabla
+     * @return una lista de Objetos
+     * @throws SQLException si ocurre un error de acceso a la base de datos, o este método es invocado con una conexión cerrada
+     */
     public List<Objeto> listarTodo() throws SQLException {
         List<Objeto> resultado = new ArrayList<>();
 
@@ -68,6 +82,12 @@ public class Repositorio {
         return resultado;
     }
 
+    /**
+     * Busca el registro en la tabla correspondiente al id proporcionado
+     * @param id El id del registro a buscar
+     * @return Una instancia de Objeto correspondiente al registro de la tabla
+     * @throws SQLException si ocurre un error de acceso a la base de datos, o este método es invocado con una conexión cerrada
+     */
     public Objeto buscarPorId(int id) throws SQLException {
         Atributo clavePrimaria = entidad.getClavePrimaria();
         ValorAtributo valorClavePrimaria = new ValorAtributo(clavePrimaria);
@@ -76,6 +96,12 @@ public class Repositorio {
         return buscar(valorClavePrimaria).get(0);
     }
 
+    /**
+     * Busca registros en la tabla que contengan el valor proporcionado, de un campo específico
+     * @param valorAtributo El campo y su valor, utilizados para filtrar la búsqueda
+     * @return Una instancia de Objeto por cada registro que coincida con los parámetros proporcionados
+     * @throws SQLException si ocurre un error de acceso a la base de datos, o este método es invocado con una conexión cerrada
+     */
     public List<Objeto> buscar(ValorAtributo valorAtributo) throws SQLException {
         try (PreparedStatement statement = Statements
                     .selectFrom(entidad.getNombre())
@@ -101,6 +127,11 @@ public class Repositorio {
         return objeto;
     }
 
+    /**
+     * Actualiza registros en la base de datos
+     * @param objeto El Objeto cuyos valores de campos van a ser actualizados
+     * @throws SQLException si ocurre un error de acceso a la base de datos, o este método es invocado con una conexión cerrada
+     */
     public void actualizar(Objeto objeto) throws SQLException {
       try (PreparedStatement statement = Statements
               .update(entidad.getNombre())
@@ -112,6 +143,11 @@ public class Repositorio {
         }
     }
 
+    /**
+     * Elimina registros en la base de datos
+     * @param objeto El Objeto que va a ser eliminado
+     * @throws SQLException si ocurre un error de acceso a la base de datos, o este método es invocado con una conexión cerrada
+     */
     public void eliminar(Objeto objeto) throws SQLException {
         try (PreparedStatement statement = Statements
                 .deleteFrom(entidad.getNombre())
