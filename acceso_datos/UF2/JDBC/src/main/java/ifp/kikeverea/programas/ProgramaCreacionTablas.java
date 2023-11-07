@@ -12,6 +12,8 @@ import java.util.List;
 public class ProgramaCreacionTablas {
 
     public static void crearTabla(BaseDeDatos bd, InputUsuario input) throws SQLException {
+        Programa.imprimirMensaje("Crear tabla");
+
         String nombre = solicitarNombreEntidad(bd, input);
 
         if (nombre.isBlank()) {
