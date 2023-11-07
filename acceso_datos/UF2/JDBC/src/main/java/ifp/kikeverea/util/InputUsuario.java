@@ -42,6 +42,12 @@ public class InputUsuario {
         }
     }
 
+    public boolean solicitarSioNo(String mensaje) {
+        return solicitarEleccion(mensaje,
+                new String[]{"SI", "Si", "si", "S", "s"},
+                new String[]{"NO", "No", "no", "N", "n"});
+    }
+
     /**
      * Solicita al usuario elegir entre una opción positiva y una negativa
      * @param mensaje El mensaje que se imprime al usuario al pedir la entrada
