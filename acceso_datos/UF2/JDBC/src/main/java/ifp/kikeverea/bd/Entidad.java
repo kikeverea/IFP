@@ -10,7 +10,15 @@ public class Entidad {
     private final List<Atributo> atributos;
 
     public Entidad(String nombre, List<Atributo> atributos) {
-        this.clavePrimaria = extraerClavePrimaria(atributos);
+        Atributo clavePrimaria = extraerClavePrimaria(atributos);
+
+        if (clavePrimaria == null) {
+            // crea un atributo 'clave primaria', si uno no fue proporcionado
+            clavePrimaria = crearClavePrimaria();
+            atributos.add(0, clavePrimaria);
+        }
+
+        this.clavePrimaria = clavePrimaria;
         this.nombre = nombre;
         this.atributos = atributos;
     }
@@ -20,10 +28,14 @@ public class Entidad {
                 .stream()
                 .filter(Atributo::esClavePrimaria)
                 .findAny()
-                .orElse(Atributo.nuevoAtributo("id").deTipo(
-                        TipoAtributo.NUMERO,
-                        ClausulaAtributo.PRIMARY_KEY,
-                        ClausulaAtributo.AUTO_INCREMENT));
+                .orElse(null);
+    }
+
+    private Atributo crearClavePrimaria() {
+        return Atributo.nuevoAtributo("id").deTipo(
+                TipoAtributo.NUMERO,
+                ClausulaAtributo.PRIMARY_KEY,
+                ClausulaAtributo.AUTO_INCREMENT);
     }
 
     public String getNombre() {
