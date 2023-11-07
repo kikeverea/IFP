@@ -6,14 +6,14 @@ public enum ClausulaAtributo {
     UNIQUE("UNIQUE"),
     NOT_NULL("NOT NULL");
 
-    private final String definicion;
+    private final String nombre;
 
-    ClausulaAtributo(String definicion) {
-        this.definicion = definicion;
+    ClausulaAtributo(String nombre) {
+        this.nombre = nombre;
     }
 
     @Override
     public String toString() {
-        return definicion;
+        return nombre;
     }
 }
