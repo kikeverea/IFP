@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<personas>
+    <persona extranjero="NO" mayor_edad="SI">
+        <nombre>Persona</nombre>
+        <apellidos>
+            <apellido>Maria</apellido>
+            <apellido>de los</apellido>
+            <apellido>Palotes</apellido>
+        </apellidos>
+        <nif>23925905V</nif>
+        <direccion>
+            <direccion>Carrer de la Barca 19, 1-1</direccion>
+            <ciudad>Girona</ciudad>
+            <provincia>Girona</provincia>
+            <codigo_postal>17004</codigo_postal>
+        </direccion>
+        <nacionalidad>Español</nacionalidad>
+        <info_contacto>
+            <telefono>555 555 555</telefono>
+            <email>persona@gmail.com</email>
+        </info_contacto>
+    </persona>
+</personas>
