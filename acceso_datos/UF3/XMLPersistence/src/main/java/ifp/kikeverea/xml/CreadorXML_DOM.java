@@ -11,11 +11,11 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.List;
 
-public class AdaptadorXML {
+public class CreadorXML {
 
     private final Document documento;
 
-    public AdaptadorXML(String raiz) throws ParserConfigurationException {
+    public CreadorXML(String raiz) throws ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         DOMImplementation implementation = builder.getDOMImplementation();

@@ -1,4 +1,4 @@
-package ifp.kikeverea.xml;
+package ifp.kikeverea.persona;
 
 import java.util.ArrayList;
 import java.util.List;

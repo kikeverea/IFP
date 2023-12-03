@@ -1,4 +1,4 @@
-package ifp.kikeverea.xml;
+package ifp.kikeverea.persona;
 
 public class Atributo {
 

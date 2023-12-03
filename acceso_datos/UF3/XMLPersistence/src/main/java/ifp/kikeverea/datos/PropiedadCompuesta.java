@@ -1,4 +1,4 @@
-package ifp.kikeverea.xml;
+package ifp.kikeverea.persona;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class PropiedadCompuesta implements Propiedad {
 
     private final String nombre;
-    private List<Atributo> atributos;
+    private final List<Atributo> atributos = new ArrayList<>();
 
     public PropiedadCompuesta(String nombre) {
         this.nombre = nombre;
@@ -17,15 +17,12 @@ public abstract class PropiedadCompuesta implements Propiedad {
     }
 
     protected void anadirAtributo(Atributo atributo) {
-        if (atributos == null)
-            atributos = new ArrayList<>();
-
         atributos.add(atributo);
     }
 
     @Override
     public String getValor() {
-        // propiedades con hijos no pueden tener un valor textual
+        // Propiedades con hijos no tienen un valor textual
         return null;
     }
 
