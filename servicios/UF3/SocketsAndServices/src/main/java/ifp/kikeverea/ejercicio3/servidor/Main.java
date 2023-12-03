@@ -1,8 +1,8 @@
-package ifp.kikeverea.ejercicio3;
+package ifp.kikeverea.ejercicio3.servidor;
 
 import java.io.IOException;
 
-public class MainServer {
+public class Main {
 
     public static void main(String[] args) {
         try {
