@@ -1,0 +1,19 @@
+<galaxia>
+    <estrellas>
+        <estrella nombre="Solemio">
+            <planeta>Tierra</planeta>
+            <satelite>Luna</satelite>
+            <cometa>Halley</cometa>
+        </estrella>
+        <estrella nombre="Vega">
+            <planeta>VegaPlanet</planeta>
+            <satelite>SatVegaPlanet</satelite>
+            <cometa>CometaVega</cometa>
+        </estrella>
+        <estrella nombre="Polaris">
+            <planeta>PolarPlanet</planeta>
+            <satelite>FrioPolar</satelite>
+            <cometa>SantaExpress</cometa>
+        </estrella>
+    </estrellas>
+</galaxia>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<personas>
+    <persona extranjero="NO" mayor_edad="SI">
+        <nombre>Cindy</nombre>
+        <apellidos>
+            <apellido>Nero</apellido>
+        </apellidos>
+        <nif>74089868Z</nif>
+        <fecha_nacimiento>26/02/1992</fecha_nacimiento>
+        <nacionalidad>España</nacionalidad>
+        <direccion>
+            <direccion>Av. Zumalakarregi 38, 1-4</direccion>
+            <ciudad>Alpera</ciudad>
+            <provincia>Albacete</provincia>
+            <codigo_postal>02690</codigo_postal>
+        </direccion>
+        <info_contacto>
+            <telefono>555 555 555</telefono>
+            <email>cindynero@gmail.com</email>
+        </info_contacto>
+    </persona>
+    <persona extranjero="SI" mayor_edad="SI">
+        <nombre>Elmer</nombre>
+        <apellidos>
+            <apellido>Curio</apellido>
+        </apellidos>
+        <nif>24686643F</nif>
+        <fecha_nacimiento>08/10/1984</fecha_nacimiento>
+        <nacionalidad>Egipto</nacionalidad>
+        <direccion>
+            <direccion>Ctra. de Siles 56, 2-3</direccion>
+            <ciudad>Quiroga</ciudad>
+            <provincia>Lugo</provincia>
+            <codigo_postal>27320</codigo_postal>
+        </direccion>
+        <info_contacto>
+            <telefono>888 888 888</telefono>
+            <email>elmercurio@gmail.com</email>
+        </info_contacto>
+    </persona>
+    <persona extranjero="NO" mayor_edad="SI">
+        <nombre>Esteban</nombre>
+        <apellidos>
+            <apellido>Dido</apellido>
+            <apellido>Arrimado</apellido>
+        </apellidos>
+        <nif>82719642G</nif>
+        <fecha_nacimiento>19/04/1998</fecha_nacimiento>
+        <nacionalidad>España</nacionalidad>
+        <direccion>
+            <direccion>C/ Amoladera 80, 4-6</direccion>
+            <ciudad>Somosierra</ciudad>
+            <provincia>Madrid</provincia>
+            <codigo_postal>28756</codigo_postal>
+        </direccion>
+        <info_contacto>
+            <telefono>222 222 222</telefono>
+            <email>elbandido@gmail.com</email>
+        </info_contacto>
+    </persona>
+</personas>
