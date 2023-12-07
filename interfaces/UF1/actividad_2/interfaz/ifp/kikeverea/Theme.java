@@ -25,8 +25,8 @@ public class Theme {
 	static {
 		try {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./src/static/Inter-Regular.ttf")));
-		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./src/static/Inter-Bold.ttf")));
+		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./static/Inter-Regular.ttf")));
+		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./static/Inter-Bold.ttf")));
 		} 
 		catch (IOException|FontFormatException e) {
 			e.printStackTrace();

@@ -3,8 +3,8 @@ package ifp.kikeverea;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -22,8 +22,10 @@ public class PaginaPrincipal {
 			titulo.setForeground(Color.WHITE);
 			titulo.setBounds(271, 38, 408, 40);
 			frame.add(titulo);
-			
-			BufferedImage myPicture = ImageIO.read(new File("./src/hide_the_pain_harold.jpeg"));
+
+			System.out.println(PaginaPrincipal.class.getProtectionDomain().getCodeSource().getLocation());
+
+			BufferedImage myPicture = ImageIO.read(Path.of("hide_the_pain_harold.jpeg").toFile());
 			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 			picLabel.setBounds(45, 109, 700, 400);
 			frame.add(picLabel);
