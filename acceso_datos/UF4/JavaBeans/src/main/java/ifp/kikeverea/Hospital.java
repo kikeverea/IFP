@@ -2,12 +2,16 @@ package ifp.kikeverea;
 
 import ifp.kikeverea.util.InputUsuario;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Scanner;
 
 public class Hospital {
+
+    private static final DateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
 
     public static void main(String[] args) {
         InputUsuario input = new InputUsuario(new Scanner(System.in));
@@ -18,8 +22,10 @@ public class Hospital {
         analisis.setPaciente(paciente);
 
         while (true) {
-            System.out.println("Análisis " + analisis.getNumAnalisis() +
-                    " del paciente " + paciente.getNombre() + " " + paciente.getApellido());
+            System.out.println(
+                    "Análisis " + analisis.getNumAnalisis() +
+                    " del paciente " + paciente.getNombre() + " " + paciente.getApellido() + " (" +
+                    formatoFecha.format(analisis.getFecha()) + ")");
 
             int valorHierro = input.solicitarEntero("Introducir valor de hierro: ");
             paciente.setUltimoHierro(valorHierro);
@@ -27,8 +33,8 @@ public class Hospital {
             int valorUrea = input.solicitarEntero("Introducir valor de úrea': ");
             paciente.setUltimaUrea(valorUrea);
 
-            // no hay necesidad de un nuevo analisis, terminar programa
             if (analisis.getAnalisisPendiente() == 0) {
+                // no hay necesidad de un nuevo analisis, terminar programa
                 System.out.println("Valores correctos");
                 break;
             }
