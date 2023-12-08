@@ -38,6 +38,14 @@ public class Paciente implements Serializable {
     }
 
     // Setters
+    public void setUltimoHierro(int valor) {
+        int valorAntiguo = this.ultimoHierro;
+        this.ultimoHierro = valor;
+
+        // genera un evento de cambio en el valor de ultimoHierro
+        changeSupport.firePropertyChange("ultimoHierro", valorAntiguo, valor);
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -52,14 +60,6 @@ public class Paciente implements Serializable {
 
     public void setEdad(int edad) {
         this.edad = edad;
-    }
-
-    public void setUltimoHierro(int valor) {
-        int valorAntiguo = this.ultimoHierro;
-        this.ultimoHierro = valor;
-
-        // genera un evento de cambio en el valor de ultimoHierro
-        changeSupport.firePropertyChange("ultimoHierro", valorAntiguo, valor);
     }
 
     public void setUltimaUrea(int valor) {

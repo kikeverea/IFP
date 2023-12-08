@@ -27,6 +27,10 @@ public class Hospital {
                     " del paciente " + paciente.getNombre() + " " + paciente.getApellido() + " (" +
                     formatoFecha.format(analisis.getFecha()) + ")");
 
+            System.out.println("Valores actuales");
+            System.out.println("Hierro: " + paciente.getUltimoHierro());
+            System.out.println("Úrea: " + paciente.getUltimaUrea());
+
             int valorHierro = input.solicitarEntero("Introducir valor de hierro: ");
             paciente.setUltimoHierro(valorHierro);
 
@@ -35,16 +39,22 @@ public class Hospital {
 
             if (analisis.getAnalisisPendiente() == 0) {
                 // no hay necesidad de un nuevo analisis, terminar programa
+                System.out.println("*******************");
                 System.out.println("Valores correctos");
+                System.out.println("*******************");
                 break;
             }
+            else {
+                // un nuevo análisis es necesario
+                System.out.println("*****************************************************");
+                System.out.println("Valores de hierro inadecuados.");
+                System.out.println("Diferencia mayor a 10. Generando nuevo análisis de seguimiento");
+                System.out.println("*****************************************************");
 
-            System.out.println("Valores de hierro inadecuados. Diferencia mayor a 10. " +
-                                "Generando nuevo análisis de seguimmiento");
-
-            analisis = analisis.generarNuevoAnalisis(
-                    analisis,
-                    Date.from(Instant.now().plus(7, ChronoUnit.DAYS)));
+                analisis = analisis.generarNuevoAnalisis(
+                        analisis,
+                        Date.from(Instant.now().plus(7, ChronoUnit.DAYS)));
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ public class GeneraAnalisis implements Serializable, PropertyChangeListener {
     private Date fecha;
     private int analisisPendiente;
 
+    // constructor para cumplir con especificaiones JavaBean
     public GeneraAnalisis() {}
 
     public GeneraAnalisis(int numAnalisis, Date fecha) {
