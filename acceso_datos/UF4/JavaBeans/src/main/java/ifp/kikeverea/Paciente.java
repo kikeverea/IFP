@@ -57,6 +57,8 @@ public class Paciente implements Serializable {
     public void setUltimoHierro(int valor) {
         int valorAntiguo = this.ultimoHierro;
         this.ultimoHierro = valor;
+
+        // genera un evento de cambio en el valor de ultimoHierro
         changeSupport.firePropertyChange("ultimoHierro", valorAntiguo, valor);
     }
 
